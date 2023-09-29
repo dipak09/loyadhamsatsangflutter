@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class LoginScreenUI extends StatefulWidget {
@@ -117,7 +117,9 @@ class _LoginScreenUIState extends State<LoginScreenUI> {
   Widget button() {
     return GestureDetector(
         onTap: () {
-          Get.off(() => DashboardScreenUI());
+          Get.off(() => BottomNavigation(
+                index: 2,
+              ));
         },
         child: Container(
             alignment: Alignment.center,
