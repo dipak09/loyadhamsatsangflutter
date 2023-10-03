@@ -10,7 +10,20 @@ class AppImages {
   static const String dasbboardBottomPic = 'assets/images/bottompic.png';
   static const String dasbboardMandirPic = 'assets/images/mandirpic.png';
   static const String bottomBackgroundPic = 'assets/images/footer_bg.png';
+  static const String appBarBackgroundPic = 'assets/images/header_bg.png';
+  static const String backgroundPic = 'assets/images/dashboardbg.png';
+  static const String statusCircle = 'assets/images/statusCircle.png';
+  static const String section1bg = 'assets/images/section1bg.png';
+  static const String image1 = 'assets/images/jpg1.jpg';
+  static const String image2 = 'assets/images/jpg2.jpg';
+  static const String slider1 = 'assets/images/slider1.jpg';
+  static const String slider2 = 'assets/images/slider2.jpg';
+  static const String slider3 = 'assets/images/slider3.png';
+  static const String dailyniyamimg1 = 'assets/images/mydailyniyam1.png';
+  static const String dailyniyamimg2 = 'assets/images/mydailyniyam2.png';
 
+  static const String appBarNotificationPic = 'assets/svgs/notification.svg';
+  static const String appBarSearchPic = 'assets/svgs/search.svg';
   static const String videoBottombar = 'assets/svgs/vedio.svg';
   static const String videoRedBottombar = 'assets/svgs/vedio_red.svg';
   static const String audioBottombar = 'assets/svgs/audio.svg';
