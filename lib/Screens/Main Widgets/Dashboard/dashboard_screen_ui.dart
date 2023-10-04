@@ -116,66 +116,50 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
           ])),
       SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              dailyNiyamCard(
-                  title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1),
-              dailyNiyamCard(
-                  title: "Vachanamrut", img: AppImages.dailyniyamimg2),
-              dailyNiyamCard(
-                  title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1)
-            ],
-          ))
+          child: Row(children: [
+            dailyNiyamCard(
+                title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1),
+            dailyNiyamCard(title: "Vachanamrut", img: AppImages.dailyniyamimg2),
+            dailyNiyamCard(
+                title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1)
+          ]))
     ]);
   }
 
   Widget dailyNiyamCard({String? title, String? img}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      child: Container(
-        height: 170,
-        width: 180,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppImages.section1bg), fit: BoxFit.fill)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Container(
-                  width: 90.0, // Adjust the width and height as needed
-                  height: 90.0,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(img!), fit: BoxFit.fill))),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 60,
-                    alignment: Alignment.centerLeft,
-                    child: CustomText(
-                      title!,
-                      fontSize: 8,
-                      color: Colors.black,
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.grey,
-                    size: 15,
-                  )
-                ],
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        child: Container(
+            height: 170,
+            width: 180,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(AppImages.section1bg), fit: BoxFit.fill)),
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Container(
+                    width: 90.0, // Adjust the width and height as needed
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(img!), fit: BoxFit.fill))),
               ),
-            )
-          ],
-        ),
-      ),
-    );
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 45),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            width: 60,
+                            alignment: Alignment.centerLeft,
+                            child: CustomText(title!,
+                                fontSize: 8,
+                                color: Colors.black,
+                                textAlign: TextAlign.start)),
+                        Icon(Icons.favorite, color: Colors.grey, size: 15)
+                      ]))
+            ])));
   }
 
   Widget liveStreamSection() {
@@ -197,23 +181,21 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
             ])
           ])),
       SizedBox(
-        height: screenHeight(context) * 0.2,
-        child: ListView.builder(
-            itemCount: 3,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (contex, index) {
-              return Container(
-                height: 125,
-                width: 300,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 3),
-                    image: DecorationImage(
-                        image: AssetImage(AppImages.slider2),
-                        fit: BoxFit.fill)),
-              );
-            }),
-      )
+          height: screenHeight(context) * 0.2,
+          child: ListView.builder(
+              itemCount: 3,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (contex, index) {
+                return Container(
+                    height: 125,
+                    width: 300,
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 3),
+                        image: DecorationImage(
+                            image: AssetImage(AppImages.slider2),
+                            fit: BoxFit.fill)));
+              }))
     ]);
   }
 }

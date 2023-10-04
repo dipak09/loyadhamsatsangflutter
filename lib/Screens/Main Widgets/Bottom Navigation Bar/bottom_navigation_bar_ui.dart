@@ -10,10 +10,7 @@ import 'package:loyadhamsatsang/globals.dart';
 
 class BottomNavigation extends StatefulWidget {
   int index;
-  BottomNavigation({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
+  BottomNavigation({Key? key, required this.index}) : super(key: key);
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -26,7 +23,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     DashboardScreenUI(),
     DashboardScreenUI(),
     DashboardScreenUI(),
-    DashboardScreenUI(),
+    DashboardScreenUI()
   ];
   @override
   Widget build(BuildContext context) {
@@ -36,34 +33,32 @@ class _BottomNavigationState extends State<BottomNavigation> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                content: Text('Are you sure you want to exit?'),
-                actions: <Widget>[
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      side: BorderSide(width: 2, color: AppColors.apptheme),
+                  content: Text('Are you sure you want to exit?'),
+                  actions: <Widget>[
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          side:
+                              BorderSide(width: 2, color: AppColors.apptheme)),
+                      child: CustomText("No"),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
                     ),
-                    child: CustomText("No"),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                  ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      side: BorderSide(width: 2, color: AppColors.apptheme),
-                    ),
-                    child: CustomText("Yes,exit"),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
-                ],
-              );
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          side: BorderSide(width: 2, color: AppColors.apptheme),
+                        ),
+                        child: CustomText("Yes,exit"),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        })
+                  ]);
             });
 
         return value == true;
@@ -76,14 +71,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   buildMyNavBar(BuildContext context) {
     return Container(
-      height: screenHeight(context) * 0.08,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(AppImages.bottomBackgroundPic),
-              fit: BoxFit.fill)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+        height: screenHeight(context) * 0.08,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(AppImages.bottomBackgroundPic),
+                fit: BoxFit.fill)),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           widget.index == 0
               ? GestureDetector(
                   onTap: () {
@@ -92,8 +85,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.videoRedBottombar,
-                      height: 25, width: 25),
-                )
+                      height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
                     setState(() {
@@ -101,8 +93,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.videoBottombar,
-                      height: 25, width: 25),
-                ),
+                      height: 25, width: 25)),
           widget.index == 1
               ? GestureDetector(
                   onTap: () {
@@ -111,8 +102,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.audioRedBottombar,
-                      height: 25, width: 25),
-                )
+                      height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
                     setState(() {
@@ -120,8 +110,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.audioBottombar,
-                      height: 25, width: 25),
-                ),
+                      height: 25, width: 25)),
           widget.index == 2
               ? GestureDetector(
                   onTap: () {
@@ -130,8 +119,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.homeRedBottombar,
-                      height: 25, width: 25),
-                )
+                      height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
                     setState(() {
@@ -139,8 +127,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.homeBottombar,
-                      height: 25, width: 25),
-                ),
+                      height: 25, width: 25)),
           widget.index == 3
               ? GestureDetector(
                   onTap: () {
@@ -149,8 +136,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.meditationRedBottomBar,
-                      height: 25, width: 25),
-                )
+                      height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
                     setState(() {
@@ -158,8 +144,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.meditationBottomBar,
-                      height: 25, width: 25),
-                ),
+                      height: 25, width: 25)),
           widget.index == 4
               ? GestureDetector(
                   onTap: () {
@@ -168,8 +153,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.moreredBottomBar,
-                      height: 25, width: 25),
-                )
+                      height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
                     setState(() {
@@ -177,10 +161,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     });
                   },
                   child: SvgPicture.asset(AppImages.moreBottomBar,
-                      height: 25, width: 25),
-                ),
-        ],
-      ),
-    );
+                      height: 25, width: 25))
+        ]));
   }
 }
