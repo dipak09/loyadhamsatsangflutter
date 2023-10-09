@@ -6,6 +6,7 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/LoginScreen/login_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -23,7 +24,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     DashboardScreenUI(),
     DashboardScreenUI(),
     DashboardScreenUI(),
-    DashboardScreenUI()
+    LoginScreenUI()
   ];
   @override
   Widget build(BuildContext context) {

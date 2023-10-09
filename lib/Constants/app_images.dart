@@ -34,4 +34,7 @@ class AppImages {
   static const String meditationRedBottomBar = 'assets/svgs/meditation_red.svg';
   static const String moreBottomBar = 'assets/svgs/more.svg';
   static const String moreredBottomBar = 'assets/svgs/more_red.svg';
+
+  static const String dailyDarshanSlider =
+      'assets/images/dailyDashanSlider.png';
 }

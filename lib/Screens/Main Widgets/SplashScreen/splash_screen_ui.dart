@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/LoginScreen/login_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
 import '../../../Constants/app_images.dart';
 
 class SplashScreenUI extends StatefulWidget {
@@ -16,7 +18,9 @@ class _SplashScreenUIState extends State<SplashScreenUI> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      Get.off(() => LoginScreenUI());
+      Get.off(() => BottomNavigation(
+            index: 2,
+          ));
     });
   }
 

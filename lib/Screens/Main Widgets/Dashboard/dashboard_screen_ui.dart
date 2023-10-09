@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan%20Screen/dailydarshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/appbar.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/imageSlider.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -59,7 +61,12 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
           scrollDirection: Axis.horizontal,
           child: Row(children: [
             statusCircleCard(title: "Satsang", img: AppImages.image1),
-            statusCircleCard(title: "Daily Darshan", img: AppImages.image2),
+            GestureDetector(
+                onTap: () {
+                  Get.to(() => DailyDarshanScreenUI());
+                },
+                child: statusCircleCard(
+                    title: "Daily Darshan", img: AppImages.image2)),
             statusCircleCard(title: "Pu Guruji", img: AppImages.image1),
             statusCircleCard(title: "Upcoming events", img: AppImages.image2),
             statusCircleCard(title: "Daily Darshan", img: AppImages.image1)
