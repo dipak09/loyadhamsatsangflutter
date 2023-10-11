@@ -99,7 +99,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               ? GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.index = 0;
+                      widget.index = 1;
                     });
                   },
                   child: SvgPicture.asset(AppImages.audioRedBottombar,
@@ -133,10 +133,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
               ? GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.index = 0;
+                      widget.index = 3;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.meditationRedBottomBar,
+                  child: SvgPicture.asset(AppImages.eventredBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -144,13 +144,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 3;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.meditationBottomBar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25)),
           widget.index == 4
               ? GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.index = 0;
+                      widget.index = 4;
                     });
                   },
                   child: SvgPicture.asset(AppImages.moreredBottomBar,

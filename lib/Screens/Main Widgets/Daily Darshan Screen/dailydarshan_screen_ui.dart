@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Controllers/daily_darshan_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomScaffold.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/globals.dart';
 import 'package:intl/intl.dart';
 
 class DailyDarshanScreenUI extends StatefulWidget {
@@ -22,31 +23,11 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(children: [
-      Image.asset(AppImages.backgroundImage,
-          fit: BoxFit.fill,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width),
-      SingleChildScrollView(
-          child: Column(children: [
-        Padding(
-            padding: EdgeInsets.only(top: 50),
-            child: SizedBox(
-                height: screenHeight(context) * 0.09,
-                child: Stack(children: [
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Image.asset(AppImages.dasbboardMandirPic,
-                          fit: BoxFit.cover)),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: CustomText("Daily Darshan",
-                          fontSize: 20,
-                          textAlign: TextAlign.center,
-                          wordSpacing: 2,
-                          fontFamily: 'Open Sans'))
-                ]))),
+    return CustomScaffold(
+      appbar: CustomAppBar(
+        titleImage: AppImages.dailyDarshanTitle,
+      ),
+      children: Column(children: [
         titleselection(),
         dateSelection(),
         Padding(
@@ -92,8 +73,8 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                                     onPageChanged: controller.onPageChanged))
                           ])
                         : Center(child: CustomText("No Images Found")))))
-      ]))
-    ]));
+      ]),
+    );
   }
 
   Widget titleselection() {

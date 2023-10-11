@@ -22,6 +22,9 @@ class AppImages {
   static const String dailyniyamimg1 = 'assets/images/mydailyniyam1.png';
   static const String dailyniyamimg2 = 'assets/images/mydailyniyam2.png';
 
+  static const String dailyDarshanTitle = 'assets/images/daily-darshan.png';
+  static const String ourBranchesTitle = 'assets/images/our_branches.png';
+
   static const String appBarNotificationPic = 'assets/svgs/notification.svg';
   static const String appBarSearchPic = 'assets/svgs/search.svg';
   static const String videoBottombar = 'assets/svgs/vedio.svg';
@@ -34,6 +37,8 @@ class AppImages {
   static const String meditationRedBottomBar = 'assets/svgs/meditation_red.svg';
   static const String moreBottomBar = 'assets/svgs/more.svg';
   static const String moreredBottomBar = 'assets/svgs/more_red.svg';
+  static const String eventBottomBar = 'assets/svgs/events.svg';
+  static const String eventredBottomBar = 'assets/svgs/events-red.svg';
 
   static const String dailyDarshanSlider =
       'assets/images/dailyDashanSlider.png';

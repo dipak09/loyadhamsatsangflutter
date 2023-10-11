@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class DashBoardImageSlider extends StatefulWidget {
@@ -11,15 +14,9 @@ class DashBoardImageSlider extends StatefulWidget {
 }
 
 class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
-  final List<String> images = [
-    AppImages.slider1,
-    AppImages.slider3,
-    AppImages.slider2,
-  ];
-
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
-
+  var Home = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,10 +29,10 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
             height: screenHeight(context) * 0.2,
             width: screenWidth(context),
             child: CarouselSlider(
-              items: images
+              items: Home.sliderList
                   .map(
-                    (item) => Image.asset(
-                      item,
+                    (item) => Image.network(
+                      item.image!,
                     ),
                   )
                   .toList(),
@@ -68,7 +65,7 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
   List<Widget> _buildIndicators() {
     List<Widget> indicators = [];
 
-    for (int i = 0; i < images.length; i++) {
+    for (int i = 0; i < Home.sliderList.length; i++) {
       indicators.add(
         Container(
           width: 26.0,
@@ -76,7 +73,7 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
           margin: EdgeInsets.symmetric(horizontal: 5.0),
           decoration: BoxDecoration(
               color: currentIndex == i
-                  ? const Color.fromARGB(255, 10, 91, 157)
+                  ? Color.fromARGB(255, 10, 91, 157)
                   : Colors.grey,
               borderRadius: BorderRadius.all(Radius.circular(3))),
         ),

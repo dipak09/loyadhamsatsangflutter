@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan%20Screen/dailydarshan_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/appbar.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/imageSlider.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class DashboardScreenUI extends StatefulWidget {
   const DashboardScreenUI({super.key});
@@ -17,26 +19,34 @@ class DashboardScreenUI extends StatefulWidget {
 }
 
 class _DashboardScreenUIState extends State<DashboardScreenUI> {
+  var Home = Get.put(DashboardController());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: DashboardAppBar(),
-        body: Stack(children: [
-          Image.asset(
-            AppImages.backgroundPic,
-            fit: BoxFit.cover,
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-          ),
-          SingleChildScrollView(
-            child: Column(children: [
-              statusSection(),
-              DashBoardImageSlider(),
-              dailyNiyamSection(),
-              liveStreamSection()
-            ]),
-          )
-        ]));
+    return Obx(() => ModalProgressHUD(
+          inAsyncCall: Home.isLoading.value,
+          color: Colors.white,
+          opacity: 0.9,
+          progressIndicator: Center(child: CircularProgressIndicator()),
+          child: Scaffold(
+              appBar: DashboardAppBar(),
+              body: Stack(children: [
+                Image.asset(
+                  AppImages.backgroundPic,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                SingleChildScrollView(
+                  child: Column(children: [
+                    statusSection(),
+                    DashBoardImageSlider(),
+                    branchesSection(),
+                    liveStreamSection()
+                  ]),
+                )
+              ])),
+        ));
   }
 
   Widget statusSection() {
@@ -57,116 +67,118 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                   fontFamily: 'Open Sans')
             ])
           ])),
-      SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            statusCircleCard(title: "Satsang", img: AppImages.image1),
-            GestureDetector(
-                onTap: () {
-                  Get.to(() => DailyDarshanScreenUI());
-                },
-                child: statusCircleCard(
-                    title: "Daily Darshan", img: AppImages.image2)),
-            statusCircleCard(title: "Pu Guruji", img: AppImages.image1),
-            statusCircleCard(title: "Upcoming events", img: AppImages.image2),
-            statusCircleCard(title: "Daily Darshan", img: AppImages.image1)
-          ]))
+      SizedBox(
+        height: screenHeight(context) * 0.13,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: Home.publicationList.length,
+            itemBuilder: (context, index) {
+              return statusCircleCard(
+                  onTap: () {
+                    Get.toNamed('/${Home.publicationList[index].routename}');
+                  },
+                  title: Home.publicationList[index].name,
+                  img: Home.publicationList[index].image);
+            }),
+      )
     ]);
   }
 
-  Widget statusCircleCard({String? title, String? img}) {
-    return SizedBox(
-        height: screenHeight(context) * 0.13,
-        width: screenWidth(context) * 0.24,
-        child: Column(children: [
-          Container(
-              height: 75,
-              width: 75,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(AppImages.statusCircle),
-                      fit: BoxFit.fill)),
-              child: ClipOval(
-                  child: Container(
-                      width: 60.0, // Adjust the width and height as needed
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(img!), fit: BoxFit.fill))))),
-          CustomText(title!,
-              color: Colors.black,
-              fontSize: 10,
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Open Sans')
-        ]));
+  Widget statusCircleCard({String? title, String? img, Function? onTap}) {
+    return GestureDetector(
+      onTap: () {
+        if (onTap != null) onTap();
+      },
+      child: SizedBox(
+          height: screenHeight(context) * 0.13,
+          // width: screenWidth(context) * 0.22,
+          child: Column(children: [
+            Container(
+                height: 75,
+                width: 75,
+                margin: EdgeInsets.all(5),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(AppImages.statusCircle),
+                        fit: BoxFit.fill)),
+                child: ClipOval(
+                    child: Container(
+                        width: 60.0,
+                        height: 60.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            image: DecorationImage(
+                                image: NetworkImage(img!),
+                                fit: BoxFit.fill))))),
+            CustomText(title!,
+                color: Colors.black,
+                fontSize: 10,
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Open Sans')
+          ])),
+    );
   }
 
-  Widget dailyNiyamSection() {
+  Widget branchesSection() {
     return Column(children: [
       Padding(
           padding: EdgeInsets.only(left: 25, right: 25),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CustomText("My Daily Niyams",
+            CustomText("Branches",
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Open Sans'),
-            Row(children: [
-              Icon(Icons.arrow_right),
-              CustomText("View all",
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Open Sans')
-            ])
+            GestureDetector(
+              onTap: () {
+                Get.to(() => BranchesScreenUI());
+              },
+              child: Row(children: [
+                Icon(Icons.arrow_right),
+                CustomText("View all",
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Open Sans')
+              ]),
+            )
           ])),
-      SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            dailyNiyamCard(
-                title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1),
-            dailyNiyamCard(title: "Vachanamrut", img: AppImages.dailyniyamimg2),
-            dailyNiyamCard(
-                title: "Swaminarayan Dhun", img: AppImages.dailyniyamimg1)
-          ]))
+      SizedBox(
+        height: screenHeight(context) * 0.24,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: Home.branchesList.length,
+            itemBuilder: (context, index) {
+              return dailyNiyamCard(
+                  title: Home.branchesList[index].name,
+                  img: Home.branchesList[index].image);
+            }),
+      ),
     ]);
   }
 
   Widget dailyNiyamCard({String? title, String? img}) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-        child: Container(
-            height: 170,
-            width: 180,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(AppImages.section1bg), fit: BoxFit.fill)),
-            child: Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: Container(
-                    width: 90.0, // Adjust the width and height as needed
-                    height: 90.0,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(img!), fit: BoxFit.fill))),
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 45),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                            width: 60,
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(title!,
-                                fontSize: 8,
-                                color: Colors.black,
-                                textAlign: TextAlign.start)),
-                        Icon(Icons.favorite, color: Colors.grey, size: 15)
-                      ]))
-            ])));
+    return Container(
+        height: 100,
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Container(
+                width: 120.0,
+                height: 130.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                        image: NetworkImage(img!), fit: BoxFit.fill))),
+          ),
+          SizedBox(height: 10),
+          CustomText(title!,
+              fontSize: 10, color: Colors.black, textAlign: TextAlign.start)
+        ]));
   }
 
   Widget liveStreamSection() {
@@ -190,7 +202,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
       SizedBox(
           height: screenHeight(context) * 0.2,
           child: ListView.builder(
-              itemCount: 3,
+              itemCount: Home.livestreamingList.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (contex, index) {
                 return Container(
@@ -200,7 +212,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.white, width: 3),
                         image: DecorationImage(
-                            image: AssetImage(AppImages.slider2),
+                            image: NetworkImage(
+                                Home.livestreamingList[index].image!),
                             fit: BoxFit.fill)));
               }))
     ]);

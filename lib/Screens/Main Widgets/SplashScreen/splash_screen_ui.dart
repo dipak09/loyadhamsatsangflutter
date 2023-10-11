@@ -3,8 +3,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Controllers/splashScreen_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
-import '../../../Constants/app_images.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SplashScreenUI extends StatefulWidget {
   const SplashScreenUI({super.key});
@@ -14,10 +15,11 @@ class SplashScreenUI extends StatefulWidget {
 }
 
 class _SplashScreenUIState extends State<SplashScreenUI> {
+  var Splash = Get.put(SplashScreenController());
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 6), () {
       Get.off(() => BottomNavigation(
             index: 2,
           ));
@@ -25,13 +27,21 @@ class _SplashScreenUIState extends State<SplashScreenUI> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Image.asset(
-        AppImages.splashImage,
-        fit: BoxFit.fill,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-      ),
-    );
+    return Obx(() => ModalProgressHUD(
+          inAsyncCall: Splash.isLoading.value,
+          color: Colors.white,
+          opacity: 0.9,
+          progressIndicator: Center(child: CircularProgressIndicator()),
+          child: Scaffold(
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(Splash.image.toString()),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
