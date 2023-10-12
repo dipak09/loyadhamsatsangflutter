@@ -3,7 +3,7 @@ class Branches {
   String? name;
   String? mobileNumber;
   String? emailId;
-  String? address;
+  dynamic addr;
   String? uploadFile;
 
   Branches({
@@ -11,7 +11,7 @@ class Branches {
     this.name,
     this.mobileNumber,
     this.emailId,
-    this.address,
+    this.addr,
     this.uploadFile,
   });
 
@@ -20,7 +20,7 @@ class Branches {
         name: json["name"],
         mobileNumber: json["mobile_number"],
         emailId: json["email_id"],
-        address: json["address"],
+        addr: json["addr"],
         uploadFile: json["upload_file"],
       );
 
@@ -29,7 +29,7 @@ class Branches {
         "name": name,
         "mobile_number": mobileNumber,
         "email_id": emailId,
-        "address": address,
+        "addr": addr,
         "upload_file": uploadFile,
       };
 }

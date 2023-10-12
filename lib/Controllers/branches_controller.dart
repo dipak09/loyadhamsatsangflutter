@@ -30,8 +30,6 @@ class BranchesController extends GetxController {
       final data = response.data;
       data.forEach((el) {
         Branches branches = Branches.fromJson(el);
-        print(branches.name);
-        print(branches.address);
         branchesList.add(branches);
       });
 
@@ -40,7 +38,6 @@ class BranchesController extends GetxController {
     } catch (error) {
       isLoading(false);
       update();
-      // Handle any errors
       print('Error: $error');
     }
   }
