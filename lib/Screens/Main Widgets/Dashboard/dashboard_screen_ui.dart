@@ -92,7 +92,6 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
       },
       child: SizedBox(
           height: screenHeight(context) * 0.13,
-          // width: screenWidth(context) * 0.22,
           child: Column(children: [
             Container(
                 height: 75,
@@ -152,9 +151,14 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
             scrollDirection: Axis.horizontal,
             itemCount: Home.branchesList.length,
             itemBuilder: (context, index) {
-              return dailyNiyamCard(
-                  title: Home.branchesList[index].name,
-                  img: Home.branchesList[index].image);
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => BranchesScreenUI());
+                },
+                child: dailyNiyamCard(
+                    title: Home.branchesList[index].name,
+                    img: Home.branchesList[index].image),
+              );
             }),
       ),
     ]);
