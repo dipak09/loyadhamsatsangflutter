@@ -6,6 +6,7 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/splashScreen_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan%20Screen/dailydarshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/SplashScreen/splash_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Wellpaper/wallpaper_screen_ui.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +30,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/dailyDarshan',
           page: () => DailyDarshanScreenUI(),
+        ),
+        GetPage(
+          name: '/wallpaper',
+          page: () => WallpaperScreenUI(),
         ),
       ],
     );

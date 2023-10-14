@@ -2,35 +2,34 @@
 
 import 'package:dio/dio.dart' as r;
 import 'package:dio/dio.dart';
+import 'dart:io' as platform;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:loyadhamsatsang/Models/Events.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:loyadhamsatsang/Models/Wallpaper.dart';
 
-import 'dart:io' as platform;
+class WallpaperController extends GetxController {
+  r.Dio dio = r.Dio();
 
-class EventsImagesController extends GetxController {
-  Dio dio = Dio();
-
-  List<Events> imageList = [];
+  List<Wallpaper> imageList = [];
 
   RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
+    getImages();
   }
 
-  Future<void> getImages(String albumTitle) async {
+  Future<void> getImages() async {
     try {
       isLoading(true);
       update();
 
       isLoading(true);
       update();
-      String apiUrl =
-          'https://loyadham.in/api/webservice/eventalbum?album_title=${albumTitle}';
+      String apiUrl = 'https://loyadham.in/api/webservice/Wallpaper';
 
       final response = await dio.get(
         apiUrl,
@@ -39,7 +38,7 @@ class EventsImagesController extends GetxController {
       final data = response.data;
       print(data);
       data.forEach((el) {
-        Events image = Events.fromJson(el);
+        Wallpaper image = Wallpaper.fromJson(el);
         imageList.add(image);
       });
 

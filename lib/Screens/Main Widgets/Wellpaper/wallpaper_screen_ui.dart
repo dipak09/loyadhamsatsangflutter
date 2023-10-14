@@ -1,55 +1,44 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loyadhamsatsang/Controllers/events_Images_controller.dart';
+import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Controllers/wallpaper_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomScaffold.dart';
-import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Utilites/ToastNotification.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class EventsPhotosScreenUI extends StatefulWidget {
-  String? title;
-  EventsPhotosScreenUI({super.key, this.title});
+class WallpaperScreenUI extends StatefulWidget {
+  const WallpaperScreenUI({super.key});
 
   @override
-  State<EventsPhotosScreenUI> createState() => _EventsPhotosScreenUIState();
+  State<WallpaperScreenUI> createState() => _WallpaperScreenUIState();
 }
 
-class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
-  var Events = Get.put(EventsImagesController());
-
-  @override
-  void initState() {
-    super.initState();
-    Events.getImages(widget.title!);
-  }
-
+class _WallpaperScreenUIState extends State<WallpaperScreenUI> {
+  var Wallpaper = Get.put(WallpaperController());
   @override
   Widget build(BuildContext context) {
     return Obx(() => ModalProgressHUD(
-          inAsyncCall: Events.isLoading.value,
+          inAsyncCall: Wallpaper.isLoading.value,
           color: Colors.white,
           opacity: 0.9,
           progressIndicator: Center(child: CircularProgressIndicator()),
           child: CustomScaffold(
               appbar: CustomAppBar(
-                  isTitle: false,
-                  title: CustomText(
-                    widget.title.toString(),
-                    fontSize: 13,
-                  )),
+                titleImage: AppImages.wallpaperTitle,
+              ),
               children: GridView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.all(4.0),
                   scrollDirection: Axis.vertical,
-                  itemCount: Events.imageList.length,
+                  itemCount: Wallpaper.imageList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+                      crossAxisCount: 2, childAspectRatio: 0.7),
                   itemBuilder: (BuildContext context, int index) {
-                    var data = Events.imageList[index];
+                    var data = Wallpaper.imageList[index];
                     return GestureDetector(
                         onTap: () {
                           Get.dialog(Padding(
@@ -60,12 +49,12 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                               children: [
                                 Container(
                                   width: screenWidth(context) * 0.9,
-                                  height: screenHeight(context) * 0.4,
+                                  height: screenHeight(context) * 0.7,
                                   margin: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       color: Colors.grey.withOpacity(0.2),
                                       image: DecorationImage(
-                                          image: NetworkImage(data.source!),
+                                          image: NetworkImage(data.image!),
                                           fit: BoxFit.fill),
                                       border: Border.all(),
                                       borderRadius: BorderRadius.all(
@@ -81,10 +70,11 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                             ToastNotifications.showSuccess(
                                                 msg: "Image saved to gallery");
 
-                                            Events.downloadAndSaveImage(
-                                                data.source!);
+                                            Wallpaper.downloadAndSaveImage(
+                                                data.image!);
                                           },
-                                          child: Icon(Icons.download, size: 40),
+                                          child: Icon(Icons.download,
+                                              color: Colors.white, size: 40),
                                         )),
                                   ),
                                 ),
@@ -99,7 +89,7 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                             decoration: BoxDecoration(
                                 color: Colors.grey.withOpacity(0.2),
                                 image: DecorationImage(
-                                    image: NetworkImage(data.source!),
+                                    image: NetworkImage(data.image!),
                                     fit: BoxFit.fill),
                                 border: Border.all(),
                                 borderRadius:
