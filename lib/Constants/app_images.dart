@@ -26,6 +26,9 @@ class AppImages {
   static const String ourBranchesTitle = 'assets/images/our_branches.png';
   static const String eventsTitle = 'assets/images/Events.png';
   static const String wallpaperTitle = 'assets/images/wallpaper.png';
+  static const String booksTitle = 'assets/images/books.png';
+  static const String kirtanTitle = 'assets/images/kirtan.png';
+  static const String kathaTitle = 'assets/images/katha.png';
 
   static const String appBarNotificationPic = 'assets/svgs/notification.svg';
   static const String appBarSearchPic = 'assets/svgs/search.svg';
