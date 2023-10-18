@@ -6,8 +6,6 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/LoginScreen/login_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -24,8 +22,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
     DashboardScreenUI(),
     DashboardScreenUI(),
     DashboardScreenUI(),
-    EventScreenUI(),
-    LoginScreenUI()
+    DashboardScreenUI(),
+    DashboardScreenUI(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -73,11 +71,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   buildMyNavBar(BuildContext context) {
     return Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Colors.white, //New
+            blurRadius: 25.0,
+          )
+        ]),
         height: screenHeight(context) * 0.08,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppImages.bottomBackgroundPic),
-                fit: BoxFit.fill)),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           widget.index == 0
               ? GestureDetector(
@@ -86,7 +86,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 0;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.videoRedBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -94,7 +94,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 0;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.videoBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25)),
           widget.index == 1
               ? GestureDetector(
@@ -103,7 +103,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 1;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.audioRedBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -111,7 +111,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 1;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.audioBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25)),
           widget.index == 2
               ? GestureDetector(
@@ -120,7 +120,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 2;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.homeRedBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -128,7 +128,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 2;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.homeBottombar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25)),
           widget.index == 3
               ? GestureDetector(
@@ -137,7 +137,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 3;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.eventredBottomBar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -154,7 +154,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 4;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.moreredBottomBar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
               : GestureDetector(
                   onTap: () {
@@ -162,7 +162,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       widget.index = 4;
                     });
                   },
-                  child: SvgPicture.asset(AppImages.moreBottomBar,
+                  child: SvgPicture.asset(AppImages.eventBottomBar,
                       height: 25, width: 25))
         ]));
   }

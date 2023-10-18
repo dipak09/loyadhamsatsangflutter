@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 
 class CustomText extends StatelessWidget {
@@ -18,7 +19,7 @@ class CustomText extends StatelessWidget {
     this.title, {
     this.fontWeight = FontWeight.w600,
     this.color,
-    this.fontFamily,
+    this.fontFamily = 'Kage Pro',
     this.fontSize,
     this.overflow,
     this.maxLines,
@@ -33,11 +34,10 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: TextStyle(
+      style: GoogleFonts.poppins(
         fontWeight: fontWeight,
         color: color ?? AppColors.apptheme,
         fontSize: fontSize,
-        fontFamily: fontFamily,
         wordSpacing: wordSpacing,
         letterSpacing: letterSpacing,
         backgroundColor: backgroundColor,

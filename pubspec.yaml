@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   
   get: ^4.6.5
-  google_fonts: ^3.0.1
+  google_fonts: ^6.1.0
   flutter_svg: ^2.0.7
   carousel_slider: ^4.2.1
   intl: ^0.17.0
@@ -42,6 +42,7 @@ dependencies:
   permission_handler: ^11.0.1
   path_provider: ^2.0.2
   image_gallery_saver: ^2.0.3
+  flutter_cached_pdfview: ^0.4.2
   
 
 
@@ -82,9 +83,9 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   fonts:
-     - family: Black Chancery
+     - family: Kage Pro
        fonts:
-          - asset: assets/fonts/BLKCHCRY.TTF
+          - asset: assets/fonts/Kage Pro Variable.ttf
   
   
      - family: Open Sans
@@ -115,23 +116,7 @@ flutter:
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   
-  # fonts:
-  #   # - family: Black Chancery
-  #   #   fonts:
-  #   #     - asset: assets/fonts/blackchah.ttf
-
-  #   - family: Open Sans
-  #     fonts:
-  #       - asset: assets/fonts/static/OpenSans-Bold.ttf
-  #       - asset: assets/fonts/static/OpenSans-Medium.ttf
-  #       - asset: assets/fonts/static/OpenSans-Light.ttf
-        
-          
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+ 
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

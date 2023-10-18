@@ -6,10 +6,11 @@ import 'package:loyadhamsatsang/Models/ImagesData.dart';
 
 class DashboardController extends GetxController {
   Dio dio = Dio();
-  List<Dashboardata> publicationList = [];
   List<Dashboardata> sliderList = [];
-  List<Dashboardata> branchesList = [];
   List<Dashboardata> livestreamingList = [];
+  List<Dashboardata> dailyDarshanList = [];
+  List<Dashboardata> featuredMediaList = [];
+  List<Dashboardata> upcomingEventList = [];
   RxBool isLoading = false.obs;
   @override
   void onInit() {
@@ -29,28 +30,34 @@ class DashboardController extends GetxController {
       );
       final data = response.data;
 
-      final publicationsData = data['publication'];
-      publicationsData.forEach((el) {
-        Dashboardata publications = Dashboardata.fromJson(el);
-        publicationList.add(publications);
-      });
       final sliderData = data['slider'];
       sliderData.forEach((el) {
         Dashboardata slider = Dashboardata.fromJson(el);
         sliderList.add(slider);
-      });
-
-      final branchesData = data['branches'];
-
-      branchesData.forEach((el) {
-        Dashboardata branches = Dashboardata.fromJson(el);
-        branchesList.add(branches);
       });
       final livestreamingData = data['livestreaming'];
 
       livestreamingData.forEach((el) {
         Dashboardata livestreaming = Dashboardata.fromJson(el);
         livestreamingList.add(livestreaming);
+      });
+
+      final dailydarshansData = data['dailydarshans'];
+      dailydarshansData.forEach((el) {
+        Dashboardata dailydarshans = Dashboardata.fromJson(el);
+        dailyDarshanList.add(dailydarshans);
+      });
+      final featuredMediaData = data['featuredmedia'];
+
+      featuredMediaData.forEach((el) {
+        Dashboardata featuredMedia = Dashboardata.fromJson(el);
+        featuredMediaList.add(featuredMedia);
+      });
+      final upcomingEventData = data['upcomingevent'];
+
+      upcomingEventData.forEach((el) {
+        Dashboardata upcomingEvent = Dashboardata.fromJson(el);
+        upcomingEventList.add(upcomingEvent);
       });
 
       isLoading(false);

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,46 +17,38 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
   var Home = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            print(currentIndex);
-          },
-          child: SizedBox(
-            height: screenHeight(context) * 0.2,
-            width: screenWidth(context),
-            child: CarouselSlider(
-              items: Home.sliderList
-                  .map(
-                    (item) => Image.network(
-                      item.image!,
-                    ),
-                  )
-                  .toList(),
-              carouselController: carouselController,
-              options: CarouselOptions(
-                scrollPhysics: const BouncingScrollPhysics(),
-                autoPlay: true,
-                aspectRatio: 2,
-                viewportFraction: 1,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
+    return SizedBox(
+      height: screenHeight(context) * 0.2,
+      width: screenWidth(context),
+      child: CarouselSlider(
+        items: Home.sliderList
+            .map(
+              (item) => Container(
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          item.image!,
+                        ),
+                        fit: BoxFit.fill)),
               ),
-            ),
-          ),
+            )
+            .toList(),
+        carouselController: carouselController,
+        options: CarouselOptions(
+          scrollPhysics: const BouncingScrollPhysics(),
+          autoPlay: true,
+          aspectRatio: 2,
+          viewportFraction: 1,
+          onPageChanged: (index, reason) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
         ),
-        Container(
-          margin: EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: _buildIndicators(),
-          ),
-        ),
-      ],
+      ),
     );
   }
 

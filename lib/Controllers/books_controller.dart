@@ -14,6 +14,7 @@ class BooksController extends GetxController {
   final searchQuery = ''.obs;
   RxString selectedLang = 'All'.obs;
   RxBool isLoading = false.obs;
+  var pdfUrl = ''.obs;
   final List<String> languages = [
     'All',
     'English',
@@ -25,23 +26,15 @@ class BooksController extends GetxController {
     getBooks();
   }
 
+  // loadPdfFromUrl(String url) {
+  //   pdfUrl.value = url;
+  // }
+
   @override
   void onInit() {
     super.onInit();
     getBooks();
   }
-
-  // SearchName(String searchtxt) {
-  //   booksList = [];
-  //   if (searchtxt.isEmpty)
-  //     booksList = List.from(fullbooksList);
-  //   else
-  //     booksList = fullbooksList
-  //         .where((residence) =>
-  //             residence.bookName!.toString().contains(searchtxt.toString()))
-  //         .toList();
-
-  //     }
 
   Future<void> getBooks({String? search}) async {
     try {
