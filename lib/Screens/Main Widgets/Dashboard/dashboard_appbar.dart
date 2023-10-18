@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Bottomsheet.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,7 +13,20 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         forceMaterialTransparency: true,
         elevation: 10,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                ),
+                context: context,
+                builder: (BuildContext context) {
+                  return BottomSheetUI();
+                },
+              );
+            },
             icon: Icon(
               Icons.menu,
               color: Colors.white,

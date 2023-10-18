@@ -33,18 +33,18 @@ class AppImages {
   static const String appBarNotificationPic = 'assets/images/notifications.png';
   static const String appBarSearchPic = 'assets/images/search.png';
 
-  static const String videoBottombar = 'assets/svgs/video.svg';
-  // // static const String videoRedBottombar = 'assets/svgs/vedio_red.svg';
-  static const String audioBottombar = 'assets/svgs/audio.svg';
-  // // static const String audioRedBottombar = 'assets/svgs/audio_red.svg';
-  static const String homeBottombar = 'assets/svgs/home.svg';
-  static const String photosBottombar = 'assets/svgs/photos.svg';
-  // static const String meditationBottomBar = 'assets/svgs/meditation.svg';
-  // //static const String meditationRedBottomBar = 'assets/svgs/meditation_red.svg';
-  static const String moreBottomBar = 'assets/svgs/more.svg';
-  // // static const String moreredBottomBar = 'assets/svgs/more_red.svg';
-  static const String eventBottomBar = 'assets/svgs/Audio.svg';
-  // // static const String eventredBottomBar = 'assets/svgs/events-red.svg';
+  static const String videoBottombar = 'assets/images/video.png';
+  static const String audioBottombar = 'assets/images/Audio.png';
+  static const String homeBottombar = 'assets/images/home.png';
+  static const String photosBottombar = 'assets/images/photos.png';
+  static const String moreBottomBar = 'assets/images/more.png';
+
+  static const String calenderBottomSheet = 'assets/images/Calendar.png';
+  static const String booksBottomSheet = 'assets/images/book.png';
+  static const String santmandalBottomSheet = 'assets/images/santmandal.png';
+  static const String dailyDarshanBottomSheet =
+      'assets/images/dailydarshan.png';
+  static const String settingBottomSheet = 'assets/images/settings.png';
 
   static const String dailyDarshanSlider =
       'assets/images/dailyDashanSlider.png';
