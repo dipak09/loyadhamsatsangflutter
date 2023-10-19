@@ -35,6 +35,7 @@ class DailyDarshanController extends GetxController {
 
   void selectItem(String item) {
     selectedTitle.value = item;
+    getValue();
   }
 
   var currentIndex = 0.obs;
