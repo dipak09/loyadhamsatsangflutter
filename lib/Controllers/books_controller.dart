@@ -26,6 +26,11 @@ class BooksController extends GetxController {
     getBooks();
   }
 
+  void searchBook(String item) {
+    searchQuery.value = item;
+    getBooks();
+  }
+
   // loadPdfFromUrl(String url) {
   //   pdfUrl.value = url;
   // }

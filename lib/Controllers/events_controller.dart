@@ -10,7 +10,7 @@ class EventsController extends GetxController {
   List<Events> imageList = [];
   RxString selectedTitle = 'Loyadham Canada'.obs;
   RxString selectedYear = '2023'.obs;
-  List<String> years = List.generate(10, (index) => (2024 - index).toString());
+  List<String> years = List.generate(3, (index) => (2024 - index).toString());
   RxBool isLoading = false.obs;
   final List<String> items = [
     'Loyadham Canada',
@@ -47,8 +47,6 @@ class EventsController extends GetxController {
     try {
       isLoading(true);
       update();
-      print(year);
-      print(title);
       eventList = [];
       isLoading(true);
       update();
@@ -60,13 +58,11 @@ class EventsController extends GetxController {
       );
 
       final data = response.data;
-      print(data);
+
       data.forEach((el) {
         Events events = Events.fromJson(el);
         eventList.add(events);
       });
-
-      print(eventList.length);
 
       isLoading(false);
       update();
@@ -94,13 +90,11 @@ class EventsController extends GetxController {
       );
 
       final data = response.data;
-      print(data);
+
       data.forEach((el) {
         Events image = Events.fromJson(el);
         imageList.add(image);
       });
-
-      print(imageList.length);
 
       isLoading(false);
       update();

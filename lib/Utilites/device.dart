@@ -1,0 +1,3 @@
+class DeviceConfig {
+  DeviceConfig._();
+}

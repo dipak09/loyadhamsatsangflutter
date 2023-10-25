@@ -7,8 +7,9 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final bool? isBack;
 
-  CustomAppBar({Key? key, this.title}) : super(key: key);
+  CustomAppBar({Key? key, this.title, this.isBack = true}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -22,14 +23,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.white,
           fontWeight: FontWeight.w700,
         ),
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_outlined,
-              color: Colors.white,
-            )),
+        leading: isBack!
+            ? IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                  color: Colors.white,
+                ))
+            : SizedBox.shrink(),
         flexibleSpace: Container(
           color: AppColors.apptheme,
         ));

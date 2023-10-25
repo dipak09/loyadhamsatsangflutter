@@ -15,6 +15,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: IconButton(
             onPressed: () {
               showModalBottomSheet(
+                barrierColor: Colors.transparent,
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

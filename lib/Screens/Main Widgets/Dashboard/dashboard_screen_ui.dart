@@ -67,6 +67,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     width: 250,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
+                        color: Colors.grey,
                         border: Border.all(color: Colors.white, width: 3),
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
@@ -100,6 +101,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     width: 250,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
+                        color: Colors.grey,
                         border: Border.all(color: Colors.white, width: 3),
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
@@ -133,6 +135,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     width: 250,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
+                        color: Colors.grey,
                         border: Border.all(color: Colors.white, width: 3),
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
@@ -166,6 +169,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     width: 250,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
+                        color: Colors.grey,
                         border: Border.all(color: Colors.white, width: 3),
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(

@@ -6,6 +6,8 @@ import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Bottomsheet.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/music_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -20,9 +22,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
   List<Widget> screens = [
     DashboardScreenUI(),
+    MusicScreenUI(),
     DashboardScreenUI(),
-    DashboardScreenUI(),
-    DashboardScreenUI(),
+    EventScreenUI(),
     DashboardScreenUI(),
   ];
   @override
@@ -118,6 +120,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 setState(() {
                   widget.index = 4;
                   showModalBottomSheet(
+                    barrierColor: Colors.transparent,
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
@@ -135,7 +138,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 
   Widget card({String? title, String? imageName, Function? onTap}) {
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           if (onTap != null) onTap();
         },

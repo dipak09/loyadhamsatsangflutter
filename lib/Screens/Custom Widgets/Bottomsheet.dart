@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/books_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Calendar/calender_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Sant%20Mandal/sant_mandal_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BottomSheetUI extends StatelessWidget {
@@ -31,7 +34,12 @@ class BottomSheetUI extends StatelessWidget {
             CustomText("Term & Conditions", fontSize: 15, color: Colors.black)
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            card(title: "Calendar", imageName: AppImages.calenderBottomSheet),
+            card(
+                title: "Calendar",
+                imageName: AppImages.calenderBottomSheet,
+                onTap: () {
+                  Get.to(() => CalenderScreenUI());
+                }),
             card(
                 title: "Books",
                 imageName: AppImages.booksBottomSheet,
@@ -40,20 +48,28 @@ class BottomSheetUI extends StatelessWidget {
                 }),
             card(
                 title: "Sant Mandal",
-                imageName: AppImages.santmandalBottomSheet),
+                imageName: AppImages.santmandalBottomSheet,
+                onTap: () {
+                  Get.to(() => SantMandalScreenUI());
+                }),
             card(
                 title: "Daily Darshan",
                 imageName: AppImages.dailyDarshanBottomSheet,
                 onTap: () {
                   Get.to(() => DailyDarshanScreenUI());
                 }),
-            card(title: "Setting", imageName: AppImages.settingBottomSheet)
+            card(
+                title: "Setting",
+                imageName: AppImages.settingBottomSheet,
+                onTap: () {
+                  Get.to(() => SettingScreenUI());
+                }),
           ])
         ]));
   }
 
   Widget card({String? title, String? imageName, Function? onTap}) {
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           if (onTap != null) onTap();
         },

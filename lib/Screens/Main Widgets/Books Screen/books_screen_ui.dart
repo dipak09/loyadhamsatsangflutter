@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +22,6 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
 
   @override
   void dispose() {
-    // Your custom cleanup code.
     super.dispose();
     Books.searchController.clear();
   }
@@ -30,87 +29,76 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: "Books",
-      ),
-      body: Column(children: [
-        titleselection(),
-        dateSelection(),
-        Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Obx(() => Books.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
-                    : Books.booksList.isNotEmpty && Books.booksList != null
-                        ? GridView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(4.0),
-                            scrollDirection: Axis.vertical,
-                            itemCount: Books.booksList.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 0.8),
-                            itemBuilder: (BuildContext context, int index) {
-                              var data = Books.booksList[index];
-                              return GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => PDFViewerFromUrl(
+        appBar: CustomAppBar(title: "Books"),
+        body: Column(children: [
+          titleselection(),
+          search(),
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Obx(() => Books.isLoading.value
+                      ? Center(child: CircularProgressIndicator())
+                      : Books.booksList.isNotEmpty && Books.booksList != null
+                          ? GridView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.all(4.0),
+                              scrollDirection: Axis.vertical,
+                              itemCount: Books.booksList.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, childAspectRatio: 0.8),
+                              itemBuilder: (BuildContext context, int index) {
+                                var data = Books.booksList[index];
+
+                                return GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => PDFViewerFromUrl(
                                           url: data.uploadPdf!,
-                                          title: data.bookName,
-                                        ));
-                                  },
-                                  child: Container(
-                                      width: screenWidth(context) * 0.32,
-                                      height: screenHeight(context) * 0.2,
-                                      margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  data.uploadFile!),
-                                              fit: BoxFit.fill))));
-                            })
-                        : Center(child: CustomText("No Book Found")))))
-      ]),
-    );
+                                          title: data.bookName));
+                                    },
+                                    child: Container(
+                                        width: screenWidth(context) * 0.32,
+                                        height: screenHeight(context) * 0.2,
+                                        margin: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    data.uploadFile!),
+                                                fit: BoxFit.fill))));
+                              })
+                          : Center(child: CustomText("No Book Found")))))
+        ]));
   }
 
   Widget titleselection() {
     return Obx(() => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText("Language :"),
-              SizedBox(height: 10),
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.apptheme),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: DropdownButton<String>(
-                      icon: Icon(Icons.arrow_drop_down,
-                          color: AppColors.apptheme),
-                      style: GoogleFonts.poppins(
-                          color: AppColors.apptheme,
-                          fontWeight: FontWeight.w600),
-                      underline: SizedBox.shrink(),
-                      isExpanded: true,
-                      value: Books.selectedLang.value,
-                      items: Books.languages
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ))
-                          .toList(),
-                      onChanged: (item) {
-                        Books.selectLang(item!);
-                      })),
-            ],
-          ),
-        ));
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          CustomText("Language :"),
+          SizedBox(height: 10),
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.apptheme),
+                  borderRadius: BorderRadius.circular(15)),
+              child: DropdownButton<String>(
+                  icon: Icon(Icons.arrow_drop_down, color: AppColors.apptheme),
+                  style: GoogleFonts.poppins(
+                      color: AppColors.apptheme, fontWeight: FontWeight.w600),
+                  underline: SizedBox.shrink(),
+                  isExpanded: true,
+                  value: Books.selectedLang.value,
+                  items: Books.languages
+                      .map((item) => DropdownMenuItem<String>(
+                          value: item, child: Text(item)))
+                      .toList(),
+                  onChanged: (item) {
+                    Books.selectLang(item!);
+                  }))
+        ])));
   }
 
-  Widget dateSelection() {
+  Widget search() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -118,9 +106,7 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
           borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
           controller: Books.searchController,
-          onChanged: (value) {
-            Books.getBooks(search: value);
-          },
+          onChanged: (value) => Books.getBooks(search: value),
           decoration: InputDecoration(
               hintText: "Search Books",
               filled: true,
