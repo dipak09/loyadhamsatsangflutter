@@ -5,14 +5,28 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/splashScreen_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/SplashScreen/splash_screen_ui.dart';
+import 'package:loyadhamsatsang/Utilites/device.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    DeviceConfig.rotationLock();
+  }
+
   var Splash = Get.put(SplashScreenController());
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

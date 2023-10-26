@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/kirtan&katha_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class MusicScreenUI extends StatefulWidget {
@@ -17,19 +19,26 @@ class _MusicScreenUIState extends State<MusicScreenUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Music", isBack: false),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            cards(title: "ALL KIRTANS"),
-            cards(title: "ALL KATHA"),
-          ],
-        ),
-      ),
-    );
+        appBar: CustomAppBar(title: "Music", isBack: false),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  cards(
+                      title: "ALL KIRTANS",
+                      onTap: () {
+                        Get.to(() => KirtanKathaScreenUI(
+                            title: "ALL KIRTANS", type: 'kirtan'));
+                      }),
+                  cards(
+                      title: "ALL KATHA",
+                      onTap: () {
+                        Get.to(() => KirtanKathaScreenUI(
+                            title: "ALL KATHA", type: 'katha'));
+                      })
+                ])));
   }
 
   Widget cards({String? title, Function? onTap}) {
