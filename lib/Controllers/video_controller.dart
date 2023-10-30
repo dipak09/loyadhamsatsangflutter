@@ -1,29 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:loyadhamsatsang/Models/KirtanKatha.dart';
+import 'package:loyadhamsatsang/Models/Video.dart';
 
-class KirtanKathaController extends GetxController {
+class VideoController extends GetxController {
   Dio dio = Dio();
-  List<KirtanKatha> kirtankathaList = [];
+  List<Video> videoList = [];
 
   RxBool isLoading = false.obs;
 
-  Future<void> getData(String type) async {
+  @override
+  void onInit() {
+    super.onInit();
+    getData();
+  }
+
+  Future<void> getData() async {
     try {
       isLoading(true);
       update();
 
-      String apiUrl = 'https://loyadham.in/api/webservice/kirtan?type=${type}';
+      String apiUrl =
+          'https://loyadham.in/api/webservice/getYoutubeChannellatest';
 
       final response = await dio.get(apiUrl);
 
       final data = response.data;
 
       data.forEach((el) {
-        KirtanKatha kirtanKatha = KirtanKatha.fromJson(el);
-        kirtankathaList.add(kirtanKatha);
+        Video video = Video.fromJson(el);
+        videoList.add(video);
       });
-      print(kirtankathaList.length);
+      print(videoList.length);
 
       isLoading(false);
       update();

@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors
+// ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -8,6 +8,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/music_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -21,11 +22,11 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
   List<Widget> screens = [
-    DashboardScreenUI(),
+    VideoScreenUI(),
     MusicScreenUI(),
     DashboardScreenUI(),
     EventScreenUI(),
-    DashboardScreenUI(),
+    DashboardScreenUI()
   ];
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       },
       child: Scaffold(
           body: screens[widget.index],
-          bottomNavigationBar: buildMyNavBar(context)),
+          bottomNavigationBar: buildMyNavBar(context))
     );
   }
 
@@ -120,18 +121,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 setState(() {
                   widget.index = 4;
                   showModalBottomSheet(
-                    barrierColor: Colors.transparent,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                    ),
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BottomSheetUI();
-                    },
-                  );
+                      barrierColor: Colors.transparent,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20))),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BottomSheetUI();
+                      });
                 });
               })
         ]));
