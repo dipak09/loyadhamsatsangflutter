@@ -2,15 +2,17 @@
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Models/ImagesData.dart';
+import 'package:loyadhamsatsang/Models/Video.dart';
 
 class DashboardController extends GetxController {
   Dio dio = Dio();
   List<Dashboardata> sliderList = [];
-  List<Dashboardata> livestreamingList = [];
-  List<Dashboardata> dailyDarshanList = [];
-  List<Dashboardata> featuredMediaList = [];
-  List<Dashboardata> upcomingEventList = [];
+  List<Video> livestreamingList = [];
+  List<DailyDarshan> dailyDarshanList = [];
+  List<Video> featuredMediaList = [];
+  List<Video> upcomingEventList = [];
   RxBool isLoading = false.obs;
   @override
   void onInit() {
@@ -38,25 +40,25 @@ class DashboardController extends GetxController {
       final livestreamingData = data['livestreaming'];
 
       livestreamingData.forEach((el) {
-        Dashboardata livestreaming = Dashboardata.fromJson(el);
+        Video livestreaming = Video.fromJson(el);
         livestreamingList.add(livestreaming);
       });
 
       final dailydarshansData = data['dailydarshans'];
       dailydarshansData.forEach((el) {
-        Dashboardata dailydarshans = Dashboardata.fromJson(el);
+        DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
         dailyDarshanList.add(dailydarshans);
       });
       final featuredMediaData = data['featuredmedia'];
 
       featuredMediaData.forEach((el) {
-        Dashboardata featuredMedia = Dashboardata.fromJson(el);
+        Video featuredMedia = Video.fromJson(el);
         featuredMediaList.add(featuredMedia);
       });
       final upcomingEventData = data['upcomingevent'];
 
       upcomingEventData.forEach((el) {
-        Dashboardata upcomingEvent = Dashboardata.fromJson(el);
+        Video upcomingEvent = Video.fromJson(el);
         upcomingEventList.add(upcomingEvent);
       });
 

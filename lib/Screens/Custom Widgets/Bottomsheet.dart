@@ -56,7 +56,10 @@ class BottomSheetUI extends StatelessWidget {
                 title: "Daily Darshan",
                 imageName: AppImages.dailyDarshanBottomSheet,
                 onTap: () {
-                  Get.to(() => DailyDarshanScreenUI());
+                  final selectedDate = Rx<DateTime>(DateTime.now());
+
+                  Get.to(() => DailyDarshanScreenUI(
+                      title: "Thakorji Maharaj", date: selectedDate.value));
                 }),
             card(
                 title: "Setting",

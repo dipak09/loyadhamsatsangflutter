@@ -4,7 +4,7 @@ class DailyDarshan {
   String collectionId;
   String title;
   String albumId;
-  String albumTitle;
+  DateTime albumTitle;
   DateTime createdAt;
   String source;
 
@@ -25,7 +25,7 @@ class DailyDarshan {
         collectionId: json["collection_id"],
         title: json["title"],
         albumId: json["album_id"],
-        albumTitle: json["album_title"],
+        albumTitle: DateTime.parse(json["album_title"]),
         createdAt: DateTime.parse(json["created_at"]),
         source: json["source"],
       );
@@ -36,7 +36,7 @@ class DailyDarshan {
         "collection_id": collectionId,
         "title": title,
         "album_id": albumId,
-        "album_title": albumTitle,
+        "album_title": albumTitle.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "source": source,
       };

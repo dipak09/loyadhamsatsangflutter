@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, unnecessary_string_interpolations
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, unnecessary_string_interpolations, must_be_immutable
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,9 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:intl/intl.dart';
 
 class DailyDarshanScreenUI extends StatefulWidget {
-  const DailyDarshanScreenUI({super.key});
+  String? title;
+  DateTime? date;
+  DailyDarshanScreenUI({this.date, this.title});
 
   @override
   State<DailyDarshanScreenUI> createState() => _DailyDarshanScreenUIState();
@@ -19,6 +21,26 @@ class DailyDarshanScreenUI extends StatefulWidget {
 
 class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
   var DailyDarshan = Get.put(DailyDarshanController());
+
+  @override
+  void initState() {
+    super.initState();
+    getValue();
+
+    Future.delayed(Duration(seconds: 1), () {
+      // Replace this with the function you want to call
+      getValue();
+    });
+  }
+
+  getValue() {
+    DailyDarshan.selectItem(widget.title!);
+    DailyDarshan.selectDate(widget.date!);
+    setState(() {
+      //DailyDarshan.getValue();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

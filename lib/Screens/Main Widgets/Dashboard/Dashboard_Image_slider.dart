@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DashBoardImageSlider extends StatefulWidget {
   const DashBoardImageSlider({super.key});
@@ -12,27 +13,42 @@ class DashBoardImageSlider extends StatefulWidget {
 }
 
 class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
+  _launchURL(String openURL) async {
+    // ignore: deprecated_member_use
+    if (await canLaunch(openURL)) {
+      // ignore: deprecated_member_use
+      await launch(openURL);
+    } else {
+      throw 'Could not launch $openURL';
+    }
+  }
+
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
   var Home = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: screenHeight(context) * 0.2,
+      height: screenHeight(context) * 0.22,
       width: screenWidth(context),
       child: CarouselSlider(
         items: Home.sliderList
             .map(
-              (item) => Container(
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: NetworkImage(
-                          item.image!,
-                        ),
-                        fit: BoxFit.fill)),
+              (item) => InkWell(
+                onTap: () {
+                  _launchURL(item.routename!);
+                },
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            item.image!,
+                          ),
+                          fit: BoxFit.fill)),
+                ),
               ),
             )
             .toList(),

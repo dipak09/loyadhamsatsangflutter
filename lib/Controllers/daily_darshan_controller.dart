@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 
 class DailyDarshanController extends GetxController {
@@ -30,7 +29,13 @@ class DailyDarshanController extends GetxController {
 
   getValue() {
     final formattedDate = DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
+    print(formattedDate);
     getData(title: selectedTitle.toString(), date: formattedDate.toString());
+  }
+
+  selectDate(DateTime date) {
+    selectedDate.value = date;
+    getValue();
   }
 
   void selectItem(String item) {
@@ -61,13 +66,6 @@ class DailyDarshanController extends GetxController {
     }
   }
 
-  final List<String> imageList = [
-    AppImages.slider1,
-    AppImages.slider3,
-    AppImages.slider2,
-    // Add your image paths here
-  ];
-
   Future<void> pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -88,6 +86,7 @@ class DailyDarshanController extends GetxController {
       update();
       print(date);
       print(title);
+
       dailyDarshanList = [];
       isLoading(true);
       update();
@@ -105,8 +104,7 @@ class DailyDarshanController extends GetxController {
         dailyDarshanList.add(dailyDarshan);
       });
 
-      print(dailyDarshanList.length);
-
+      update();
       isLoading(false);
       update();
     } catch (error) {

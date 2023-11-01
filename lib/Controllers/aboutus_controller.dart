@@ -46,9 +46,7 @@ class AboutUSController extends GetxController {
       update();
       String apiUrl = 'https://loyadham.in/api/webservice/about?name=${title}';
 
-      final response = await dio.get(
-        apiUrl,
-      );
+      final response = await dio.get(apiUrl);
 
       final data = response.data;
 
@@ -56,7 +54,6 @@ class AboutUSController extends GetxController {
         AboutUs aboutUs = AboutUs.fromJson(el);
         list.add(aboutUs);
       });
-      print(list.length);
 
       isLoading(false);
       update();

@@ -7,6 +7,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/About%20Us/aboutus_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Feedback%20Screen/feedback_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
@@ -62,7 +63,11 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                       onTap: () {
                         _launchURL('https://loyadham.in/');
                       }),
-                  cards(title: "FEEDBACK"),
+                  cards(
+                      title: "FEEDBACK",
+                      onTap: () {
+                        Get.to(() => FeedBackScreenUI());
+                      }),
                   cards(
                       title: "CONTACT US",
                       onTap: () {
