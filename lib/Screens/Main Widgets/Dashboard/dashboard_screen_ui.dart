@@ -12,7 +12,8 @@ import 'package:loyadhamsatsang/globals.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class DashboardScreenUI extends StatefulWidget {
-  const DashboardScreenUI({super.key});
+  final GlobalKey<ScaffoldState>? drawer;
+  const DashboardScreenUI({super.key, this.drawer});
 
   @override
   State<DashboardScreenUI> createState() => _DashboardScreenUIState();
@@ -30,7 +31,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
         progressIndicator: Center(child: CircularProgressIndicator()),
         child: Scaffold(
           backgroundColor: Colors.white54,
-          appBar: DashboardAppBar(),
+          appBar: DashboardAppBar(drawer: widget.drawer),
           body: SingleChildScrollView(
             child: Column(
               children: [

@@ -7,7 +7,7 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/books_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/book_pdf_viewer.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/bookViewer.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class BooksScreenUI extends StatefulWidget {
@@ -52,9 +52,10 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
 
                                 return GestureDetector(
                                     onTap: () {
-                                      Get.to(() => PDFViewerFromUrl(
-                                          url: data.uploadPdf!,
-                                          title: data.bookName));
+                                      Get.to(PdfViewerFromApi(data.uploadPdf!));
+                                      // Get.to(() => PDFViewerFromUrl(
+                                      //     url: data.uploadPdf!,
+                                      //     title: data.bookName));
                                     },
                                     child: Container(
                                         width: screenWidth(context) * 0.32,

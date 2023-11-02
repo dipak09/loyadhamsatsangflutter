@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
-import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Bottomsheet.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Notification/notification_screen_ui.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Function()? drawerOnTap;
+  final GlobalKey<ScaffoldState>? drawer;
+  DashboardAppBar({this.drawerOnTap, this.drawer});
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -16,17 +18,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 10,
         leading: IconButton(
             onPressed: () {
-              showModalBottomSheet(
-                  barrierColor: Colors.transparent,
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BottomSheetUI();
-                  });
+              drawer!.currentState!.openDrawer();
             },
             icon: Icon(Icons.menu, color: Colors.white)),
         title: CustomText("Loyadham Satsang",

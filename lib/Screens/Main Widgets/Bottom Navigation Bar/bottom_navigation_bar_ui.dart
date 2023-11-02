@@ -5,6 +5,7 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Bottomsheet.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Drawer.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/music_screen_ui.dart';
@@ -20,56 +21,69 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  int currentIndex = 0;
-  List<Widget> screens = [
-    VideoScreenUI(),
-    MusicScreenUI(),
-    DashboardScreenUI(),
-    EventScreenUI(),
-    DashboardScreenUI()
-  ];
+  int currentIndex = 2;
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final value = await showDialog<bool>(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                  content: Text('Are you sure you want to exit?'),
-                  actions: <Widget>[
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          side:
-                              BorderSide(width: 2, color: AppColors.apptheme)),
-                      child: CustomText("No"),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                    ),
-                    OutlinedButton(
+        onWillPop: () async {
+          final value = await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                    content: Text('Are you sure you want to exit?'),
+                    actions: <Widget>[
+                      OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          side: BorderSide(width: 2, color: AppColors.apptheme),
-                        ),
-                        child: CustomText("Yes,exit"),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            side: BorderSide(
+                                width: 2, color: AppColors.apptheme)),
+                        child: CustomText("No"),
                         onPressed: () {
-                          Navigator.of(context).pop(true);
-                        })
-                  ]);
-            });
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            side:
+                                BorderSide(width: 2, color: AppColors.apptheme),
+                          ),
+                          child: CustomText("Yes,exit"),
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          })
+                    ]);
+              });
 
-        return value == true;
-      },
-      child: Scaffold(
-          body: screens[widget.index],
-          bottomNavigationBar: buildMyNavBar(context))
-    );
+          return value == true;
+        },
+        child: Scaffold(
+            key: _drawerKey,
+            drawer: Drawer(
+              width: MediaQuery.of(context).size.width * .9,
+              child: DrawerData(),
+            ),
+            body: IndexedStack(
+              index: widget.index,
+              children: <Widget>[
+                VideoScreenUI(),
+                MusicScreenUI(),
+                DashboardScreenUI(
+                  drawer: _drawerKey,
+                ),
+                EventScreenUI(),
+                DashboardScreenUI(
+                  drawer: _drawerKey,
+                )
+              ],
+            ),
+            bottomNavigationBar: buildMyNavBar(context)));
   }
 
   buildMyNavBar(BuildContext context) {

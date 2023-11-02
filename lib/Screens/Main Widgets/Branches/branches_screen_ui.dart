@@ -38,7 +38,7 @@ class _BranchesScreenUIState extends State<BranchesScreenUI> {
         progressIndicator: Center(child: CircularProgressIndicator()),
         child: Scaffold(
             appBar: CustomAppBar(
-              title: "CONTACT US",
+              title: "Our Branches",
             ),
             body: ListView.builder(
                 itemCount: Branches.branchesList.length,
