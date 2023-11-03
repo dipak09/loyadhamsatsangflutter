@@ -6,9 +6,13 @@ class CachedImageWithShimmer extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
+  final BoxFit fit;
 
   CachedImageWithShimmer(
-      {required this.imageUrl, this.width = 200, this.height = 200});
+      {required this.imageUrl,
+      this.width = 200,
+      this.height = 200,
+      this.fit = BoxFit.fill});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class CachedImageWithShimmer extends StatelessWidget {
       errorWidget: (context, url, error) => Icon(Icons.error),
       width: width,
       height: height,
-      fit: BoxFit.fill,
+      fit: fit,
     );
   }
 }

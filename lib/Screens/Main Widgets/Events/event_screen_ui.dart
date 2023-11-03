@@ -43,10 +43,10 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                 return GestureDetector(
                                   onTap: () {
                                     Get.to(() => EventsPhotosScreenUI(
-                                          title: Events
-                                              .eventList[index].albumTitle
-                                              .toString(),
-                                        ));
+                                        name:
+                                            Events.eventList[index].albumTitle,
+                                        title:
+                                            "${Events.eventList[index].albumTitle} ${Events.eventList[index].date}"));
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(10),
@@ -61,13 +61,6 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        CustomText(
-                                            Events.eventList[index].albumTitle
-                                                .toString(),
-                                            textAlign: TextAlign.center,
-                                            color: Colors.black,
-                                            fontSize: 12),
-                                        SizedBox(height: 10),
                                         Container(
                                             height: screenHeight(context) * 0.2,
                                             width: screenWidth(context),
@@ -83,6 +76,13 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                                     .eventList[index].source!,
                                               ),
                                             )),
+                                        SizedBox(height: 10),
+                                        CustomText(
+                                            Events.eventList[index].albumTitle
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            color: Colors.black,
+                                            fontSize: 12),
                                       ],
                                     ),
                                   ),
@@ -100,6 +100,9 @@ class _EventScreenUIState extends State<EventScreenUI> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [],
+              ),
               CustomText("Place :"),
               SizedBox(height: 10),
               Container(

@@ -17,6 +17,7 @@ class BottomSheetUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        color: Colors.white,
         height: screenHeight(context) * 0.35,
         width: screenWidth(context),
         child:

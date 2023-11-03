@@ -8,14 +8,17 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool? isBack;
+  final List<Widget>? actions;
 
-  CustomAppBar({Key? key, this.title, this.isBack = true}) : super(key: key);
+  CustomAppBar({Key? key, this.title, this.isBack = true, this.actions})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AppBar(
         centerTitle: true,
         forceMaterialTransparency: true,
         elevation: 10,
+        actions: actions,
         title: CustomText(
           title!,
           fontSize: 15,

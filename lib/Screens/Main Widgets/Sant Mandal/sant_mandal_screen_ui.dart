@@ -52,12 +52,12 @@ class _SantMandalScreenUIState extends State<SantMandalScreenUI> {
                                   CustomText(data.saintName.toString(),
                                       textAlign: TextAlign.center,
                                       color: Colors.black,
-                                      fontSize: 12),
+                                      fontSize: 14),
                                   SizedBox(height: 10),
                                   Row(children: [
                                     Container(
                                       height: screenHeight(context) * 0.2,
-                                      width: screenWidth(context) * 0.35,
+                                      width: screenWidth(context) * 0.34,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: CachedImageWithShimmer(
@@ -65,29 +65,29 @@ class _SantMandalScreenUIState extends State<SantMandalScreenUI> {
                                       ),
                                     ),
                                     Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(7.0),
                                         child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               CustomText("Date Of Birth",
-                                                  fontSize: 10),
+                                                  fontSize: 11),
                                               CustomText(data.dateOfBirth!,
-                                                  fontSize: 8),
+                                                  fontSize: 9),
                                               SizedBox(height: 10),
                                               CustomText("Parshad Diksha Date",
-                                                  fontSize: 10),
+                                                  fontSize: 11),
                                               CustomText(
                                                   data.dateOfParshadDiksha ??
                                                       "",
-                                                  fontSize: 8),
+                                                  fontSize: 9),
                                               SizedBox(height: 10),
                                               CustomText("Bhagvati Diksha Date",
-                                                  fontSize: 10),
+                                                  fontSize: 11),
                                               CustomText(
                                                   data.dateOfBhagvatiDiksha ??
                                                       "",
-                                                  fontSize: 8)
+                                                  fontSize: 9)
                                             ]))
                                   ])
                                 ])));

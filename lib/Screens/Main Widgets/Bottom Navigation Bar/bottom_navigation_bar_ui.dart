@@ -22,6 +22,7 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 2;
+  bool isBottomSheet = false;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   @override
@@ -65,6 +66,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         },
         child: Scaffold(
             key: _drawerKey,
+            bottomSheet: isBottomSheet ? BottomSheetUI() : SizedBox.shrink(),
             drawer: Drawer(
               width: MediaQuery.of(context).size.width * .9,
               child: DrawerData(),
@@ -106,6 +108,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               onTap: () {
                 setState(() {
                   widget.index = 0;
+                  isBottomSheet = false;
                 });
               }),
           card(
@@ -114,6 +117,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               onTap: () {
                 setState(() {
                   widget.index = 1;
+                  isBottomSheet = false;
                 });
               }),
           card(
@@ -122,6 +126,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               onTap: () {
                 setState(() {
                   widget.index = 2;
+                  isBottomSheet = false;
                 });
               }),
           card(
@@ -130,6 +135,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               onTap: () {
                 setState(() {
                   widget.index = 3;
+                  isBottomSheet = false;
                 });
               }),
           card(
@@ -138,17 +144,23 @@ class _BottomNavigationState extends State<BottomNavigation> {
               onTap: () {
                 setState(() {
                   widget.index = 4;
-                  showModalBottomSheet(
-                      barrierColor: Colors.transparent,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20))),
-                      context: context,
-                      builder: (BuildContext context) {
-                        return BottomSheetUI();
-                      });
+                  if (isBottomSheet == true) {
+                    isBottomSheet = false;
+                  } else {
+                    isBottomSheet = true;
+                  }
+
+                  // showModalBottomSheet(
+                  //     barrierColor: Colors.transparent,
+                  //     backgroundColor: Colors.white,
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.only(
+                  //             topLeft: Radius.circular(20),
+                  //             topRight: Radius.circular(20))),
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return BottomSheetUI();
+                  //     });
                 });
               })
         ]));

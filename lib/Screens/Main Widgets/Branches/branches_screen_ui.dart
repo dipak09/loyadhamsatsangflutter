@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/branches_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -58,16 +59,16 @@ class _BranchesScreenUIState extends State<BranchesScreenUI> {
                         ),
                         // Image.network(Branches.branchesList[index].uploadFile!),
                         Container(
-                            height: screenHeight(context) * 0.2,
-                            width: screenWidth(context),
-                            margin: EdgeInsets.symmetric(horizontal: 20),
-                            // width: 150,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(Branches
-                                        .branchesList[index].uploadFile!)))),
+                          height: screenHeight(context) * 0.2,
+                          width: screenWidth(context),
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedImageWithShimmer(
+                                imageUrl:
+                                    Branches.branchesList[index].uploadFile!),
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.only(top: 10, left: 20),
                           child: Row(
