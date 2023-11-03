@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +22,7 @@ class BottomSheetUI extends StatelessWidget {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Column(children: [
-            CustomText("My Satsang", fontSize: 40),
+            CustomText("Loyadham Satsang", fontSize: 30),
             CustomText("Version 3.0", fontSize: 15, color: Colors.black)
           ]),
           SizedBox(height: 20),
@@ -56,7 +56,9 @@ class BottomSheetUI extends StatelessWidget {
                 title: "Daily Darshan",
                 imageName: AppImages.dailyDarshanBottomSheet,
                 onTap: () {
-                  final selectedDate = Rx<DateTime>(DateTime.now());
+                  final selectedDate =
+                      Rx<DateTime>(DateTime.now().subtract(Duration(days: 1)));
+                  // final previousDate = selectedDate.subtract(Duration(days: 1));
 
                   Get.to(() => DailyDarshanScreenUI(
                       title: "Thakorji Maharaj", date: selectedDate.value));
@@ -67,7 +69,7 @@ class BottomSheetUI extends StatelessWidget {
                 onTap: () {
                   Get.to(() => SettingScreenUI());
                 }),
-          ])
+          ]),
         ]));
   }
 

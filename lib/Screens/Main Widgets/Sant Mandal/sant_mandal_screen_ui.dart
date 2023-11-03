@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/santMandal_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -55,16 +56,14 @@ class _SantMandalScreenUIState extends State<SantMandalScreenUI> {
                                   SizedBox(height: 10),
                                   Row(children: [
                                     Container(
-                                        height: screenHeight(context) * 0.2,
-                                        width: screenWidth(context) * 0.35,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: NetworkImage(
-                                                    data.photopath!)))),
+                                      height: screenHeight(context) * 0.2,
+                                      width: screenWidth(context) * 0.35,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: CachedImageWithShimmer(
+                                            imageUrl: data.photopath!),
+                                      ),
+                                    ),
                                     Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(

@@ -6,6 +6,8 @@ import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/About%20Us/aboutus_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Feedback%20Screen/feedback_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Prashadi%20Vastu%20Sthan/prashadi_vastu_sthan_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Wellpaper/wallpaper_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -43,8 +45,18 @@ class DrawerData extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 20),
-                    _subMenuCard(title: "Wallpapers", onTap: () {}),
-                    _subMenuCard(title: "Prasadi Vastu / Sthan", onTap: () {}),
+                    _subMenuCard(
+                        title: "Wallpapers",
+                        onTap: () {
+                          Get.back();
+                          Get.to(() => WallpaperScreenUI());
+                        }),
+                    _subMenuCard(
+                        title: "Prasadi Vastu / Sthan",
+                        onTap: () {
+                          Get.back();
+                          Get.to(() => PrashadiVastuSthanScreenUI());
+                        }),
                     _subMenuCard(title: "Donations", onTap: () {}),
                     _subMenuCard(title: "Our Applications", onTap: () {}),
                     _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
@@ -146,9 +158,13 @@ class DrawerData extends StatelessWidget {
         onTap: onTap!,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-          child: CustomText(
-            title!,
-            fontSize: 16,
+          child: Row(
+            children: [
+              CustomText(
+                title!,
+                fontSize: 16,
+              ),
+            ],
           ),
         ));
   }

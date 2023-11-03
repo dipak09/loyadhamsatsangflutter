@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/events_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_photo_screen_ui.dart';
@@ -73,15 +74,15 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 20),
                                             // width: 150,
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: NetworkImage(Events
-                                                        .eventList[index]
-                                                        .source!)))),
+
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: CachedImageWithShimmer(
+                                                imageUrl: Events
+                                                    .eventList[index].source!,
+                                              ),
+                                            )),
                                       ],
                                     ),
                                   ),

@@ -69,18 +69,22 @@ class _BottomNavigationState extends State<BottomNavigation> {
               width: MediaQuery.of(context).size.width * .9,
               child: DrawerData(),
             ),
-            body: IndexedStack(
-              index: widget.index,
-              children: <Widget>[
-                VideoScreenUI(),
-                MusicScreenUI(),
-                DashboardScreenUI(
-                  drawer: _drawerKey,
+            body: Stack(
+              children: [
+                IndexedStack(
+                  index: widget.index,
+                  children: <Widget>[
+                    VideoScreenUI(),
+                    MusicScreenUI(),
+                    DashboardScreenUI(
+                      drawer: _drawerKey,
+                    ),
+                    EventScreenUI(),
+                    DashboardScreenUI(
+                      drawer: _drawerKey,
+                    )
+                  ],
                 ),
-                EventScreenUI(),
-                DashboardScreenUI(
-                  drawer: _drawerKey,
-                )
               ],
             ),
             bottomNavigationBar: buildMyNavBar(context)));
