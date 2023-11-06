@@ -1,15 +1,16 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, body_might_complete_normally_nullable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/Dashboard_Image_slider.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_appbar.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DashboardScreenUI extends StatefulWidget {
   final GlobalKey<ScaffoldState>? drawer;
@@ -24,27 +25,20 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ModalProgressHUD(
-        inAsyncCall: Home.isLoading.value,
-        color: Colors.white,
-        opacity: 0.9,
-        progressIndicator: Center(child: CircularProgressIndicator()),
-        child: Scaffold(
-          backgroundColor: Colors.white54,
-          appBar: DashboardAppBar(drawer: widget.drawer),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                DashBoardImageSlider(),
-                liveStreamSection(),
-                dailyDarshanSection(),
-                featuredMediaSection(),
-                upcomingeventSection()
-              ],
-            ),
-          ),
-        )));
-    // )));
+    return Scaffold(
+        backgroundColor: Colors.white54,
+        appBar: DashboardAppBar(drawer: widget.drawer),
+        body: SingleChildScrollView(
+            child: Column(children: [
+          Obx(() => Home.isLoading.value == true
+              ? _loaderSlider()
+              : DashBoardImageSlider()),
+          liveStreamSection(),
+          dailyDarshanSection(),
+          featuredMediaSection(),
+          SizedBox(height: 10),
+          upcomingeventSection()
+        ])));
   }
 
   Widget liveStreamSection() {
@@ -62,36 +56,46 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                         fontWeight: FontWeight.bold,
                       ),
                     ])),
-            SizedBox(
-                height: screenHeight(context) * 0.2,
-                child: ListView.builder(
-                    itemCount: Home.livestreamingList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (contex, index) {
-                      return InkWell(
-                        onTap: () {
-                          Get.to(() => VideoScreen(
-                                url: Home.livestreamingList[index].youtubeLink,
-                                videoId:
-                                    Home.livestreamingList[index].initialId,
-                              ));
-                        },
-                        child: Container(
-                            height: 125,
-                            width: 250,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                border:
-                                    Border.all(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    image: NetworkImage(Home
+            Obx(() => Home.isLoading.value == true
+                ? _loader()
+                : SizedBox(
+                    height: screenHeight(context) * 0.2,
+                    child: ListView.builder(
+                        itemCount: Home.livestreamingList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (contex, index) {
+                          return InkWell(
+                            onTap: () {
+                              Get.to(() => VideoScreen(
+                                    url: Home
+                                        .livestreamingList[index].youtubeLink,
+                                    videoId:
+                                        Home.livestreamingList[index].initialId,
+                                  ));
+                            },
+                            child: Container(
+                              height: 125,
+                              width: 250,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  border:
+                                      Border.all(color: Colors.white, width: 3),
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                      image: NetworkImage(Home
+                                          .livestreamingList[index].thumbnail!),
+                                      fit: BoxFit.fill)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedImageWithShimmer(
+                                    imageUrl: Home
                                         .livestreamingList[index].thumbnail!),
-                                    fit: BoxFit.fill))),
-                      );
-                    }))
+                              ),
+                            ),
+                          );
+                        })))
           ]);
   }
 
@@ -107,35 +111,39 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
               fontWeight: FontWeight.bold,
             ),
           ])),
-      SizedBox(
-          height: screenHeight(context) * 0.2,
-          child: ListView.builder(
-              itemCount: Home.dailyDarshanList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (contex, index) {
-                return InkWell(
-                  onTap: () {
-                    // print(Home.dailyDarshanList[index].title);
-                    // //print(Home.dailyDarshanList[index].albumTitle.toString());
+      Obx(() => Home.isLoading.value == true
+          ? _loader()
+          : SizedBox(
+              height: screenHeight(context) * 0.2,
+              child: ListView.builder(
+                  itemCount: Home.dailyDarshanList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (contex, index) {
+                    return InkWell(
+                      onTap: () {
+                        // print(Home.dailyDarshanList[index].title);
+                        print(
+                            Home.dailyDarshanList[index].createdAt.toString());
 
-                    Get.to(() => DailyDarshanScreenUI(
-                        title: Home.dailyDarshanList[index].title,
-                        date: Home.dailyDarshanList[index].albumTitle));
-                  },
-                  child: Container(
-                      height: 125,
-                      width: 250,
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black, width: 3),
+                        Get.to(() => DailyDarshanScreenUI(
+                            title: Home.dailyDarshanList[index].title,
+                            date: Home.dailyDarshanList[index].albumTitle));
+                      },
+                      child: Container(
+                        height: 125,
+                        width: 250,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        decoration: BoxDecoration(),
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  Home.dailyDarshanList[index].source),
-                              fit: BoxFit.contain))),
-                );
-              }))
+                          child: CachedImageWithShimmer(
+                              fit: BoxFit.fitHeight,
+                              imageUrl: Home.dailyDarshanList[index].source),
+                        ),
+                      ),
+                    );
+                  })))
     ]);
   }
 
@@ -151,34 +159,96 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
               fontWeight: FontWeight.bold,
             ),
           ])),
-      SizedBox(
-          height: screenHeight(context) * 0.2,
-          child: ListView.builder(
-              itemCount: Home.featuredMediaList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (contex, index) {
-                return InkWell(
-                  onTap: () {
-                    Get.to(() => VideoScreen(
-                          url: Home.featuredMediaList[index].youtubeLink,
-                          videoId: Home.featuredMediaList[index].initialId,
-                        ));
-                  },
-                  child: Container(
-                      height: 125,
-                      width: 250,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          border: Border.all(color: Colors.white, width: 3),
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  Home.featuredMediaList[index].thumbnail!),
-                              fit: BoxFit.fill))),
-                );
-              }))
+      Obx(() => Home.isLoading.value == true
+          ? _loader()
+          : SizedBox(
+              height: screenHeight(context) * 0.25,
+              child: ListView.builder(
+                  itemCount: Home.featuredMediaList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (contex, index) {
+                    return InkWell(
+                      onTap: () {
+                        Get.to(() => VideoScreen(
+                              url: Home.featuredMediaList[index].youtubeLink,
+                              videoId: Home.featuredMediaList[index].initialId,
+                            ));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 140,
+                            width: 250,
+                            margin: EdgeInsets.only(top: 10, left: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15)),
+                              child: CachedImageWithShimmer(
+                                  fit: BoxFit.fitHeight,
+                                  imageUrl:
+                                      Home.featuredMediaList[index].thumbnail!),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            width: 250,
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(179, 221, 218, 218),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15))),
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  width: 250,
+                                  child: CustomText(
+                                    Home.featuredMediaList[index].title!,
+                                    fontSize: 9,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  width: 250,
+                                  child: CustomText(
+                                      Home.featuredMediaList[index]
+                                          .publishedDate!
+                                          .toString(),
+                                      fontSize: 9,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                                Container(
+                                  width: 250,
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomText(
+                                        Home.featuredMediaList[index].timeAgo!,
+                                        fontSize: 9,
+                                      ),
+                                      CustomText(
+                                        Home.featuredMediaList[index]
+                                            .viewCount!,
+                                        fontSize: 9,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  })))
     ]);
   }
 
@@ -194,35 +264,92 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
               fontWeight: FontWeight.bold,
             ),
           ])),
-      SizedBox(
-          height: screenHeight(context) * 0.2,
-          child: ListView.builder(
-              itemCount: Home.upcomingEventList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (contex, index) {
-                return InkWell(
-                  onTap: () {
-                    Get.to(() => VideoScreen(
-                          url: Home.upcomingEventList[index].youtubeLink,
-                          videoId: Home.upcomingEventList[index].initialId,
-                        ));
-                  },
-                  child: Container(
-                      height: 125,
-                      width: 250,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          border: Border.all(color: Colors.white, width: 3),
+      Obx(() => Home.isLoading.value == true
+          ? _loader()
+          : SizedBox(
+              height: screenHeight(context) * 0.2,
+              child: ListView.builder(
+                  itemCount: Home.upcomingEventList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (contex, index) {
+                    return InkWell(
+                      onTap: () {
+                        Get.to(() => VideoScreen(
+                              url: Home.upcomingEventList[index].youtubeLink,
+                              videoId: Home.upcomingEventList[index].initialId,
+                            ));
+                      },
+                      child: Container(
+                        height: 125,
+                        width: 250,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            border: Border.all(color: Colors.white, width: 3),
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    Home.upcomingEventList[index].thumbnail!),
+                                fit: BoxFit.fill)),
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: NetworkImage(
+                          child: CachedImageWithShimmer(
+                              fit: BoxFit.fitHeight,
+                              imageUrl:
                                   Home.upcomingEventList[index].thumbnail!),
-                              fit: BoxFit.fill))),
-                );
-              }))
+                        ),
+                      ),
+                    );
+                  })))
     ]);
+  }
+
+  Widget _loaderSlider() {
+    return Container(
+      height: screenHeight(context) * 0.18,
+      width: screenWidth(context),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Shimmer.fromColors(
+          highlightColor: Colors.grey[300]!,
+          baseColor: Colors.grey[200]!,
+          child: Container(
+            width: 200,
+            height: 200,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loader() {
+    return SizedBox(
+      height: screenHeight(context) * 0.2,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Container(
+              height: 125,
+              width: 250,
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Shimmer.fromColors(
+                  highlightColor: Colors.grey[300]!,
+                  baseColor: Colors.grey[200]!,
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
   }
 }
 

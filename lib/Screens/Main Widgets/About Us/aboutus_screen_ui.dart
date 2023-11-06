@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/aboutus_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -43,16 +44,15 @@ class _AboutUsScreenUIState extends State<AboutUsScreenUI> {
                                       textAlign: TextAlign.center),
                                   SizedBox(height: 10),
                                   Container(
-                                      height: screenHeight(context) * 0.4,
-                                      margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.grey,
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  data.uploadFile!),
-                                              fit: BoxFit.fill))),
+                                    height: screenHeight(context) * 0.4,
+                                    width: screenWidth(context),
+                                    margin: EdgeInsets.all(10),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: CachedImageWithShimmer(
+                                          imageUrl: data.uploadFile!),
+                                    ),
+                                  ),
                                   Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),

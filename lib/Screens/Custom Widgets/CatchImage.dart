@@ -19,8 +19,8 @@ class CachedImageWithShimmer extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: imageUrl,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey,
-        highlightColor: Colors.white,
+        highlightColor: Colors.grey[300]!,
+        baseColor: Colors.grey[200]!,
         child: Container(
           width: width,
           height: height,

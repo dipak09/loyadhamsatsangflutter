@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,15 +40,13 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
                   _launchURL(item.routename!);
                 },
                 child: Container(
+                  height: screenHeight(context) * 0.22,
+                  width: screenWidth(context),
                   margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                            item.image!,
-                          ),
-                          fit: BoxFit.fill)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedImageWithShimmer(imageUrl: item.image!),
+                  ),
                 ),
               ),
             )

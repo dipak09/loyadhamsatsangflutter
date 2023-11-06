@@ -29,7 +29,7 @@ class DailyDarshanController extends GetxController {
 
   getValue() {
     final formattedDate = DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
-    print(formattedDate);
+
     getData(title: selectedTitle.toString(), date: formattedDate.toString());
   }
 
@@ -46,7 +46,6 @@ class DailyDarshanController extends GetxController {
   var currentIndex = 0.obs;
 
   void onPageChanged(int index, CarouselPageChangedReason reason) {
-    print(index);
     update();
     currentIndex.value = index;
   }

@@ -6,9 +6,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/daily_darshan_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:intl/intl.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_photo_viewer.dart';
+import 'package:loyadhamsatsang/globals.dart';
 
 class DailyDarshanScreenUI extends StatefulWidget {
   String? title;
@@ -26,18 +29,16 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
   void initState() {
     super.initState();
     getValue();
-
-    Future.delayed(Duration(seconds: 1), () {
-      // Replace this with the function you want to call
-      getValue();
-    });
   }
 
   getValue() {
     DailyDarshan.selectItem(widget.title!);
     DailyDarshan.selectDate(widget.date!);
+
     setState(() {
-      //DailyDarshan.getValue();
+      Future.delayed(Duration(seconds: 2), () {
+        DailyDarshan.getValue();
+      });
     });
   }
 
@@ -61,17 +62,33 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                               CarouselSlider(
                                   items: DailyDarshan.dailyDarshanList.map((e) {
                                     return Stack(children: [
-                                      Container(
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(() => DailyDarshanPhotoViewer(
+                                              title: e.title,
+                                              darshanList: DailyDarshan
+                                                  .dailyDarshanList));
+                                        },
+                                        child: Container(
                                           height: 335,
+                                          width: screenWidth(context),
                                           decoration: BoxDecoration(
-                                              color: AppColors.backgroundColor,
-                                              border: Border.all(
-                                                  color: AppColors.apptheme),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15)),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(e.source),
-                                                  fit: BoxFit.cover))),
+                                            color: AppColors.backgroundColor,
+                                            border: Border.all(
+                                                color: AppColors.apptheme),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)),
+                                            child: CachedImageWithShimmer(
+                                              imageUrl: e.source,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                       Align(
                                           alignment: Alignment.bottomCenter,
                                           child: Container(
