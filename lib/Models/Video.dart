@@ -3,7 +3,7 @@ class Video {
   String? thumbnail;
   String? youtubeLink;
   String? initialId;
-  DateTime? publishedDate;
+  String? publishedDate;
   String? timeAgo;
   String? viewCount;
 
@@ -22,9 +22,7 @@ class Video {
         thumbnail: json["thumbnail"],
         youtubeLink: json["youtube_link"],
         initialId: json["initial_id"],
-        publishedDate: json["published_date"] == null
-            ? null
-            : DateTime.parse(json["published_date"]),
+        publishedDate: json["published_date"],
         timeAgo: json["time_ago"],
         viewCount: json["view_count"],
       );
@@ -34,8 +32,7 @@ class Video {
         "thumbnail": thumbnail,
         "youtube_link": youtubeLink,
         "initial_id": initialId,
-        "published_date":
-            "${publishedDate!.year.toString().padLeft(4, '0')}-${publishedDate!.month.toString().padLeft(2, '0')}-${publishedDate!.day.toString().padLeft(2, '0')}",
+        "published_date": publishedDate,
         "time_ago": timeAgo,
         "view_count": viewCount,
       };

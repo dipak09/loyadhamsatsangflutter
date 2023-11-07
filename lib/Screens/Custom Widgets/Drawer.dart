@@ -5,16 +5,27 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/About%20Us/aboutus_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Contact_Us/contact_us_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Feedback%20Screen/feedback_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Prashadi%20Vastu%20Sthan/prashadi_vastu_sthan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Wellpaper/wallpaper_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'CustomText.dart';
 
 class DrawerData extends StatelessWidget {
   const DrawerData({super.key});
+  _launchURL(String openURL) async {
+    // ignore: deprecated_member_use
+    if (await canLaunch(openURL)) {
+      // ignore: deprecated_member_use
+      await launch(openURL);
+    } else {
+      throw 'Could not launch $openURL';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +95,12 @@ class DrawerData extends StatelessWidget {
                           Get.back();
                           Get.to(() => FeedBackScreenUI());
                         }),
-                    _subMenuCard(title: "Contact us", onTap: () {}),
+                    _subMenuCard(
+                        title: "Contact us",
+                        onTap: () {
+                          Get.back();
+                          Get.to(() => ContactUSScreenUI());
+                        }),
                     _subMenuCard(
                         title: "About US",
                         onTap: () {
@@ -96,35 +112,64 @@ class DrawerData extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                Image.asset(
-                  AppImages.youtube,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {
+                    _launchURL("https://www.youtube.com/user/MaconMandal");
+                  },
+                  child: Image.asset(
+                    AppImages.youtube,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
-                Image.asset(
-                  AppImages.facebook,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {
+                    _launchURL("https://www.facebook.com/loyadhammandir/");
+                  },
+                  child: Image.asset(
+                    AppImages.facebook,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
-                Image.asset(
-                  AppImages.insta,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {
+                    _launchURL("https://www.instagram.com/loyadhammandir/");
+                  },
+                  child: Image.asset(
+                    AppImages.insta,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
-                Image.asset(
-                  AppImages.whatsapp,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {
+                    _launchURL(
+                        "https://api.whatsapp.com/send?phone=918758026000&text=Jay%20Swaminarayan,%20Name:%20___________City:%20_____________Country%20:%20___________");
+                  },
+                  child: Image.asset(
+                    AppImages.whatsapp,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
-                Image.asset(
-                  AppImages.spotify,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {},
+                  child: Image.asset(
+                    AppImages.spotify,
+                    height: 30,
+                    width: 30,
+                  ),
                 ),
-                Image.asset(
-                  AppImages.web,
-                  height: 30,
-                  width: 30,
+                InkWell(
+                  onTap: () {
+                    _launchURL("https://loyadham.in/");
+                  },
+                  child: Image.asset(
+                    AppImages.web,
+                    height: 30,
+                    width: 30,
+                  ),
                 )
               ]),
               SizedBox(height: 20),

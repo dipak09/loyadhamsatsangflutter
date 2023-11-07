@@ -30,7 +30,6 @@ class VideoController extends GetxController {
         Video video = Video.fromJson(el);
         videoList.add(video);
       });
-      print(videoList.length);
 
       isLoading(false);
       update();

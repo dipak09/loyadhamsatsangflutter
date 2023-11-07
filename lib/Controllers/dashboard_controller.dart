@@ -49,12 +49,12 @@ class DashboardController extends GetxController {
         DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
         dailyDarshanList.add(dailydarshans);
       });
-      final featuredMediaData = data['featuredmedia'];
+      //  final featuredMediaData = data['featuredmedia'];
 
-      featuredMediaData.forEach((el) {
-        Video featuredMedia = Video.fromJson(el);
-        featuredMediaList.add(featuredMedia);
-      });
+      // featuredMediaData.forEach((el) {
+      //   Video featuredMedia = Video.fromJson(el);
+      //   featuredMediaList.add(featuredMedia);
+      // });
       final upcomingEventData = data['upcomingevent'];
 
       upcomingEventData.forEach((el) {

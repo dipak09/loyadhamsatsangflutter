@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
@@ -22,7 +23,7 @@ class DashboardScreenUI extends StatefulWidget {
 
 class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Home = Get.put(DashboardController());
-
+  var Video = Get.put(VideoController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,11 +51,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText(
-                        "Live Streaming",
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      CustomText("Live Streaming",
+                          color: Colors.black, fontWeight: FontWeight.bold)
                     ])),
             Obx(() => Home.isLoading.value == true
                 ? _loader()
@@ -65,36 +63,34 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (contex, index) {
                           return InkWell(
-                            onTap: () {
-                              Get.to(() => VideoScreen(
+                              onTap: () {
+                                Get.to(() => VideoScreen(
                                     url: Home
                                         .livestreamingList[index].youtubeLink,
-                                    videoId:
-                                        Home.livestreamingList[index].initialId,
-                                  ));
-                            },
-                            child: Container(
-                              height: 125,
-                              width: 250,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  border:
-                                      Border.all(color: Colors.white, width: 3),
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                      image: NetworkImage(Home
-                                          .livestreamingList[index].thumbnail!),
-                                      fit: BoxFit.fill)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: CachedImageWithShimmer(
-                                    imageUrl: Home
-                                        .livestreamingList[index].thumbnail!),
-                              ),
-                            ),
-                          );
+                                    videoId: Home
+                                        .livestreamingList[index].initialId));
+                              },
+                              child: Container(
+                                  height: 125,
+                                  width: 250,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      border: Border.all(
+                                          color: Colors.white, width: 3),
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: NetworkImage(Home
+                                              .livestreamingList[index]
+                                              .thumbnail!),
+                                          fit: BoxFit.fill)),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: CachedImageWithShimmer(
+                                          imageUrl: Home
+                                              .livestreamingList[index]
+                                              .thumbnail!))));
                         })))
           ]);
   }
@@ -103,14 +99,12 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
     return Column(children: [
       Padding(
           padding: EdgeInsets.only(left: 25, right: 25),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CustomText(
-              "Daily Darshan",
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ])),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText("Daily Darshan",
+                    color: Colors.black, fontWeight: FontWeight.bold)
+              ])),
       Obx(() => Home.isLoading.value == true
           ? _loader()
           : SizedBox(
@@ -120,29 +114,27 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (contex, index) {
                     return InkWell(
-                      onTap: () {
-                        // print(Home.dailyDarshanList[index].title);
-                        print(
-                            Home.dailyDarshanList[index].createdAt.toString());
+                        onTap: () {
+                          // print(Home.dailyDarshanList[index].title);
+                          print(Home.dailyDarshanList[index].createdAt
+                              .toString());
 
-                        Get.to(() => DailyDarshanScreenUI(
-                            title: Home.dailyDarshanList[index].title,
-                            date: Home.dailyDarshanList[index].albumTitle));
-                      },
-                      child: Container(
-                        height: 125,
-                        width: 250,
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                        decoration: BoxDecoration(),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedImageWithShimmer(
-                              fit: BoxFit.fitHeight,
-                              imageUrl: Home.dailyDarshanList[index].source),
-                        ),
-                      ),
-                    );
+                          Get.to(() => DailyDarshanScreenUI(
+                              title: Home.dailyDarshanList[index].title,
+                              date: Home.dailyDarshanList[index].albumTitle));
+                        },
+                        child: Container(
+                            height: 125,
+                            width: 250,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 10),
+                            decoration: BoxDecoration(),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: CachedImageWithShimmer(
+                                    fit: BoxFit.fitHeight,
+                                    imageUrl:
+                                        Home.dailyDarshanList[index].source))));
                   })))
     ]);
   }
@@ -159,95 +151,82 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
               fontWeight: FontWeight.bold,
             ),
           ])),
-      Obx(() => Home.isLoading.value == true
+      Obx(() => Video.isLoading.value == true
           ? _loader()
           : SizedBox(
               height: screenHeight(context) * 0.25,
               child: ListView.builder(
-                  itemCount: Home.featuredMediaList.length,
+                  itemCount: Video.videoList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (contex, index) {
                     return InkWell(
-                      onTap: () {
-                        Get.to(() => VideoScreen(
-                              url: Home.featuredMediaList[index].youtubeLink,
-                              videoId: Home.featuredMediaList[index].initialId,
-                            ));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 140,
-                            width: 250,
-                            margin: EdgeInsets.only(top: 10, left: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15)),
-                              child: CachedImageWithShimmer(
-                                  fit: BoxFit.fitHeight,
-                                  imageUrl:
-                                      Home.featuredMediaList[index].thumbnail!),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            width: 250,
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                                color: Color.fromARGB(179, 221, 218, 218),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15))),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                        onTap: () {
+                          Get.to(() => VideoScreen(
+                              url: Video.videoList[index].youtubeLink,
+                              videoId: Video.videoList[index].initialId));
+                        },
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  height: 140,
                                   width: 250,
-                                  child: CustomText(
-                                    Home.featuredMediaList[index].title!,
-                                    fontSize: 9,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  margin: EdgeInsets.only(top: 10, left: 10),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15)),
+                                      child: CachedImageWithShimmer(
+                                          fit: BoxFit.fitHeight,
+                                          imageUrl: Video
+                                              .videoList[index].thumbnail!))),
+                              Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
                                   width: 250,
-                                  child: CustomText(
-                                      Home.featuredMediaList[index]
-                                          .publishedDate!
-                                          .toString(),
-                                      fontSize: 9,
-                                      overflow: TextOverflow.ellipsis),
-                                ),
-                                Container(
-                                  width: 250,
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      CustomText(
-                                        Home.featuredMediaList[index].timeAgo!,
-                                        fontSize: 9,
-                                      ),
-                                      CustomText(
-                                        Home.featuredMediaList[index]
-                                            .viewCount!,
-                                        fontSize: 9,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Color.fromARGB(179, 221, 218, 218),
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15))),
+                                  child: Column(children: [
+                                    Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        width: 250,
+                                        child: CustomText(
+                                            Video.videoList[index].title!,
+                                            fontSize: 9,
+                                            overflow: TextOverflow.ellipsis)),
+                                    Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        width: 250,
+                                        child: CustomText(
+                                            Video
+                                                .videoList[index].publishedDate!
+                                                .toString(),
+                                            fontSize: 9,
+                                            overflow: TextOverflow.ellipsis)),
+                                    Container(
+                                        width: 250,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              CustomText(
+                                                  Video.videoList[index]
+                                                      .timeAgo!,
+                                                  fontSize: 9),
+                                              CustomText(
+                                                  Video.videoList[index]
+                                                      .viewCount!,
+                                                  fontSize: 9)
+                                            ]))
+                                  ]))
+                            ]));
                   })))
     ]);
   }
@@ -256,14 +235,12 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
     return Column(children: [
       Padding(
           padding: EdgeInsets.only(left: 25, right: 25),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CustomText(
-              "Upcoming Events",
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ])),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText("Upcoming Events",
+                    color: Colors.black, fontWeight: FontWeight.bold)
+              ])),
       Obx(() => Home.isLoading.value == true
           ? _loader()
           : SizedBox(
@@ -273,221 +250,67 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (contex, index) {
                     return InkWell(
-                      onTap: () {
-                        Get.to(() => VideoScreen(
+                        onTap: () {
+                          Get.to(() => VideoScreen(
                               url: Home.upcomingEventList[index].youtubeLink,
-                              videoId: Home.upcomingEventList[index].initialId,
-                            ));
-                      },
-                      child: Container(
-                        height: 125,
-                        width: 250,
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white, width: 3),
-                            borderRadius: BorderRadius.circular(15),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    Home.upcomingEventList[index].thumbnail!),
-                                fit: BoxFit.fill)),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedImageWithShimmer(
-                              fit: BoxFit.fitHeight,
-                              imageUrl:
-                                  Home.upcomingEventList[index].thumbnail!),
-                        ),
-                      ),
-                    );
+                              videoId:
+                                  Home.upcomingEventList[index].initialId));
+                        },
+                        child: Container(
+                            height: 125,
+                            width: 250,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                border:
+                                    Border.all(color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                    image: NetworkImage(Home
+                                        .upcomingEventList[index].thumbnail!),
+                                    fit: BoxFit.fill)),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: CachedImageWithShimmer(
+                                    fit: BoxFit.fitHeight,
+                                    imageUrl: Home.upcomingEventList[index]
+                                        .thumbnail!))));
                   })))
     ]);
   }
 
   Widget _loaderSlider() {
     return Container(
-      height: screenHeight(context) * 0.18,
-      width: screenWidth(context),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Shimmer.fromColors(
-          highlightColor: Colors.grey[300]!,
-          baseColor: Colors.grey[200]!,
-          child: Container(
-            width: 200,
-            height: 200,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
+        height: screenHeight(context) * 0.18,
+        width: screenWidth(context),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Shimmer.fromColors(
+                highlightColor: Colors.grey[300]!,
+                baseColor: Colors.grey[200]!,
+                child:
+                    Container(width: 200, height: 200, color: Colors.white))));
   }
 
   Widget _loader() {
     return SizedBox(
-      height: screenHeight(context) * 0.2,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 125,
-              width: 250,
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Shimmer.fromColors(
-                  highlightColor: Colors.grey[300]!,
-                  baseColor: Colors.grey[200]!,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            );
-          }),
-    );
+        height: screenHeight(context) * 0.2,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Container(
+                  height: 125,
+                  width: 250,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Shimmer.fromColors(
+                          highlightColor: Colors.grey[300]!,
+                          baseColor: Colors.grey[200]!,
+                          child: Container(
+                              width: 200, height: 200, color: Colors.white))));
+            }));
   }
 }
-
-
-// Widget statusSection() {
-//   return Column(children: [
-//     Padding(
-//         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-//         child:
-//             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-//           CustomText("Stories",
-//               color: Colors.black,
-//               fontWeight: FontWeight.bold,
-//               fontFamily: 'Open Sans'),
-//           Row(children: [
-//             Icon(Icons.arrow_right),
-//             CustomText("Watch all",
-//                 color: Colors.black,
-//                 fontWeight: FontWeight.w400,
-//                 fontFamily: 'Open Sans')
-//           ])
-//         ])),
-//     SizedBox(
-//       height: screenHeight(context) * 0.13,
-//       child: ListView.builder(
-//           shrinkWrap: true,
-//           scrollDirection: Axis.horizontal,
-//           itemCount: Home.publicationList.length,
-//           itemBuilder: (context, index) {
-//             return statusCircleCard(
-//                 onTap: () {
-//                   Get.toNamed('/${Home.publicationList[index].routename}');
-//                 },
-//                 title: Home.publicationList[index].name,
-//                 img: Home.publicationList[index].image);
-//           }),
-//     )
-//   ]);
-// }
-
-// Widget statusCircleCard({String? title, String? img, Function? onTap}) {
-//   return GestureDetector(
-//     onTap: () {
-//       if (onTap != null) onTap();
-//     },
-//     child: SizedBox(
-//         height: screenHeight(context) * 0.13,
-//         child: Column(children: [
-//           Container(
-//               height: 75,
-//               width: 75,
-//               margin: EdgeInsets.all(5),
-//               alignment: Alignment.center,
-//               decoration: BoxDecoration(
-//                   image: DecorationImage(
-//                       image: AssetImage(AppImages.statusCircle),
-//                       fit: BoxFit.fill)),
-//               child: ClipOval(
-//                   child: Container(
-//                       width: 60.0,
-//                       height: 60.0,
-//                       decoration: BoxDecoration(
-//                           color: Colors.white,
-//                           image: DecorationImage(
-//                               image: NetworkImage(img!),
-//                               fit: BoxFit.fill))))),
-//           CustomText(title!,
-//               color: Colors.black,
-//               fontSize: 10,
-//               overflow: TextOverflow.ellipsis,
-//               fontWeight: FontWeight.w400,
-//               fontFamily: 'Open Sans')
-//         ])),
-//   );
-// }
-
-// Widget branchesSection() {
-//   return Column(children: [
-//     Padding(
-//         padding: EdgeInsets.only(left: 25, right: 25),
-//         child:
-//             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-//           CustomText("Branches",
-//               color: Colors.black,
-//               fontWeight: FontWeight.bold,
-//               fontFamily: 'Open Sans'),
-//           GestureDetector(
-//             onTap: () {
-//               Get.to(() => BranchesScreenUI());
-//             },
-//             child: Row(children: [
-//               Icon(Icons.arrow_right),
-//               CustomText("View all",
-//                   color: Colors.black,
-//                   fontWeight: FontWeight.w400,
-//                   fontFamily: 'Open Sans')
-//             ]),
-//           )
-//         ])),
-//     SizedBox(
-//       height: screenHeight(context) * 0.24,
-//       child: ListView.builder(
-//           shrinkWrap: true,
-//           scrollDirection: Axis.horizontal,
-//           itemCount: Home.branchesList.length,
-//           itemBuilder: (context, index) {
-//             return GestureDetector(
-//               onTap: () {
-//                 Get.to(() => BranchesScreenUI());
-//               },
-//               child: dailyNiyamCard(
-//                   title: Home.branchesList[index].name,
-//                   img: Home.branchesList[index].image),
-//             );
-//           }),
-//     ),
-//   ]);
-// }
-
-// Widget dailyNiyamCard({String? title, String? img}) {
-//   return Container(
-//       height: 100,
-//       margin: EdgeInsets.symmetric(horizontal: 10),
-//       child: Column(children: [
-//         Padding(
-//           padding: const EdgeInsets.only(top: 20),
-//           child: Container(
-//               width: 120.0,
-//               height: 130.0,
-//               decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(15),
-//                   image: DecorationImage(
-//                       image: NetworkImage(img!), fit: BoxFit.fill))),
-//         ),
-//         SizedBox(height: 10),
-//         CustomText(title!,
-//             fontSize: 10, color: Colors.black, textAlign: TextAlign.start)
-//       ]));
-// }
-
-
