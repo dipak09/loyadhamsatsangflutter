@@ -90,205 +90,115 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
         opacity: 0.9,
         // progressIndicator: Center(child: CircularProgressIndicator()),
         child: Scaffold(
-          backgroundColor: Colors.black,
-          appBar: CustomAppBar(
-            title: widget.name,
-          ),
-          body: Events.imageList.isEmpty
-              ? Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
+            backgroundColor: Colors.black,
+            appBar: CustomAppBar(title: widget.name),
+            body: Events.imageList.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : Column(children: [
                     Expanded(
-                      child: Stack(
-                        children: [
-                          PhotoViewGallery.builder(
-                              pageController: pageController,
-                              itemCount: Events.imageList.length,
-                              backgroundDecoration:
-                                  BoxDecoration(color: Colors.black),
-                              onPageChanged: (index) {
-                                setState(() {
-                                  currentIndex = index;
-                                });
-                              },
-                              builder: (context, index) {
-                                return PhotoViewGalleryPageOptions(
-                                    imageProvider: NetworkImage(
-                                        Events.imageList[index].source!),
-                                    minScale: PhotoViewComputedScale.contained,
-                                    maxScale:
-                                        PhotoViewComputedScale.covered * 2);
-                              }),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
+                        child: Stack(children: [
+                      PhotoViewGallery.builder(
+                          pageController: pageController,
+                          itemCount: Events.imageList.length,
+                          backgroundDecoration:
+                              BoxDecoration(color: Colors.black),
+                          onPageChanged: (index) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                          builder: (context, index) {
+                            return PhotoViewGalleryPageOptions(
+                                imageProvider: NetworkImage(
+                                    Events.imageList[index].source!),
+                                minScale: PhotoViewComputedScale.contained,
+                                maxScale: PhotoViewComputedScale.covered * 2);
+                          }),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.download,
-                                      color: Colors.white,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.download,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        downloadImage(Events
+                                            .imageList[currentIndex].source!);
+                                      },
                                     ),
-                                    onPressed: () {
-                                      downloadImage(Events
-                                          .imageList[currentIndex].source!);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      shareImage(Events
-                                          .imageList[currentIndex].source!);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                                    IconButton(
+                                        icon: Icon(
+                                          Icons.share,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          shareImage(Events
+                                              .imageList[currentIndex].source!);
+                                        })
+                                  ])))
+                    ])),
                     Container(
-                      height: 100, // Adjust the height as needed
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: Events.imageList.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                pageController.animateToPage(index,
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.ease);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: index == currentIndex
-                                        ? Colors.blue
-                                        : Colors.transparent,
-                                    width: 2.0,
-                                  ),
-                                ),
-                                child: CachedImageWithShimmer(
-                                    width: 100,
-                                    imageUrl: Events.imageList[index].source!),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.black,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      if (currentIndex > 0) {
-                        pageController.animateToPage(currentIndex - 1,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      }
-                    },
-                    child: Icon(Icons.arrow_back)),
-                ElevatedButton(
-                    onPressed: () {
-                      if (currentIndex < Events.imageList.length - 1) {
-                        pageController.animateToPage(currentIndex + 1,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      }
-                    },
-                    child: Icon(Icons.arrow_forward)),
-              ],
-            ),
-          ),
-        )));
+                        height: 100, // Adjust the height as needed
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: Events.imageList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        pageController.animateToPage(index,
+                                            duration:
+                                                Duration(milliseconds: 300),
+                                            curve: Curves.ease);
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: index == currentIndex
+                                                  ? Colors.blue
+                                                  : Colors.transparent,
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          child: CachedImageWithShimmer(
+                                              width: 100,
+                                              imageUrl: Events
+                                                  .imageList[index].source!))));
+                            }))
+                  ])
+            // bottomNavigationBar: BottomAppBar(
+            //   color: Colors.black,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //     children: [
+            //       ElevatedButton(
+            //           onPressed: () {
+            //             if (currentIndex > 0) {
+            //               pageController.animateToPage(currentIndex - 1,
+            //                   duration: Duration(milliseconds: 300),
+            //                   curve: Curves.ease);
+            //             }
+            //           },
+            //           child: Icon(Icons.arrow_back)),
+            //       ElevatedButton(
+            //           onPressed: () {
+            //             if (currentIndex < Events.imageList.length - 1) {
+            //               pageController.animateToPage(currentIndex + 1,
+            //                   duration: Duration(milliseconds: 300),
+            //                   curve: Curves.ease);
+            //             }
+            //           },
+            //           child: Icon(Icons.arrow_forward)),
+            //     ],
+            //   ),
+            // ),
+            )));
   }
 }
-
-//           Scaffold(
-//               appBar: CustomAppBar(title: widget.title),
-//               body: GridView.builder(
-//                   shrinkWrap: true,
-//                   padding: const EdgeInsets.all(4.0),
-//                   scrollDirection: Axis.vertical,
-//                   itemCount: Events.imageList.length,
-//                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                       crossAxisCount: 2),
-//                   itemBuilder: (BuildContext context, int index) {
-//                     var data = Events.imageList[index];
-//                     return GestureDetector(
-//                       onTap: () {
-//                         Get.to(() => PhotoViewScreen(
-//                               url: data.source!,
-//                             ));
-//                         // Get.dialog(Padding(
-//                         //   padding: const EdgeInsets.only(top: 10),
-//                         //   child: Column(
-//                         //     crossAxisAlignment: CrossAxisAlignment.center,
-//                         //     mainAxisAlignment: MainAxisAlignment.center,
-//                         //     children: [
-//                         //       Container(
-//                         //           height: screenHeight(context) * 0.7,
-//                         //           width: screenWidth(context) * 0.9,
-//                         //           decoration: BoxDecoration(
-//                         //               borderRadius: BorderRadius.circular(15),
-//                         //               color: Colors.white),
-//                         //           child: PhotoView(
-//                         //               imageProvider:
-//                         //                   NetworkImage(data.source!)))
-//                         //     ],
-//                         //   ),
-//                         // ));
-//                       },
-//                       child: Container(
-//                           width: screenWidth(context) * 0.32,
-//                           height: screenHeight(context) * 0.2,
-//                           margin: EdgeInsets.all(10),
-//                           child: ClipRRect(
-//                             borderRadius: BorderRadius.circular(15),
-//                             child: CachedImageWithShimmer(
-//                               imageUrl: data.source!,
-//                             ),
-//                           )),
-//                     );
-//                   })),
-//         ));
-//   }
-// }
-// // GestureDetector(
-// //                                         onTap: () {
-// //                                           Get.back();
-// //                                           ToastNotifications.showSuccess(
-// //                                               msg: "Image saved to gallery");
-
-// //                                           Events.downloadAndSaveImage(
-// //                                               data.source!);
-// //                                         },
-// //                                         child: Icon(Icons.download, size: 40),
-// //                                       )
-  // ListView.builder(
-  //                       shrinkWrap: true,
-  //                       scrollDirection: Axis.horizontal,
-  //                       itemBuilder: (context, index) {
-  //                         return Align(
-  //                           alignment: Alignment.bottomCenter,
-  //                           child: Container(
-  //                             height: 100,
-  //                             width: 100,
-  //                             child: CustomText("title"),
-  //                           ),
-  //                         );
-  //                       }),
