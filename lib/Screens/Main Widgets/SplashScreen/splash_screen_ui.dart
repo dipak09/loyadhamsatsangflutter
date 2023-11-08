@@ -18,7 +18,7 @@ class _SplashScreenUIState extends State<SplashScreenUI> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 6), () {
+    Timer(Duration(seconds: 5), () {
       Get.off(() => BottomNavigation(index: 2));
     });
   }

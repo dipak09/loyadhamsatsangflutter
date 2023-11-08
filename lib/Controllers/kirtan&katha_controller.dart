@@ -7,6 +7,15 @@ class KirtanKathaController extends GetxController {
   List<KirtanKatha> kirtankathaList = [];
 
   RxBool isLoading = false.obs;
+  void get(int? i) {
+    if (i == 0) {
+      getData("All");
+    } else if (i == 1) {
+      getData("kirtan");
+    } else {
+      getData("katha");
+    }
+  }
 
   Future<void> getData(String type) async {
     try {
@@ -18,7 +27,7 @@ class KirtanKathaController extends GetxController {
       final response = await dio.get(apiUrl);
 
       final data = response.data;
-
+      kirtankathaList = [];
       data.forEach((el) {
         KirtanKatha kirtanKatha = KirtanKatha.fromJson(el);
         kirtankathaList.add(kirtanKatha);
