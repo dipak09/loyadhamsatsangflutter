@@ -28,18 +28,8 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
   @override
   void initState() {
     super.initState();
-    getValue();
-  }
-
-  getValue() {
     DailyDarshan.selectItem(widget.title!);
     DailyDarshan.selectDate(widget.date!);
-
-    setState(() {
-      Future.delayed(Duration(seconds: 2), () {
-        DailyDarshan.getValue();
-      });
-    });
   }
 
   @override

@@ -153,14 +153,14 @@ class DrawerData extends StatelessWidget {
                     width: 30,
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Image.asset(
-                    AppImages.spotify,
-                    height: 30,
-                    width: 30,
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {},
+                //   child: Image.asset(
+                //     AppImages.spotify,
+                //     height: 30,
+                //     width: 30,
+                //   ),
+                // ),
                 InkWell(
                   onTap: () {
                     _launchURL("https://loyadham.in/");

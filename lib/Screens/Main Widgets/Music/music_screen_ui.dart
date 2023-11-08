@@ -59,7 +59,7 @@ class _MusicScreenUIState extends State<MusicScreenUI>
                   unselectedLabelStyle: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w700),
                   tabs: [
-                    Tab(text: 'All'),
+                    Tab(text: '    All    '),
                     Tab(text: 'Kirtan'),
                     Tab(text: 'Katha')
                   ])),

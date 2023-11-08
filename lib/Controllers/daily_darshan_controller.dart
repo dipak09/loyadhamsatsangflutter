@@ -25,6 +25,9 @@ class DailyDarshanController extends GetxController {
   void onInit() {
     super.onInit();
     getValue();
+    Future.delayed(Duration(seconds: 1), () {
+      getValue();
+    });
   }
 
   getValue() {
@@ -35,12 +38,17 @@ class DailyDarshanController extends GetxController {
 
   selectDate(DateTime date) {
     selectedDate.value = date;
+    //print(selectedDate.value);
+    final formattedDate = DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
+    getData(date: formattedDate, title: selectedTitle.value);
+
     getValue();
   }
 
   void selectItem(String item) {
     selectedTitle.value = item;
-    getValue();
+    // print(item);
+    // getData(title: selectedTitle.value);
   }
 
   var currentIndex = 0.obs;
@@ -58,7 +66,6 @@ class DailyDarshanController extends GetxController {
   }
 
   void goToNext(int itemCount) {
-    print("here");
     update();
     if (currentIndex.value < itemCount - 1) {
       currentIndex.value++;
@@ -70,7 +77,7 @@ class DailyDarshanController extends GetxController {
       context: context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
     );
 
     if (pickedDate != null && pickedDate != selectedDate.value) {
@@ -97,7 +104,6 @@ class DailyDarshanController extends GetxController {
       );
 
       final data = response.data;
-      print(data);
       data.forEach((el) {
         DailyDarshan dailyDarshan = DailyDarshan.fromJson(el);
         dailyDarshanList.add(dailyDarshan);
