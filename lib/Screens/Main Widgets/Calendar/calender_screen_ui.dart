@@ -1,6 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Controllers/calander_controller.dart';
+import 'package:loyadhamsatsang/Models/Calander.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalenderScreenUI extends StatefulWidget {
   const CalenderScreenUI({super.key});
@@ -10,49 +16,57 @@ class CalenderScreenUI extends StatefulWidget {
 }
 
 class _CalenderScreenUIState extends State<CalenderScreenUI> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-
-  final kToday = DateTime.now();
-  final kFirstDay = DateTime(
-      DateTime.now().year, DateTime.now().month - 10, DateTime.now().day);
-  final kLastDay = DateTime(
-      DateTime.now().year, DateTime.now().month + 10, DateTime.now().day);
+  var Calander = Get.put(CalanderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Calendar"),
-      body: TableCalendar(
-        firstDay: kFirstDay,
-        lastDay: kLastDay,
-        focusedDay: _focusedDay,
-        calendarFormat: _calendarFormat,
-        selectedDayPredicate: (day) {
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` when updating the selected day
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          }
-        },
-        onFormatChanged: (format) {
-          if (_calendarFormat != format) {
-            // Call `setState()` when updating calendar format
-            setState(() {
-              _calendarFormat = format;
-            });
-          }
-        },
-        onPageChanged: (focusedDay) {
-          // No need to call `setState()` here
-          _focusedDay = focusedDay;
-        },
-      ),
-    );
+        appBar: CustomAppBar(title: 'Calendar'),
+        body: InAppWebView(
+            initialUrlRequest:
+                URLRequest(url: Uri.parse('https://loyadham.in/calender.html')),
+            initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(javaScriptEnabled: true))));
+  }
+
+  // body: Obx(() => Calander.isLoading.value
+  //     ? SizedBox.shrink()
+  //     : SfCalendar(
+  //         appointmentTextStyle: TextStyle(
+  //           color: AppColors.apptheme,
+  //           fontSize: 7,
+  //         ),
+  //         view: CalendarView.month,
+  //         dataSource: _getCalendarDataSource(),
+  //         monthViewSettings: MonthViewSettings(
+  //           appointmentDisplayCount: 5,
+  //           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+  //         ),
+  //       )),
+  _DataSource _getCalendarDataSource() {
+    List<Appointment> appointments = [];
+
+    for (CalenderData data in Calander.list) {
+      if (data.icDate != null) {
+        print("Data for ${data.icDate}: ${data.tithiTitleEng}");
+        // Create an appointment for each CalenderData item
+        appointments.add(Appointment(
+          startTime: data.icDate!,
+          color: Colors.transparent,
+          endTime: data.icDate!,
+          subject:
+              "${data.monthTitleEng}${data.pakshaTitleEng}${data.tithiTitleEng}", // Replace with your data
+          notes: data.descriptionGuj ?? "Description", // Replace with your data
+          isAllDay: true,
+        ));
+      }
+    }
+
+    return _DataSource(appointments);
+  }
+}
+
+class _DataSource extends CalendarDataSource {
+  _DataSource(List<Appointment> source) {
+    appointments = source;
   }
 }

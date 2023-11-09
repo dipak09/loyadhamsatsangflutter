@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/books_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Calendar/calender_screen_ui.dart';
@@ -10,12 +11,15 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_dar
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Sant%20Mandal/sant_mandal_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:intl/intl.dart';
 
 class BottomSheetUI extends StatelessWidget {
   const BottomSheetUI({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var DailyDarshan = Get.put(DashboardController());
+
     return Container(
         color: Colors.white,
         height: screenHeight(context) * 0.35,
@@ -57,12 +61,12 @@ class BottomSheetUI extends StatelessWidget {
                 title: "Daily Darshan",
                 imageName: AppImages.dailyDarshanBottomSheet,
                 onTap: () {
-                  final selectedDate =
-                      Rx<DateTime>(DateTime.now().subtract(Duration(days: 1)));
-                  // final previousDate = selectedDate.subtract(Duration(days: 1));
+                  final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+                      .parse(DailyDarshan.dailyDarshan_date.toString());
 
                   Get.to(() => DailyDarshanScreenUI(
-                      title: "Thakorji Maharaj", date: selectedDate.value));
+                      title: DailyDarshan.dailyDarshan_title.toString(),
+                      date: selectedDate));
                 }),
             card(
                 title: "Setting",

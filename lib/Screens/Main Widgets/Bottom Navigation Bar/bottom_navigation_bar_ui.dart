@@ -1,16 +1,25 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
-import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Bottomsheet.dart';
+import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Drawer.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/animation.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/books_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Calendar/calender_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/music_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Sant%20Mandal/sant_mandal_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
+
+import 'package:intl/intl.dart';
 
 class BottomNavigation extends StatefulWidget {
   int index;
@@ -22,9 +31,10 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 2;
-  bool isBottomSheet = false;
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  bool? isBottomSheet = false;
+  var DailyDarshan = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -66,7 +76,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
         },
         child: Scaffold(
             key: _drawerKey,
-            bottomSheet: isBottomSheet ? BottomSheetUI() : SizedBox.shrink(),
+            bottomSheet: isBottomSheet!
+                ? CustomSlidetransition(dx: 400, dy: 1, child: bottomSheet())
+                : SizedBox.shrink(),
             drawer: Drawer(
               width: MediaQuery.of(context).size.width * .9,
               child: DrawerData(),
@@ -149,24 +161,110 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   } else {
                     isBottomSheet = true;
                   }
-
-                  // showModalBottomSheet(
-                  //     barrierColor: Colors.transparent,
-                  //     backgroundColor: Colors.white,
-                  //     shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.only(
-                  //             topLeft: Radius.circular(20),
-                  //             topRight: Radius.circular(20))),
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       return BottomSheetUI();
-                  //     });
                 });
               })
         ]));
   }
 
   Widget card({String? title, String? imageName, Function? onTap}) {
+    return InkWell(
+        onTap: () {
+          if (onTap != null) onTap();
+        },
+        child: Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Column(children: [
+              Image.asset(imageName!, height: 20, width: 20),
+              SizedBox(height: 5),
+              CustomText(title!, fontSize: 10)
+            ])));
+  }
+
+  Widget bottomSheet() {
+    return Container(
+        height: screenHeight(context) * 0.35,
+        width: screenWidth(context),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          color: Colors.white,
+        ),
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Column(children: [
+            CustomText("Loyadham Satsang", fontSize: 30),
+            CustomText("Version 3.0", fontSize: 15, color: Colors.black)
+          ]),
+          SizedBox(height: 20),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            InkWell(
+                onTap: () {},
+                child: CustomText("Privacy Policy",
+                    fontSize: 15, color: Colors.black)),
+            SizedBox(width: 5),
+            CustomText("|", fontSize: 15, color: Colors.black),
+            SizedBox(width: 5),
+            InkWell(
+                onTap: () {},
+                child: CustomText("Term & Conditions",
+                    fontSize: 15, color: Colors.black))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            cardBottomSheet(
+                title: "Calendar",
+                imageName: AppImages.calenderBottomSheet,
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => CalenderScreenUI());
+                }),
+            cardBottomSheet(
+                title: "Books",
+                imageName: AppImages.booksBottomSheet,
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => BooksScreenUI());
+                }),
+            cardBottomSheet(
+                title: "Sant Mandal",
+                imageName: AppImages.santmandalBottomSheet,
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => SantMandalScreenUI());
+                }),
+            cardBottomSheet(
+                title: "Daily Darshan",
+                imageName: AppImages.dailyDarshanBottomSheet,
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+                      .parse(DailyDarshan.dailyDarshan_date.toString());
+
+                  Get.to(() => DailyDarshanScreenUI(
+                      title: DailyDarshan.dailyDarshan_title.toString(),
+                      date: selectedDate));
+                }),
+            cardBottomSheet(
+                title: "Setting",
+                imageName: AppImages.settingBottomSheet,
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => SettingScreenUI());
+                }),
+          ]),
+        ]));
+  }
+
+  Widget cardBottomSheet({String? title, String? imageName, Function? onTap}) {
     return InkWell(
         onTap: () {
           if (onTap != null) onTap();

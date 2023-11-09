@@ -8,10 +8,12 @@ import 'package:loyadhamsatsang/Models/Video.dart';
 
 class DashboardController extends GetxController {
   Dio dio = Dio();
+  String? dailyDarshan_title;
+  String? dailyDarshan_date;
+
   List<Dashboardata> sliderList = [];
   List<Video> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
-  List<Video> featuredMediaList = [];
   List<Video> upcomingEventList = [];
   RxBool isLoading = false.obs;
   @override
@@ -31,6 +33,10 @@ class DashboardController extends GetxController {
         apiUrl,
       );
       final data = response.data;
+      dailyDarshan_title = data['dailydarshan_title'];
+      print("Daily Darshan : ${dailyDarshan_title}");
+      dailyDarshan_date = data['dailydarshan_date'];
+      print("Daily Darshan : ${dailyDarshan_date}");
 
       final sliderData = data['slider'];
       sliderData.forEach((el) {
