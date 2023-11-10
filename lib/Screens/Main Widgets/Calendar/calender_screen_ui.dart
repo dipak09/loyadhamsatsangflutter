@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/calander_controller.dart';
 import 'package:loyadhamsatsang/Models/Calander.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -17,31 +15,33 @@ class CalenderScreenUI extends StatefulWidget {
 
 class _CalenderScreenUIState extends State<CalenderScreenUI> {
   var Calander = Get.put(CalanderController());
+
+  final kToday = DateTime.now();
+  final kFirstDay = DateTime(
+      DateTime.now().year, DateTime.now().month - 10, DateTime.now().day);
+  final kLastDay = DateTime(
+      DateTime.now().year, DateTime.now().month + 10, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: 'Calendar'),
-        body: InAppWebView(
-            initialUrlRequest:
-                URLRequest(url: Uri.parse('https://loyadham.in/calender.html')),
-            initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(javaScriptEnabled: true))));
+      appBar: CustomAppBar(title: "Calendar"),
+      body: Obx(() => Calander.isLoading.value
+          ? SizedBox.shrink()
+          : SfCalendar(
+              appointmentTextStyle: TextStyle(
+                color: AppColors.apptheme,
+                fontSize: 7,
+              ),
+              view: CalendarView.month,
+              dataSource: _getCalendarDataSource(),
+              monthViewSettings: MonthViewSettings(
+                appointmentDisplayCount: 5,
+                appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+              ),
+            )),
+    );
   }
 
-  // body: Obx(() => Calander.isLoading.value
-  //     ? SizedBox.shrink()
-  //     : SfCalendar(
-  //         appointmentTextStyle: TextStyle(
-  //           color: AppColors.apptheme,
-  //           fontSize: 7,
-  //         ),
-  //         view: CalendarView.month,
-  //         dataSource: _getCalendarDataSource(),
-  //         monthViewSettings: MonthViewSettings(
-  //           appointmentDisplayCount: 5,
-  //           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-  //         ),
-  //       )),
   _DataSource _getCalendarDataSource() {
     List<Appointment> appointments = [];
 

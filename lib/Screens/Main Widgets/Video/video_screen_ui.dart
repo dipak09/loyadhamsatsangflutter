@@ -67,7 +67,9 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
                                         ),
                                         errorWidget: (context, url, error) =>
                                             Icon(Icons.error),
-                                        fit: BoxFit.fitHeight,
+                                        fit: BoxFit.fill,
+                                        height: screenHeight(context) * 0.18,
+                                        width: screenWidth(context),
                                       )),
                                   Container(
                                       width: screenWidth(context),

@@ -137,7 +137,8 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                               ))
                           .toList(),
                       onChanged: (item) {
-                        DailyDarshan.selectItem(item!);
+                        DailyDarshan.title(item!);
+                        DailyDarshan.getValue();
                       })),
             ],
           ),

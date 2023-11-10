@@ -14,8 +14,10 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_dar
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Events/event_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/music_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Privacy%20Policy/privacypolicy_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Sant%20Mandal/sant_mandal_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Term%20&%20Conditions/termandconditons_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen_ui.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
@@ -198,14 +200,24 @@ class _BottomNavigationState extends State<BottomNavigation> {
           SizedBox(height: 20),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             InkWell(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => PrivacyPolicyScreenUI());
+                },
                 child: CustomText("Privacy Policy",
                     fontSize: 15, color: Colors.black)),
             SizedBox(width: 5),
             CustomText("|", fontSize: 15, color: Colors.black),
             SizedBox(width: 5),
             InkWell(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    isBottomSheet = false;
+                  });
+                  Get.to(() => TermAndConditonsScreenUI());
+                },
                 child: CustomText("Term & Conditions",
                     fontSize: 15, color: Colors.black))
           ]),

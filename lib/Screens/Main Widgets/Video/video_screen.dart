@@ -32,25 +32,18 @@ class _VideoScreenState extends State<VideoScreen> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId!,
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
+      flags: YoutubePlayerFlags(autoPlay: true, mute: false, loop: true),
     );
 
     _controller.addListener(() {
       if (_controller.value.isFullScreen) {
-        // Entering full-screen mode
         setState(() {
           isFullScreen = true;
-          // Hide the status and navigation bars
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
         });
       } else {
-        // Exiting full-screen mode
         setState(() {
           isFullScreen = false;
-          // Revert the system UI mode
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         });
       }
@@ -72,41 +65,59 @@ class _VideoScreenState extends State<VideoScreen> {
         appBar: isFullScreen ? null : AppBar(title: Text('Video Player')),
         body: Stack(
           children: <Widget>[
-            YoutubePlayer(
-              controller: _controller,
-              showVideoProgressIndicator: true,
-              progressIndicatorColor: Colors.blueAccent,
-              onReady: () {},
-            ),
             Column(
               children: [
-                Container(
-                    width: screenWidth(context),
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(179, 221, 218, 218),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(15))),
+                Expanded(
+                  child: YoutubePlayer(
+                    controller: _controller,
+                    showVideoProgressIndicator: true,
+                    progressIndicatorColor: Colors.blueAccent,
+                    onReady: () {},
+                  ),
+                ),
+                if (!isFullScreen)
+                  Container(
+                    height: screenHeight(context) * 0.7,
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(widget.title!,
-                              fontSize: 9, overflow: TextOverflow.ellipsis),
-                          CustomText(widget.publishedDate!.toString(),
-                              fontSize: 9, overflow: TextOverflow.ellipsis),
-                          Container(
-                              width: screenWidth(context),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CustomText(widget.timeAgo!, fontSize: 9),
-                                    CustomText(widget.view!, fontSize: 9)
-                                  ]))
-                        ])),
+                      children: [
+                        Container(
+                            width: screenWidth(context),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(179, 221, 218, 218),
+                            ),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(widget.title!,
+                                      fontSize: 9,
+                                      overflow: TextOverflow.ellipsis),
+                                  CustomText(widget.publishedDate!.toString(),
+                                      fontSize: 9,
+                                      overflow: TextOverflow.ellipsis),
+                                  Container(
+                                      width: screenWidth(context),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(widget.timeAgo!,
+                                                fontSize: 9),
+                                            CustomText(widget.view!,
+                                                fontSize: 9)
+                                          ]))
+                                ])),
+                        Expanded(
+                          child: ListView.builder(itemBuilder: (context, i) {
+                            return CustomText("title");
+                          }),
+                        )
+                      ],
+                    ),
+                  )
               ],
-            )
+            ),
           ],
         ),
       ),

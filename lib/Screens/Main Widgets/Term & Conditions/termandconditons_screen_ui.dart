@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:loyadhamsatsang/Controllers/privacypolicy_controller.dart';
+import 'package:loyadhamsatsang/Controllers/termandconditions_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class PrivacyPolicyScreenUI extends StatefulWidget {
-  const PrivacyPolicyScreenUI({super.key});
+class TermAndConditonsScreenUI extends StatefulWidget {
+  const TermAndConditonsScreenUI({super.key});
 
   @override
-  State<PrivacyPolicyScreenUI> createState() => _PrivacyPolicyScreenUIState();
+  State<TermAndConditonsScreenUI> createState() =>
+      _TermAndConditonsScreenUIState();
 }
 
-class _PrivacyPolicyScreenUIState extends State<PrivacyPolicyScreenUI> {
-  var PrivacyPolicy = Get.put(PrivacyPolicyController());
+class _TermAndConditonsScreenUIState extends State<TermAndConditonsScreenUI> {
+  var TermAndConditons = Get.put(TermAndConditonsController());
   @override
   Widget build(BuildContext context) {
     return Obx(() => ModalProgressHUD(
-        inAsyncCall: PrivacyPolicy.isLoading.value,
+        inAsyncCall: TermAndConditons.isLoading.value,
         color: Colors.white,
         opacity: 0.9,
         progressIndicator: Center(child: CircularProgressIndicator()),
@@ -32,7 +32,7 @@ class _PrivacyPolicyScreenUIState extends State<PrivacyPolicyScreenUI> {
               child: Column(
                 children: [
                   CustomText(
-                    PrivacyPolicy.description.toString(),
+                    TermAndConditons.description.toString(),
                     color: Colors.black,
                   )
                 ],
