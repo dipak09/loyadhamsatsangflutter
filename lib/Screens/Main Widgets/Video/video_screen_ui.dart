@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
+import 'package:loyadhamsatsang/Models/Video.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
@@ -18,7 +20,42 @@ class VideoScreenUI extends StatefulWidget {
 }
 
 class _VideoScreenUIState extends State<VideoScreenUI> {
-  var Video = Get.put(VideoController());
+  var VideoData = Get.put(VideoController());
+  late ScrollController _controller;
+  var moreloading = false;
+  Dio dio = Dio();
+  void loadmore() async {
+    // print("here scroller postion ${_controller.position.extentAfter}");
+    if (_controller.position.maxScrollExtent == _controller.position.pixels) {
+      VideoData.home_page.value += 1;
+      setState(() {});
+      moreloading = true;
+
+      String apiUrl =
+          'https://loyadham.in/api/webservice/getYoutubeChannellatest?limit=10&page_number=${VideoData.home_page.value}';
+
+      final response = await dio.get(apiUrl);
+
+      final data = response.data;
+
+      data.forEach((el) {
+        Video video = Video.fromJson(el);
+        VideoData.videoList.add(video);
+      });
+
+      moreloading = false;
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    _controller = ScrollController()..addListener(loadmore);
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,22 +63,24 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
       body: Column(
         children: [
           Expanded(
-            child: Obx(() => Video.isLoading.value
+            child: Obx(() => VideoData.isLoading.value
                 ? Center(child: CircularProgressIndicator())
-                : Video.videoList.isNotEmpty && Video.videoList != null
+                : VideoData.videoList.isNotEmpty && VideoData.videoList != null
                     ? ListView.builder(
-                        itemCount: Video.videoList.length,
+                        controller: _controller,
+                        itemCount: VideoData.videoList.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
                               Get.to(() => VideoScreen(
-                                    timeAgo: Video.videoList[index].timeAgo,
-                                    title: Video.videoList[index].title,
-                                    view: Video.videoList[index].viewCount,
-                                    publishedDate:
-                                        Video.videoList[index].publishedDate,
-                                    url: Video.videoList[index].youtubeLink,
-                                    videoId: Video.videoList[index].initialId,
+                                    timeAgo: VideoData.videoList[index].timeAgo,
+                                    title: VideoData.videoList[index].title,
+                                    view: VideoData.videoList[index].viewCount,
+                                    publishedDate: VideoData
+                                        .videoList[index].publishedDate,
+                                    url: VideoData.videoList[index].youtubeLink,
+                                    videoId:
+                                        VideoData.videoList[index].initialId,
                                   ));
                             },
                             child: Container(
@@ -55,8 +94,8 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
                                           topLeft: Radius.circular(15),
                                           topRight: Radius.circular(15)),
                                       child: CachedNetworkImage(
-                                        imageUrl:
-                                            Video.videoList[index].thumbnail!,
+                                        imageUrl: VideoData
+                                            .videoList[index].thumbnail!,
                                         placeholder: (context, url) =>
                                             Shimmer.fromColors(
                                           highlightColor: Colors.grey[300]!,
@@ -87,12 +126,13 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             CustomText(
-                                                Video.videoList[index].title!,
+                                                VideoData
+                                                    .videoList[index].title!,
                                                 fontSize: 9,
                                                 overflow:
                                                     TextOverflow.ellipsis),
                                             CustomText(
-                                                Video.videoList[index]
+                                                VideoData.videoList[index]
                                                     .publishedDate!
                                                     .toString(),
                                                 fontSize: 9,
@@ -106,11 +146,13 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
                                                             .spaceBetween,
                                                     children: [
                                                       CustomText(
-                                                          Video.videoList[index]
+                                                          VideoData
+                                                              .videoList[index]
                                                               .timeAgo!,
                                                           fontSize: 9),
                                                       CustomText(
-                                                          Video.videoList[index]
+                                                          VideoData
+                                                              .videoList[index]
                                                               .viewCount!,
                                                           fontSize: 9)
                                                     ]))
@@ -123,7 +165,8 @@ class _VideoScreenUIState extends State<VideoScreenUI> {
                           );
                         })
                     : Center(child: CustomText("No Video Found"))),
-          )
+          ),
+          moreloading ? CircularProgressIndicator() : SizedBox.shrink()
         ],
       ),
     );

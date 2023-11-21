@@ -108,11 +108,11 @@ class _VideoScreenState extends State<VideoScreen> {
                                                 fontSize: 9)
                                           ]))
                                 ])),
-                        Expanded(
-                          child: ListView.builder(itemBuilder: (context, i) {
-                            return CustomText("title");
-                          }),
-                        )
+                        // Expanded(
+                        //   child: ListView.builder(itemBuilder: (context, i) {
+                        //     return CustomText("title");
+                        //   }),
+                        // )
                       ],
                     ),
                   )

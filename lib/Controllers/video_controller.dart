@@ -5,7 +5,7 @@ import 'package:loyadhamsatsang/Models/Video.dart';
 class VideoController extends GetxController {
   Dio dio = Dio();
   List<Video> videoList = [];
-
+  var home_page = 1.obs;
   RxBool isLoading = false.obs;
 
   @override
@@ -20,7 +20,7 @@ class VideoController extends GetxController {
       update();
 
       String apiUrl =
-          'https://loyadham.in/api/webservice/getYoutubeChannellatest';
+          'https://loyadham.in/api/webservice/getYoutubeChannellatest?limit=10&page_number=${home_page}';
 
       final response = await dio.get(apiUrl);
 
