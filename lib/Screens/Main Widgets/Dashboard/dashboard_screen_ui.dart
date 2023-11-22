@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, body_might_complete_normally_nullable
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
@@ -24,6 +25,7 @@ class DashboardScreenUI extends StatefulWidget {
 class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Home = Get.put(DashboardController());
   var Video = Get.put(VideoController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,7 +156,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
       Obx(() => Video.isLoading.value == true
           ? _loader()
           : SizedBox(
-              height: screenHeight(context) * 0.25,
+              height: screenHeight(context) * 0.27,
               child: ListView.builder(
                   itemCount: Video.videoList.length,
                   scrollDirection: Axis.horizontal,

@@ -1,9 +1,14 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison, prefer_const_constructors, non_constant_identifier_names, sized_box_for_whitespace, use_key_in_widget_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Controllers/videoID_controller.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoScreen extends StatefulWidget {
@@ -26,12 +31,26 @@ class _VideoScreenState extends State<VideoScreen> {
   late YoutubePlayerController _controller;
 
   bool isFullScreen = false;
+  var VideoIDWise = Get.put(VideoIDWiseController());
+  void playNewVideo(String videoId) {
+    _controller.load(videoId);
+    _controller.play();
+  }
 
   @override
   void initState() {
     super.initState();
+    VideoIDWise.assignData(
+        agoTime: widget.timeAgo,
+        videoTitle: widget.title,
+        videoView: widget.view,
+        videopublishedDate: widget.publishedDate,
+        videourl: widget.url,
+        videovideoId: widget.videoId);
+
+    VideoIDWise.getData(widget.videoId!);
     _controller = YoutubePlayerController(
-      initialVideoId: widget.videoId!,
+      initialVideoId: VideoIDWise.videoId.value,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false, loop: true),
     );
 
@@ -39,12 +58,15 @@ class _VideoScreenState extends State<VideoScreen> {
       if (_controller.value.isFullScreen) {
         setState(() {
           isFullScreen = true;
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ]);
         });
       } else {
         setState(() {
           isFullScreen = false;
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          SystemChrome.setPreferredOrientations(DeviceOrientation.values);
         });
       }
     });
@@ -62,7 +84,7 @@ class _VideoScreenState extends State<VideoScreen> {
         }
       },
       child: Scaffold(
-        appBar: isFullScreen ? null : AppBar(title: Text('Video Player')),
+        appBar: isFullScreen ? null : CustomAppBar(title: 'Video Player'),
         body: Stack(
           children: <Widget>[
             Column(
@@ -90,10 +112,11 @@ class _VideoScreenState extends State<VideoScreen> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomText(widget.title!,
+                                  CustomText(VideoIDWise.title.value,
                                       fontSize: 9,
                                       overflow: TextOverflow.ellipsis),
-                                  CustomText(widget.publishedDate!.toString(),
+                                  CustomText(
+                                      VideoIDWise.publishedDate.toString(),
                                       fontSize: 9,
                                       overflow: TextOverflow.ellipsis),
                                   Container(
@@ -102,17 +125,159 @@ class _VideoScreenState extends State<VideoScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            CustomText(widget.timeAgo!,
+                                            CustomText(
+                                                VideoIDWise.timeAgo.value,
                                                 fontSize: 9),
-                                            CustomText(widget.view!,
+                                            CustomText(VideoIDWise.view.value,
                                                 fontSize: 9)
                                           ]))
                                 ])),
-                        // Expanded(
-                        //   child: ListView.builder(itemBuilder: (context, i) {
-                        //     return CustomText("title");
-                        //   }),
-                        // )
+                        Expanded(
+                          child: Obx(() => VideoIDWise.isLoading.value
+                              ? Center(child: CircularProgressIndicator())
+                              : VideoIDWise.videoList.isNotEmpty &&
+                                      VideoIDWise.videoList != null
+                                  ? ListView.builder(
+                                      // controller: _controller,
+                                      itemCount: VideoIDWise.videoList.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            playNewVideo(VideoIDWise
+                                                .videoList[index].initialId!);
+                                            VideoIDWise.assignData(
+                                                agoTime: VideoIDWise
+                                                    .videoList[index].timeAgo,
+                                                videoTitle: VideoIDWise
+                                                    .videoList[index].title,
+                                                videoView: VideoIDWise
+                                                    .videoList[index].viewCount,
+                                                videopublishedDate: VideoIDWise
+                                                    .videoList[index]
+                                                    .publishedDate,
+                                                videourl: VideoIDWise
+                                                    .videoList[index]
+                                                    .youtubeLink,
+                                                videovideoId: VideoIDWise
+                                                    .videoList[index]
+                                                    .initialId);
+                                            VideoIDWise.getData(VideoIDWise
+                                                .videoList[index].initialId!);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            child: Column(
+                                              children: [
+                                                ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(15),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15)),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: VideoIDWise
+                                                          .videoList[index]
+                                                          .thumbnail!,
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          Shimmer.fromColors(
+                                                        highlightColor:
+                                                            Colors.grey[300]!,
+                                                        baseColor:
+                                                            Colors.grey[200]!,
+                                                        child: Container(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Icon(Icons.error),
+                                                      fit: BoxFit.fill,
+                                                      height: screenHeight(
+                                                              context) *
+                                                          0.18,
+                                                      width:
+                                                          screenWidth(context),
+                                                    )),
+                                                Container(
+                                                    width: screenWidth(context),
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: Color.fromARGB(
+                                                            179, 221, 218, 218),
+                                                        borderRadius: BorderRadius.only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15))),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          CustomText(
+                                                              VideoIDWise
+                                                                  .videoList[
+                                                                      index]
+                                                                  .title!,
+                                                              fontSize: 9,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis),
+                                                          CustomText(
+                                                              VideoIDWise
+                                                                  .videoList[
+                                                                      index]
+                                                                  .publishedDate!
+                                                                  .toString(),
+                                                              fontSize: 9,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis),
+                                                          Container(
+                                                              width:
+                                                                  screenWidth(
+                                                                      context),
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    CustomText(
+                                                                        VideoIDWise
+                                                                            .videoList[
+                                                                                index]
+                                                                            .timeAgo!,
+                                                                        fontSize:
+                                                                            9),
+                                                                    CustomText(
+                                                                        VideoIDWise
+                                                                            .videoList[
+                                                                                index]
+                                                                            .viewCount!,
+                                                                        fontSize:
+                                                                            9)
+                                                                  ]))
+                                                        ])),
+                                                SizedBox(height: 10),
+                                                Divider(),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      })
+                                  : Center(
+                                      child: CustomText("No Video Found"))),
+                        ),
                       ],
                     ),
                   )

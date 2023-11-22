@@ -8,18 +8,18 @@ class AboutUSController extends GetxController {
   Dio dio = Dio();
   List<AboutUs> list = [];
 
-  RxString selectedTitle = 'Sadguru Adharanand Swami'.obs;
+  RxString selectedTitle = 'Lord Swaminarayan'.obs;
 
   RxBool isLoading = false.obs;
   final List<String> items = [
-    'Sadguru Adharanand Swami',
-    'Sadguru Nandkishordasji Swami',
     'Lord Swaminarayan',
     'Sadguru Muktanand Swami',
-    'Pujya Guruji',
+    'Sadguru Adharanand Swami',
     'Sadguru Haripriyadasji Swami',
     'Sadguru Vaikunthcharandasji Swami',
-    'Sadguru Narayanswarupdasji Swami'
+    'Sadguru Narayanswarupdasji Swami',
+    'Sadguru Nandkishordasji Swami',
+    'Pujya Guruji',
   ];
 
   void selectItem(String item) {

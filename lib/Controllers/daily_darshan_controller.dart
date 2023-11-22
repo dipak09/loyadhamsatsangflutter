@@ -38,7 +38,7 @@ class DailyDarshanController extends GetxController {
 
   selectDate(DateTime date) {
     selectedDate.value = date;
-    //print(selectedDate.value);
+
     final formattedDate = DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
     getData(date: formattedDate, title: selectedTitle.value);
 
