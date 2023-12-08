@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Utilites/ToastNotification.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -33,13 +36,37 @@ class DailyDarshanPhotoViewer extends StatefulWidget {
 class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
   PageController pageController = PageController();
   int currentIndex = 0;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
   }
 
-  void shareImage(String imageUrl) {
-    Share.share(imageUrl);
+  void shareImage(String imageUrl) async {
+    setState(() {
+      isLoading = true; // Set loading state to true
+    });
+    try {
+      var response = await HttpClient().getUrl(Uri.parse(imageUrl));
+      var httpClient = await response.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(httpClient);
+
+      // Save image to device's temporary directory
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/tempImage.png').create();
+      await file.writeAsBytes(bytes);
+
+      // Share the saved image via WhatsApp
+      Share.shareFiles([file.path]);
+      setState(() {
+        isLoading = false; // Set loading state to false after sharing
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Set loading state to false after sharing
+      });
+      print('Error sharing image: $e');
+    }
   }
 
   Future<void> downloadImage(String imageUrl) async {
@@ -137,6 +164,8 @@ class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
+                                  // print(
+                                  //     widget.darshanList![currentIndex].source);
                                   shareImage(
                                       widget.darshanList![currentIndex].source);
                                 },
@@ -144,7 +173,8 @@ class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      if (isLoading) Center(child: CircularProgressIndicator()),
                     ],
                   ),
                 ),
@@ -182,32 +212,32 @@ class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
                 ),
               ],
             ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  if (currentIndex > 0) {
-                    pageController.animateToPage(currentIndex - 1,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                  }
-                },
-                child: Icon(Icons.arrow_back)),
-            ElevatedButton(
-                onPressed: () {
-                  if (currentIndex < widget.darshanList!.length - 1) {
-                    pageController.animateToPage(currentIndex + 1,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                  }
-                },
-                child: Icon(Icons.arrow_forward)),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   color: Colors.black,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     children: [
+      //       ElevatedButton(
+      //           onPressed: () {
+      //             if (currentIndex > 0) {
+      //               pageController.animateToPage(currentIndex - 1,
+      //                   duration: Duration(milliseconds: 300),
+      //                   curve: Curves.ease);
+      //             }
+      //           },
+      //           child: Icon(Icons.arrow_back)),
+      //       ElevatedButton(
+      //           onPressed: () {
+      //             if (currentIndex < widget.darshanList!.length - 1) {
+      //               pageController.animateToPage(currentIndex + 1,
+      //                   duration: Duration(milliseconds: 300),
+      //                   curve: Curves.ease);
+      //             }
+      //           },
+      //           child: Icon(Icons.arrow_forward)),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

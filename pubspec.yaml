@@ -37,6 +37,7 @@ dependencies:
   carousel_slider: ^4.2.1
   just_audio: ^0.9.35
   dio: ^5.2.1+1
+  fluttertoast: ^8.2.4
   share_plus: ^7.2.1
   store_redirect: ^2.0.1
   modal_progress_hud_nsn: ^0.3.0
@@ -45,6 +46,7 @@ dependencies:
   path_provider: ^2.0.2
   image_gallery_saver: ^2.0.3
   cached_network_image: ^3.3.0
+  chips_choice: ^3.0.1
   flutter_cached_pdfview: ^0.4.2
   table_calendar: ^3.0.9
   youtube_player_flutter: ^8.1.2

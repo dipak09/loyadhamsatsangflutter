@@ -21,7 +21,7 @@ class _MusicScreenUIState extends State<MusicScreenUI>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -59,7 +59,7 @@ class _MusicScreenUIState extends State<MusicScreenUI>
                   unselectedLabelStyle: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w700),
                   tabs: [
-                    Tab(text: '    All    '),
+                    //  Tab(text: '    All    '),
                     Tab(text: 'Kirtan'),
                     Tab(text: 'Katha')
                   ])),
@@ -68,7 +68,7 @@ class _MusicScreenUIState extends State<MusicScreenUI>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: [
-                KirtanKathaScreenUI(type: "All"),
+                //  KirtanKathaScreenUI(type: "All"),
                 KirtanKathaScreenUI(type: "kirtan"),
                 KirtanKathaScreenUI(type: "katha")
               ]))

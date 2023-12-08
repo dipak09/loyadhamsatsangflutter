@@ -1,20 +1,39 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
-  String? imgUrl, audioname;
-  AudioPlayerScreen({this.imgUrl, this.audioname});
+  String? imgUrl, audioname, audiofile;
+  int? index;
+
+  AudioPlayerScreen({
+    this.imgUrl,
+    this.audioname,
+    this.audiofile,
+    this.index,
+  });
   @override
   State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
 }
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   final KirtanKathaAudioController audioController = Get.find();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isdownload = false;
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -30,6 +49,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     return "$minutes:$seconds";
   }
 
+  bool isdownload = false;
   bool isPlayPause = true;
 
   void play() {
@@ -46,6 +66,30 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     audioController.audioPlayer.pause();
   }
 
+  Future<void> downloadAndSaveAudio(String audioUrl) async {
+    Dio dio = Dio();
+
+    try {
+      var response = await dio.get(audioUrl,
+          options: Options(responseType: ResponseType.bytes));
+
+      Directory appDocumentsDirectory =
+          await getApplicationDocumentsDirectory();
+      String filePath = '${appDocumentsDirectory.path}/${widget.audioname}.mp3';
+
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
+      // File is saved to local storage
+      print("Sucessfully Audio is Saved--------------------->");
+      print('Audio saved to: $filePath');
+      isdownload = true;
+      setState(() {});
+    } catch (e) {
+      print("Error found while downloading------------------->");
+      print('Error downloading audio: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,17 +98,37 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 300,
-            child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey,
-                    image: DecorationImage(
-                        image: NetworkImage(
-                          widget.imgUrl!,
-                        ),
-                        fit: BoxFit.fill))),
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: Stack(alignment: Alignment.topRight, children: [
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.grey,
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            widget.imgUrl!,
+                          ),
+                          fit: BoxFit.cover))),
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0, top: 30.0),
+                  child: IconButton(
+                      onPressed: () {
+                        print("Donwload is clicked--------------->");
+                        downloadAndSaveAudio(widget.audiofile.toString());
+                      },
+                      icon: isdownload == true
+                          ? Icon(
+                              Icons.download_done,
+                              color: Colors.white,
+                              size: 30.0,
+                            )
+                          : Icon(
+                              Icons.download_for_offline_sharp,
+                              color: Colors.white,
+                              size: 30.0,
+                            )))
+            ]),
           ),
           CustomText(widget.audioname!),
           StreamBuilder<Duration?>(
@@ -107,6 +171,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
               );
             },
           ),
+        
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

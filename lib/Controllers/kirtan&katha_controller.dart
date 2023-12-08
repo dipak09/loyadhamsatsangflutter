@@ -9,20 +9,18 @@ class KirtanKathaController extends GetxController {
   RxBool isLoading = false.obs;
   void get(int? i) {
     if (i == 0) {
-      getData("All");
-    } else if (i == 1) {
-      getData("kirtan");
+      getData("kirtan","All");
     } else {
-      getData("katha");
+      getData("katha","All");
     }
   }
 
-  Future<void> getData(String type) async {
+  Future<void> getData(String type,String singer_name) async {
     try {
       isLoading(true);
       update();
 
-      String apiUrl = 'https://loyadham.in/api/webservice/kirtan?type=${type}';
+      String apiUrl = "https://loyadham.in/api/webservice/kirtan?singer_name=${singer_name}&type=${type}";
 
       final response = await dio.get(apiUrl);
 
@@ -42,4 +40,5 @@ class KirtanKathaController extends GetxController {
       print('Error: $error');
     }
   }
+
 }

@@ -7,6 +7,7 @@ class KirtanKathaAudio {
   String? kathaMasterId;
   String? kirtanKathaAudioSingerId;
   String? fileName;
+  String? audio_duration;
   String? uploadAudio;
 
   KirtanKathaAudio({
@@ -19,6 +20,7 @@ class KirtanKathaAudio {
     this.kirtanKathaAudioSingerId,
     this.fileName,
     this.uploadAudio,
+    this.audio_duration,
   });
 
   factory KirtanKathaAudio.fromJson(Map<String, dynamic> json) =>
@@ -32,6 +34,7 @@ class KirtanKathaAudio {
         kirtanKathaAudioSingerId: json["singer_id"],
         fileName: json["file_name"],
         uploadAudio: json["upload_audio"],
+        audio_duration: json["audio_duration"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,5 +47,6 @@ class KirtanKathaAudio {
         "singer_id": kirtanKathaAudioSingerId,
         "file_name": fileName,
         "upload_audio": uploadAudio,
+        "audio_duration": audio_duration
       };
 }

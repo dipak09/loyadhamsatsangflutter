@@ -13,6 +13,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../Offline Downloads/offlineDownloads_ui.dart';
+
 class SettingScreenUI extends StatefulWidget {
   const SettingScreenUI({super.key});
 
@@ -77,6 +79,11 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                       title: "ABOUT US",
                       onTap: () {
                         Get.to(() => AboutUsScreenUI());
+                      }),
+                  cards(
+                      title: "OFFLINE DOWNLOADS",
+                      onTap: () {
+                        Get.to(() => AudioListScreen());
                       }),
                 ])));
   }
