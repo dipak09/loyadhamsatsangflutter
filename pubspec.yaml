@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   
   get: ^4.6.5
-  google_fonts: ^6.1.0
+  google_fonts: ^4.0.4
   flutter_svg: ^2.0.7
   carousel_slider: ^4.2.1
   just_audio: ^0.9.35
@@ -46,9 +46,10 @@ dependencies:
   path_provider: ^2.0.2
   image_gallery_saver: ^2.0.3
   cached_network_image: ^3.3.0
-  chips_choice: ^3.0.1
+ 
   flutter_cached_pdfview: ^0.4.2
   table_calendar: ^3.0.9
+  flutter_paypal: ^0.2.0
   youtube_player_flutter: ^8.1.2
   advance_pdf_viewer2: ^2.0.5+1
   shimmer: ^3.0.0

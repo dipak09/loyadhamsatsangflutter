@@ -1,10 +1,12 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -83,8 +85,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       print("Sucessfully Audio is Saved--------------------->");
       print('Audio saved to: $filePath');
       isdownload = true;
+      Fluttertoast.showToast(msg: "Song Download Sucessfully!!!");
       setState(() {});
     } catch (e) {
+      Fluttertoast.showToast(msg: "Please wait for while. Try again later!!");
       print("Error found while downloading------------------->");
       print('Error downloading audio: $e');
     }
@@ -109,7 +113,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                           image: NetworkImage(
                             widget.imgUrl!,
                           ),
-                          fit: BoxFit.cover))),
+                          fit: BoxFit.fill))),
               Padding(
                   padding: const EdgeInsets.only(right: 20.0, top: 30.0),
                   child: IconButton(
@@ -139,6 +143,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 stream: audioController.audioPlayer.positionStream,
                 builder: (context, snapshot) {
                   var position = snapshot.data ?? Duration.zero;
+
                   if (position > duration) {
                     position = duration;
                   }
@@ -171,7 +176,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
               );
             },
           ),
-        
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

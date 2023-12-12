@@ -83,7 +83,7 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                   cards(
                       title: "OFFLINE DOWNLOADS",
                       onTap: () {
-                        Get.to(() => AudioListScreen());
+                        Get.to(() => OfflineScreen());
                       }),
                 ])));
   }
