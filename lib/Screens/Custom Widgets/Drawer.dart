@@ -58,16 +58,16 @@ class DrawerData extends StatelessWidget {
                   children: [
                     SizedBox(height: 20),
                     _subMenuCard(
+                        title: "Loyadham",
+                        onTap: () {
+                          Get.back();
+                          Get.to(() => PrashadiVastuSthanScreenUI());
+                        }),
+                    _subMenuCard(
                         title: "Wallpapers",
                         onTap: () {
                           Get.back();
                           Get.to(() => WallpaperScreenUI());
-                        }),
-                    _subMenuCard(
-                        title: "Prasadi Vastu / Sthan",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => PrashadiVastuSthanScreenUI());
                         }),
                     _subMenuCard(
                         title: "Donations",

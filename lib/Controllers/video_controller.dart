@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
@@ -11,16 +13,27 @@ class VideoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getData();
+    get(0);
   }
 
-  Future<void> getData() async {
+  void get(int? i) {
+    if (i == 0) {
+      getData("US", "");
+    } else {
+      getData("IN", "");
+    }
+  }
+
+  Future<void> getData(String type, String token) async {
     try {
       isLoading(true);
       update();
-
+      videoList.clear();
       String apiUrl =
-          'https://loyadham.in/api/webservice/getYoutubeChannellatest?limit=10&page_number=${home_page}';
+          'http://loyadham.in/api/webservice/getYoutubeChannellatest?youtube=${type.isEmpty ? "IN" : type}';
+      //   http://loyadham.in/api/webservice/getYoutubeChannellatest?page=2&youtube=US&pageToken=CBQQAA
+      // String apiUrl =
+      //     'https://loyadham.in/api/webservice/getYoutubeChannellatest?youtube=';
 
       final response = await dio.get(apiUrl);
 

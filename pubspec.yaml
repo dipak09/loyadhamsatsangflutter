@@ -37,6 +37,7 @@ dependencies:
   carousel_slider: ^4.2.1
   just_audio: ^0.9.35
   dio: ^5.2.1+1
+
   fluttertoast: ^8.2.4
   share_plus: ^7.2.1
   store_redirect: ^2.0.1
@@ -57,7 +58,6 @@ dependencies:
   syncfusion_flutter_calendar: ^23.1.44
   flutter_inappwebview: ^5.8.0
   webview_flutter: ^4.4.2
-  
   
   
 

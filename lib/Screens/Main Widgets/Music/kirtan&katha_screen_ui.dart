@@ -32,7 +32,6 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
 
   @override
   Widget build(BuildContext context) {
-    
     List<String> singerListWithAll = [
       'All',
       ...SingerList.singerList.map((singer) => singer.name ?? '')
@@ -51,7 +50,6 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
           itemCount: singerListWithAll.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
-
             return Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: ChoiceChip(

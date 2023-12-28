@@ -4,10 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/usa_india_ui_screen.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:shimmer/shimmer.dart';
@@ -19,156 +22,90 @@ class VideoScreenUI extends StatefulWidget {
   State<VideoScreenUI> createState() => _VideoScreenUIState();
 }
 
-class _VideoScreenUIState extends State<VideoScreenUI> {
+class _VideoScreenUIState extends State<VideoScreenUI>
+    with SingleTickerProviderStateMixin {
   var VideoData = Get.put(VideoController());
   late ScrollController _controller;
   var moreloading = false;
   Dio dio = Dio();
-  void loadmore() async {
-    // print("here scroller postion ${_controller.position.extentAfter}");
-    if (_controller.position.maxScrollExtent == _controller.position.pixels) {
-      VideoData.home_page.value += 1;
-      setState(() {});
-      moreloading = true;
+  TabController? _tabController;
 
-      String apiUrl =
-          'https://loyadham.in/api/webservice/getYoutubeChannellatest?limit=10&page_number=${VideoData.home_page.value}';
-
-      final response = await dio.get(apiUrl);
-
-      final data = response.data;
-
-      data.forEach((el) {
-        Video video = Video.fromJson(el);
-        VideoData.videoList.add(video);
-      });
-
-      moreloading = false;
-      setState(() {});
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController!.dispose();
   }
+
+  // void loadmore() async {
+  //   // print("here scroller postion ${_controller.position.extentAfter}");
+  //   if (_controller.position.maxScrollExtent == _controller.position.pixels) {
+  //     VideoData.home_page.value += 1;
+  //     setState(() {});
+  //     moreloading = true;
+
+  //     String apiUrl =
+  //         'http://loyadham.in/api/webservice/getYoutubeChannellatest?youtube=US';
+
+  //     final response = await dio.get(apiUrl);
+
+  //     final data = response.data;
+
+  //     data.forEach((el) {
+  //       Video video = Video.fromJson(el);
+  //       VideoData.videoList.add(video);
+  //     });
+
+  //     moreloading = false;
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   void initState() {
-    _controller = ScrollController()..addListener(loadmore);
-
     // TODO: implement initState
+    super.initState();
+
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
-      appBar: CustomAppBar(title: "Videos", isBack: false),
-      body: Column(
-        children: [
+        appBar: CustomAppBar(title: "Videos", isBack: false),
+        body: Column(children: [
+          Theme(
+              data: theme.copyWith(
+                  colorScheme: theme.colorScheme
+                      .copyWith(surfaceVariant: Colors.transparent)),
+              child: TabBar(
+                  controller: _tabController,
+                  isScrollable: false,
+                  labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                  automaticIndicatorColorAdjustment: true,
+                  indicatorColor: AppColors.apptheme,
+                  labelColor: AppColors.apptheme,
+                  unselectedLabelColor: Colors.black,
+                  labelStyle: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w700, fontSize: 14),
+                  onTap: VideoData.get,
+                  unselectedLabelStyle: GoogleFonts.poppins(
+                      fontSize: 14, fontWeight: FontWeight.w700),
+                  tabs: [
+                    //  Tab(text: '    All    '),
+                    Tab(text: 'USA'),
+                    Tab(text: 'IND')
+                  ])),
           Expanded(
-            child: Obx(() => VideoData.isLoading.value
-                ? Center(child: CircularProgressIndicator())
-                : VideoData.videoList.isNotEmpty && VideoData.videoList != null
-                    ? ListView.builder(
-                        controller: _controller,
-                        itemCount: VideoData.videoList.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(() => VideoScreen(
-                                    timeAgo: VideoData.videoList[index].timeAgo,
-                                    title: VideoData.videoList[index].title,
-                                    view: VideoData.videoList[index].viewCount,
-                                    publishedDate: VideoData
-                                        .videoList[index].publishedDate,
-                                    url: VideoData.videoList[index].youtubeLink,
-                                    videoId:
-                                        VideoData.videoList[index].initialId,
-                                  ));
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
-                              child: Column(
-                                children: [
-                                  ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15)),
-                                      child: CachedNetworkImage(
-                                        imageUrl: VideoData
-                                            .videoList[index].thumbnail!,
-                                        placeholder: (context, url) =>
-                                            Shimmer.fromColors(
-                                          highlightColor: Colors.grey[300]!,
-                                          baseColor: Colors.grey[200]!,
-                                          child: Container(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
-                                        fit: BoxFit.fill,
-                                        height: screenHeight(context) * 0.18,
-                                        width: screenWidth(context),
-                                      )),
-                                  Container(
-                                      width: screenWidth(context),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 10),
-                                      decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                              179, 221, 218, 218),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(15),
-                                              bottomRight:
-                                                  Radius.circular(15))),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CustomText(
-                                                VideoData
-                                                    .videoList[index].title!,
-                                                fontSize: 9,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                            CustomText(
-                                                VideoData.videoList[index]
-                                                    .publishedDate!
-                                                    .toString(),
-                                                fontSize: 9,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                            Container(
-                                                width: screenWidth(context),
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      CustomText(
-                                                          VideoData
-                                                              .videoList[index]
-                                                              .timeAgo!,
-                                                          fontSize: 9),
-                                                      CustomText(
-                                                          VideoData
-                                                              .videoList[index]
-                                                              .viewCount!,
-                                                          fontSize: 9)
-                                                    ]))
-                                          ])),
-                                  SizedBox(height: 10),
-                                  Divider(),
-                                ],
-                              ),
-                            ),
-                          );
-                        })
-                    : Center(child: CustomText("No Video Found"))),
-          ),
-          moreloading ? CircularProgressIndicator() : SizedBox.shrink()
-        ],
-      ),
-    );
+              child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: [
+                //  KirtanKathaScreenUI(type: "All"),
+                USAIndiaScreen(type: "US"),
+                USAIndiaScreen(type: "IN")
+              ]))
+        ]));
   }
 }

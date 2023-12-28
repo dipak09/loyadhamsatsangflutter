@@ -44,12 +44,14 @@ class DashboardController extends GetxController {
         sliderList.add(slider);
       });
       final livestreamingData = data['livestreaming'];
-
-      livestreamingData.forEach((el) {
-        Video livestreaming = Video.fromJson(el);
-        livestreamingList.add(livestreaming);
-      });
-
+      if (livestreamingData == null || livestreamingData == []) {
+        livestreamingList = [];
+      } else {
+        livestreamingData.forEach((el) {
+          Video livestreaming = Video.fromJson(el);
+          livestreamingList.add(livestreaming);
+        });
+      }
       final dailydarshansData = data['dailydarshans'];
       dailydarshansData.forEach((el) {
         DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
@@ -57,11 +59,14 @@ class DashboardController extends GetxController {
       });
 
       final upcomingEventData = data['upcomingevent'];
-
-      upcomingEventData.forEach((el) {
-        Video upcomingEvent = Video.fromJson(el);
-        upcomingEventList.add(upcomingEvent);
-      });
+      if (upcomingEventData == null || upcomingEventData == []) {
+        upcomingEventList = [];
+      } else {
+        upcomingEventData.forEach((el) {
+          Video upcomingEvent = Video.fromJson(el);
+          upcomingEventList.add(upcomingEvent);
+        });
+      }
 
       isLoading(false);
       update();

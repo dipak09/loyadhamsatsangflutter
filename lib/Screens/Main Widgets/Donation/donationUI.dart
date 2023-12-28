@@ -4,10 +4,13 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
+import 'package:loyadhamsatsang/Controllers/donation_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/customTextField.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Donation/personalInfo_ui.dart';
 
 class DonationUI extends StatefulWidget {
   const DonationUI({super.key});
@@ -22,8 +25,13 @@ class _DonationUIState extends State<DonationUI> {
   bool hariJaynati = false;
   bool onchange = false;
   var totalamount = 0;
+  var mahapujasevTotal = 0;
+  var onsubmitvalue = 0;
   bool nilkanthVariAbhishak = false;
   TextEditingController _controller = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  var Donation = Get.put(DonationController());
+
   bool nutanMandirSeva = false;
 
   @override
@@ -62,6 +70,16 @@ class _DonationUIState extends State<DonationUI> {
                             onChanged: (value) {
                               setState(() {
                                 donationvalue = value!;
+                                if (value == false) {
+                                  if (onsubmitvalue == 0) {
+                                    totalamount += 0;
+                                  } else {
+                                    totalamount -= onsubmitvalue;
+                                    onsubmitvalue = 0;
+                                  }
+                                } else {
+                                  _controller.clear();
+                                }
                               });
                             }),
                         Text("General")
@@ -72,6 +90,7 @@ class _DonationUIState extends State<DonationUI> {
                             padding: const EdgeInsets.only(
                                 left: 8.0, right: 8.0, bottom: 8.0),
                             child: TextFormField(
+                              controller: _descriptionController,
                               decoration:
                                   InputDecoration(hintText: "Description"),
                             ),
@@ -87,6 +106,18 @@ class _DonationUIState extends State<DonationUI> {
                               onChanged: (value) {
                                 setState(() {
                                   onchange = true;
+                                });
+                              },
+                              onFieldSubmitted: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    totalamount += 0;
+                                    onsubmitvalue += 0;
+                                  } else {
+                                    print(value.toString());
+                                    totalamount += int.parse(value.toString());
+                                    onsubmitvalue = int.parse(value.toString());
+                                  }
                                 });
                               },
                               decoration: InputDecoration(
@@ -112,7 +143,9 @@ class _DonationUIState extends State<DonationUI> {
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   title: CustomText("Mahapuja Seva"),
-                  trailing: CustomText("\$0"),
+                  trailing: mahapujasevTotal == 0
+                      ? CustomText("\$0")
+                      : CustomText("\$${mahapujasevTotal}"),
                   children: [
                     ListTile(
                       leading: Checkbox(
@@ -121,8 +154,10 @@ class _DonationUIState extends State<DonationUI> {
                             setState(() {
                               if (value == true) {
                                 totalamount += 251;
+                                mahapujasevTotal += 251;
                               } else {
                                 totalamount -= 251;
+                                mahapujasevTotal -= 251;
                               }
 
                               hariJaynati = value!;
@@ -137,8 +172,10 @@ class _DonationUIState extends State<DonationUI> {
                             setState(() {
                               if (value == true) {
                                 totalamount += 11;
+                                mahapujasevTotal += 11;
                               } else {
                                 totalamount -= 11;
+                                mahapujasevTotal -= 11;
                               }
                               nilkanthVariAbhishak = value!;
                             });
@@ -163,7 +200,7 @@ class _DonationUIState extends State<DonationUI> {
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   title: CustomText("Thal"),
-                  trailing: CustomText("\$0"),
+                  trailing: thalvalue ? CustomText("\$101") : CustomText("\$0"),
                   children: [
                     ListTile(
                       leading: Checkbox(
@@ -225,20 +262,6 @@ class _DonationUIState extends State<DonationUI> {
                 ),
               ),
             ),
-            Form(
-                child: Column(
-              children: [
-                CustomTextField(hintname: "Name"),
-                CustomTextField(hintname: "Email"),
-                CustomTextField(hintname: "Phone"),
-                CustomTextField(hintname: "Street 1 Address"),
-                CustomTextField(hintname: "Street 2 Address"),
-                CustomTextField(hintname: "City"),
-                CustomTextField(hintname: "Zip"),
-                CustomTextField(hintname: "State"),
-                CustomTextField(hintname: "Country")
-              ],
-            )),
             Container(
                 height: 50.0,
                 decoration: BoxDecoration(
@@ -246,116 +269,36 @@ class _DonationUIState extends State<DonationUI> {
                       color: AppColors.apptheme,
                     ),
                     borderRadius: BorderRadius.circular(10.0)),
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: 12.0,
                   left: 10.0,
                   right: 10.0,
                 ),
                 child: ListTile(
-                  leading: CustomText("Total:- "),
+                  title: CustomText("Total:- "),
                   trailing: CustomText("\$${totalamount}"),
                 )),
-
-            // Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0, top: 20.0),
-              child: Center(
-                child: SizedBox(
-                  height: 40.0,
-
-                  width: 300.0,
-
-                  //  color: AppColors.apptheme,
-
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.apptheme),
-                      onPressed: () {
-                        if (totalamount == 0) {
-                          Fluttertoast.showToast(
-                              msg: "Amount should not be zero");
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => UsePaypal(
-                                  sandboxMode: true,
-                                  clientId:
-                                      "AZAvbuknc_yWC4RA-mHoC1q2auWscZcOZd-pZEVnNK-Kd83p-JMvCl8PvPPmWyAJPjgFFRaPGp2fPjjO",
-                                  secretKey:
-                                      "EMr3iHKaDX6kgEasACP_LzkRZwx_cEdghpqE1D148GkXynqSefwNUeiwUuCvicS2Va9bmlzxKqcBQUlw",
-                                  returnURL: "https://samplesite.com/return",
-                                  cancelURL: "https://samplesite.com/cancel",
-                                  transactions: [
-                                    {
-                                      "amount": {
-                                        "total": '${totalamount.toString()}',
-                                        "currency": "USD",
-                                        "details": {
-                                          "subtotal":
-                                              '${totalamount.toString()}',
-                                          "shipping": '0',
-                                          "shipping_discount": 0
-                                        }
-                                      },
-
-                                      "description":
-                                          "The payment transaction description.",
-
-                                      // "payment_options": {
-
-                                      //   "allowed_payment_method":
-
-                                      //       "INSTANT_FUNDING_SOURCE"
-
-                                      // },
-
-                                      "item_list": {
-                                        "items": [
-                                          {
-                                            "name": "Donation",
-                                            "quantity": 1,
-                                            "price":
-                                                '${totalamount.toString()}',
-                                            "currency": "USD"
-                                          }
-                                        ],
-
-                                        // shipping address is not required though
-
-                                        "shipping_address": {
-                                          "recipient_name": "Jane Foster",
-                                          "line1": "Travis County",
-                                          "line2": "",
-                                          "city": "Austin",
-                                          "country_code": "US",
-                                          "postal_code": "73301",
-                                          "phone": "+00000000",
-                                          "state": "Texas"
-                                        },
-                                      }
-                                    }
-                                  ],
-                                  note:
-                                      "Contact us for any questions on your order.",
-                                  onSuccess: (Map params) async {
-                                    log("onSuccess: $params");
-                                  },
-                                  onError: (error) {
-                                    log("onError: $error");
-                                  },
-                                  onCancel: (params) {
-                                    log('cancelled: $params');
-                                  }),
-                            ),
-                          );
-                        }
-                      },
-                      child: Text(
-                        "Donate",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
+            SizedBox(
+              height: 50.0,
+            ),
+            SizedBox(
+              height: 40.0,
+              width: 300.0,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.apptheme),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => PersonalInfoUI(
+                                  totalamount: totalamount,
+                                )));
+                  },
+                  child: CustomText(
+                    "Next",
+                    color: Colors.white,
+                  )),
             )
           ],
         ),

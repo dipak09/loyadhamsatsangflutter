@@ -3,9 +3,11 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   String hintname;
+  TextEditingController ?controller;
   CustomTextField({
     Key? key,
     required this.hintname,
+     this.controller,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           border: Border.all(color: AppColors.apptheme),
           borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
+        controller: widget.controller,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(left: 15.0, bottom: 10.0),
           hintText: widget.hintname,

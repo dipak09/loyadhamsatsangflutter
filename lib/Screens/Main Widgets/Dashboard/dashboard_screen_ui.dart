@@ -240,52 +240,57 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   }
 
   Widget upcomingeventSection() {
-    return Column(children: [
-      Padding(
-          padding: EdgeInsets.only(left: 25, right: 25),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText("Upcoming Events",
-                    color: Colors.black, fontWeight: FontWeight.bold)
-              ])),
-      Obx(() => Home.isLoading.value == true
-          ? _loader()
-          : SizedBox(
-              height: screenHeight(context) * 0.2,
-              child: ListView.builder(
-                  itemCount: Home.upcomingEventList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (contex, index) {
-                    return InkWell(
-                        onTap: () {
-                          Get.to(() => VideoScreen(
-                              url: Home.upcomingEventList[index].youtubeLink,
-                              videoId:
-                                  Home.upcomingEventList[index].initialId));
-                        },
-                        child: Container(
-                            height: 125,
-                            width: 250,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                border:
-                                    Border.all(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                    image: NetworkImage(Home
-                                        .upcomingEventList[index].thumbnail!),
-                                    fit: BoxFit.fill)),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: CachedImageWithShimmer(
-                                    fit: BoxFit.fitHeight,
-                                    imageUrl: Home.upcomingEventList[index]
-                                        .thumbnail!))));
-                  })))
-    ]);
+    return Home.upcomingEventList.isEmpty
+        ? SizedBox.shrink()
+        : Column(children: [
+            Padding(
+                padding: EdgeInsets.only(left: 25, right: 25),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText("Upcoming Events",
+                          color: Colors.black, fontWeight: FontWeight.bold)
+                    ])),
+            Obx(() => Home.isLoading.value == true
+                ? _loader()
+                : SizedBox(
+                    height: screenHeight(context) * 0.2,
+                    child: ListView.builder(
+                        itemCount: Home.upcomingEventList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (contex, index) {
+                          return InkWell(
+                              onTap: () {
+                                Get.to(() => VideoScreen(
+                                    url: Home
+                                        .upcomingEventList[index].youtubeLink,
+                                    videoId: Home
+                                        .upcomingEventList[index].initialId));
+                              },
+                              child: Container(
+                                  height: 125,
+                                  width: 250,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      border: Border.all(
+                                          color: Colors.white, width: 3),
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: NetworkImage(Home
+                                              .upcomingEventList[index]
+                                              .thumbnail!),
+                                          fit: BoxFit.fill)),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: CachedImageWithShimmer(
+                                          fit: BoxFit.fitHeight,
+                                          imageUrl: Home
+                                              .upcomingEventList[index]
+                                              .thumbnail!))));
+                        })))
+          ]);
   }
 
   Widget _loaderSlider() {

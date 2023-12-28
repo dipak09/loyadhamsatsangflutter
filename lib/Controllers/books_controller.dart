@@ -70,4 +70,5 @@ class BooksController extends GetxController {
       print('Error: $error');
     }
   }
+
 }
