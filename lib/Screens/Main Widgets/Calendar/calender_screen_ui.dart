@@ -1,6 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/calander_controller.dart';
 import 'package:loyadhamsatsang/Models/Calander.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -14,10 +17,24 @@ class CalenderScreenUI extends StatefulWidget {
 }
 
 class _CalenderScreenUIState extends State<CalenderScreenUI> {
+  // ignore: prefer_final_fields
   PageController _pageController =
       PageController(initialPage: DateTime.now().month - 1);
   var Calander = Get.put(CalanderController());
   DateTime _currentMonth = DateTime.now();
+  bool english = true;
+  bool gujarati = false;
+  bool selectedcurrentyear = false;
+  @override
+  void initState() {
+    super.initState();
+    Calander.startdate = null;
+    Calander.enddate = null;
+    english = true;
+    gujarati = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +43,75 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
         ),
         body: Obx(
           () => Calander.isLoading.value
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              english = true;
+                              gujarati = false;
+                            });
+                          },
+                          child: Container(
+                            height: 30.0,
+                            width: 70.0,
+                            margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                            decoration: BoxDecoration(
+                                color:
+                                    english ? AppColors.apptheme : Colors.white,
+                                border: Border.all(
+                                    color: english
+                                        ? AppColors.apptheme
+                                        : Colors.black),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Center(
+                              child: Text(
+                                "EN",
+                                style: TextStyle(
+                                    color:
+                                        english ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              english = false;
+                              gujarati = true;
+                            });
+                          },
+                          child: Container(
+                            height: 30.0,
+                            width: 70.0,
+                            margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                            decoration: BoxDecoration(
+                                color: gujarati
+                                    ? AppColors.apptheme
+                                    : Colors.white,
+                                border: Border.all(
+                                    color: gujarati
+                                        ? AppColors.apptheme
+                                        : Colors.black),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Center(
+                              child: Text(
+                                "GUJ",
+                                style: TextStyle(
+                                    color:
+                                        gujarati ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                     _buildHeader(),
                     _buildWeeks(),
                     Expanded(
@@ -61,16 +144,15 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
         ));
   }
 
-  DateTime _currentVisibleMonth = DateTime.now();
-
+  //DateTime _currentVisibleMonth = DateTime.now();
+//! Months and year dropDown Code---------------->
   Widget _buildHeader() {
     bool isLastMonthOfYear = _currentMonth.month == 12;
-    bool isCurrentYear = _currentMonth.year == DateTime.now().year;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
             icon: Icon(Icons.arrow_back),
@@ -84,17 +166,46 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             },
           ),
           Text(
-            '${DateFormat('MMMM yyyy').format(_currentMonth)}',
+            '${DateFormat('MMMM').format(_currentMonth)}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          DropdownButton<int>(
+            value: _currentMonth.year,
+            onChanged: (int? year) {
+              if (year != null) {
+                setState(() {
+                  _currentMonth = DateTime(
+                      year, 1, 1); // Set to January of the selected year
+                  Calander.enddate = "$year-12-31";
+                  Calander.startdate = "$year-01-01";
+                  Calander.getData("$year-01-01", "$year-12-31");
+
+                  int yearDiff = DateTime.now().year - year;
+                  int monthIndex = 12 * yearDiff + _currentMonth.month - 1;
+                  _pageController.jumpToPage(monthIndex);
+                });
+              }
+            },
+            items: [
+              for (int year = DateTime.now().year;
+                  year <= DateTime.now().year + 10;
+                  year++)
+                DropdownMenuItem<int>(
+                  value: year,
+                  child: Text(year.toString()),
+                ),
+            ],
           ),
           IconButton(
             icon: Icon(Icons.arrow_forward),
             onPressed: () {
-              if (!isLastMonthOfYear || isCurrentYear) {
-                _pageController.nextPage(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
+              if (!isLastMonthOfYear) {
+                setState(() {
+                  _pageController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                });
               }
             },
           ),
@@ -103,6 +214,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     );
   }
 
+//! Weeks day Code------------------>
   Widget _buildWeeks() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -131,6 +243,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     );
   }
 
+//! Whole Calendar Code-------------------->
   Widget _buildCalendar(DateTime month, CalanderController calendar) {
     int daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     DateTime firstDayOfMonth = DateTime(month.year, month.month, 1);
@@ -144,7 +257,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
 
     return GridView.builder(
       padding: EdgeInsets.zero,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
         childAspectRatio: 0.4,
         //crossAxisSpacing: 4.0,
@@ -187,6 +300,16 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
           return InkWell(
             onTap: () {
               // Handle date cell tap
+              popupdialog(
+                  context,
+                  text,
+                  month.year.toString(),
+                  month.month,
+                  currentDateData.monthTitleEng.toString(),
+                  currentDateData.pakshaTitleEng.toString(),
+                  currentDateData.tithiTitleEng.toString(),
+                  currentDateData.chandraTitleEng.toString(),
+                  currentDateData.nakshatraTitleEng.toString());
             },
             child: Container(
               decoration: const BoxDecoration(
@@ -201,33 +324,66 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                 ),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        text,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   if (currentDateData.icon != null)
-                    Image.network(
-                      currentDateData.icon
-                          .toString(), // Replace with your image URL
-                      width: 30,
-                      height: 30,
-                      fit: BoxFit.cover,
+                    Expanded(
+                      flex: 0,
+                      child: SizedBox(
+                        child: Image.network(
+                          currentDateData.events!.isEmpty
+                              ? currentDateData.icon
+                              : currentDateData.events![0]['Icon']
+                                  .toString()
+                                  .toString(), // Replace with your image URL
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                    child: Text(
-                      "${currentDateData.monthTitleEng}${currentDateData.pakshaTitleEng}${currentDateData.tithiTitleEng}" ??
-                          '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromARGB(255, 127, 126, 126)),
+                  if (currentDateData.icon == null)
+                    const Expanded(
+                      flex: 0,
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                      ),
                     ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                        child: english
+                            ? Text(
+                                "${currentDateData.monthTitleEng}${currentDateData.pakshaTitleEng}${currentDateData.tithiTitleEng}" ??
+                                    '',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromARGB(255, 127, 126, 126)),
+                              )
+                            : Text(
+                                "${currentDateData.monthTitleGuj}${currentDateData.pakshaTitleGuj}${currentDateData.tithiTitleGuj}" ??
+                                    '',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromARGB(255, 127, 126, 126)),
+                              )),
                   ), // Display the month title
                 ],
               ),
@@ -239,16 +395,136 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
   }
 }
 
+//! Popup UI---------------------->
+Future<void> popupdialog(
+    BuildContext context,
+    String date,
+    String year,
+    int month,
+    String monttitle,
+    String pakshaTitle,
+    String tithiTitle,
+    String chandra_title_eng,
+    String nakshatra_title_eng) {
+  var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+            backgroundColor: Colors.white,
+            child: SizedBox(
+              height: 250.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 100.0,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                        color: AppColors.apptheme,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(aplhaMonth.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 10.0),
+                              child: Text(
+                                date,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            Text(year,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w500))
+                          ],
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 12.0, right: 10.0),
+                          child: Text(
+                            "${monttitle}" " ${pakshaTitle}" " ${tithiTitle}",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                    child: RichText(
+                        text: TextSpan(
+                      // Note: Styles for TextSpans must be explicitly defined.
+                      // Child text spans will inherit styles from parent
+                      style: const TextStyle(
+                          fontSize: 17.0,
+                          color: AppColors.apptheme,
+                          fontWeight: FontWeight.w500),
+                      children: <TextSpan>[
+                        const TextSpan(text: 'Chandra: '),
+                        TextSpan(
+                            text: chandra_title_eng.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 67, 67, 67),
+                                fontSize: 16.0)),
+                      ],
+                    )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                    child: RichText(
+                        text: TextSpan(
+                      // Note: Styles for TextSpans must be explicitly defined.
+                      // Child text spans will inherit styles from parent
+                      style: const TextStyle(
+                          fontSize: 17.0,
+                          color: AppColors.apptheme,
+                          fontWeight: FontWeight.w500),
+                      children: <TextSpan>[
+                        TextSpan(text: 'Nakshatra: '),
+                        TextSpan(
+                            text: nakshatra_title_eng.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 67, 67, 67),
+                                fontSize: 16.0)),
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+            ));
+      });
+}
+
 extension DateOnlyCompare on DateTime {
   bool isSameDate(DateTime other) {
     return this.year == other.year &&
         this.month == other.month &&
         this.day == other.day;
-  }
-}
-
-class _DataSource extends CalendarDataSource {
-  _DataSource(List<Appointment> source) {
-    appointments = source;
   }
 }
