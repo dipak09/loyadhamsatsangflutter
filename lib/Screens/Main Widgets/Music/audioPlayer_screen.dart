@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioList_screen_ui.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
@@ -34,13 +35,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     // TODO: implement initState
     super.initState();
     isdownload = false;
+    // playallclick = false;
     setState(() {});
   }
 
   @override
   void dispose() {
     super.dispose();
-    audioController.audioPlayer.stop();
+    // audioController.audioPlayer.stop();
   }
 
   String formatDuration(Duration duration) {

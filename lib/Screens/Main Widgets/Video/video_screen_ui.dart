@@ -26,6 +26,8 @@ class _VideoScreenUIState extends State<VideoScreenUI>
     with SingleTickerProviderStateMixin {
   var VideoData = Get.put(VideoController());
   late ScrollController _controller;
+  ScrollController vendorRecordController = new ScrollController();
+
   var moreloading = false;
   Dio dio = Dio();
   TabController? _tabController;
@@ -67,6 +69,7 @@ class _VideoScreenUIState extends State<VideoScreenUI>
 
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
+    
   }
 
   @override

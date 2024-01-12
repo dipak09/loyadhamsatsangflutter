@@ -14,7 +14,7 @@ class SplashScreenUI extends StatefulWidget {
 }
 
 class _SplashScreenUIState extends State<SplashScreenUI> {
-  // var Splash = Get.put(SplashScreenController());
+ //  var Splash = Get.put(SplashScreenController());
   @override
   void initState() {
     super.initState();

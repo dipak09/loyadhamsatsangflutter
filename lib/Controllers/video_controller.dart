@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
+import 'package:loyadhamsatsang/Models/youtubevideo.dart';
+
+var apitoken;
 
 class VideoController extends GetxController {
   Dio dio = Dio();
-  List<Video> videoList = [];
-  var home_page = 1.obs;
-  RxBool isLoading = false.obs;
+  List<ListYoutubeVideo> videoList = [];
+  var isLoading = false.obs;
+  var token = "".obs;
+  var pageno = 1.obs;
 
   @override
   void onInit() {
@@ -18,32 +22,37 @@ class VideoController extends GetxController {
 
   void get(int? i) {
     if (i == 0) {
-      getData("US", "");
+      videoList.clear();
+      pageno = 1.obs;
+      getData("US", "", "");
     } else {
-      getData("IN", "");
+      videoList.clear();
+      pageno = 1.obs;
+      getData("IN", "", "");
     }
   }
 
-  Future<void> getData(String type, String token) async {
+  Future<void> getData(String type, String token, String pageno) async {
     try {
       isLoading(true);
       update();
-      videoList.clear();
+
       String apiUrl =
-          'http://loyadham.in/api/webservice/getYoutubeChannellatest?youtube=${type.isEmpty ? "IN" : type}';
-      //   http://loyadham.in/api/webservice/getYoutubeChannellatest?page=2&youtube=US&pageToken=CBQQAA
-      // String apiUrl =
-      //     'https://loyadham.in/api/webservice/getYoutubeChannellatest?youtube=';
+          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${pageno}&youtube=${type.isEmpty ? "IN" : type}&pageToken=${token ?? ""}";
 
       final response = await dio.get(apiUrl);
 
-      final data = response.data;
+      final data = response.data['youtube_video'];
+      log(apiUrl);
+      apitoken = response.data['pageToken'].toString();
 
+      List<ListYoutubeVideo> newVideos = [];
       data.forEach((el) {
-        Video video = Video.fromJson(el);
-        videoList.add(video);
+        ListYoutubeVideo video = ListYoutubeVideo.fromJson(el);
+        newVideos.add(video);
       });
 
+      videoList.addAll(newVideos);
       isLoading(false);
       update();
     } catch (error) {

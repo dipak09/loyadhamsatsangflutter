@@ -27,7 +27,7 @@ class SplashScreenController extends GetxController {
 
       final data = response.data;
 
-      print(data['image']);
+      //print(data['image']);
       image = data['image'];
 
       update();

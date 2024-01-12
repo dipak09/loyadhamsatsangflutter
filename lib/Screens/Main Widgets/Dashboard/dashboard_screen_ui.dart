@@ -262,10 +262,20 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                           return InkWell(
                               onTap: () {
                                 Get.to(() => VideoScreen(
-                                    url: Home
-                                        .upcomingEventList[index].youtubeLink,
-                                    videoId: Home
-                                        .upcomingEventList[index].initialId));
+                                      timeAgo:
+                                          Home.upcomingEventList[index].timeAgo,
+                                      title:
+                                          Home.upcomingEventList[index].title,
+                                      view: Home
+                                          .upcomingEventList[index].viewCount,
+                                      publishedDate: Home
+                                          .upcomingEventList[index]
+                                          .publishedDate,
+                                      url: Home
+                                          .upcomingEventList[index].youtubeLink,
+                                      videoId: Home
+                                          .upcomingEventList[index].initialId,
+                                    ));
                               },
                               child: Container(
                                   height: 125,

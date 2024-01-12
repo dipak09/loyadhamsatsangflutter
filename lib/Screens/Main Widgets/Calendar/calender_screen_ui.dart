@@ -269,17 +269,21 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
           // Show dates from the previous month in grey
           int previousMonthDay =
               daysInPreviousMonth - (weekdayOfFirstDay - index) + 2;
+          DateTime date =
+              DateTime(month.year, month.month, index - weekdayOfFirstDay + 2);
+
           return Container(
-            decoration: const BoxDecoration(
-                border: Border(
-              top: BorderSide.none, // Remove top line
-              left: BorderSide(
-                  width: 1.0, color: Colors.grey), // Example: left border
-              right: BorderSide(
-                  width: 1.0, color: Colors.grey), // Example: right border
-              bottom: BorderSide(
-                  width: 1.0, color: Colors.grey), // Example: bottom border
-            )),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide.none, // Remove top line
+                left: BorderSide(
+                    width: 1.0, color: Colors.grey), // Example: left border
+                right: BorderSide(
+                    width: 1.0, color: Colors.grey), // Example: right border
+                bottom: BorderSide(
+                    width: 1.0, color: Colors.grey), // Example: bottom border
+              ),
+            ),
             alignment: Alignment.center,
             child: Text(
               previousMonthDay.toString(),
@@ -290,7 +294,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
           DateTime date =
               DateTime(month.year, month.month, index - weekdayOfFirstDay + 2);
           String text = date.day.toString(); // Day number text
-
+          bool isCurrentDate = DateTime.now().isSameDate(date);
           CalenderData? currentDateData = calendar.list.firstWhere(
             (element) =>
                 DateTime.parse(element.icDate!.toString()).isSameDate(date),
@@ -309,11 +313,17 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                   currentDateData.pakshaTitleEng.toString(),
                   currentDateData.tithiTitleEng.toString(),
                   currentDateData.chandraTitleEng.toString(),
-                  currentDateData.nakshatraTitleEng.toString());
+                  currentDateData.nakshatraTitleEng.toString(),
+                  currentDateData.tithiTitleGuj.toString(),
+                  currentDateData.chandraTitleGuj.toString(),
+                  currentDateData.nakshatraTitleGuj.toString(),
+                  gujarati,
+                  currentDateData.monthTitleGuj.toString(),
+                  currentDateData.pakshaTitleGuj.toString());
             },
             child: Container(
-              decoration: const BoxDecoration(
-                border: Border(
+              decoration: BoxDecoration(
+                border: const Border(
                   top: BorderSide.none, // Remove top line
                   left: BorderSide(
                       width: 1.0, color: Colors.grey), // Example: left border
@@ -322,6 +332,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                   bottom: BorderSide(
                       width: 1.0, color: Colors.grey), // Example: bottom border
                 ),
+                color: isCurrentDate ? AppColors.apptheme : null,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -331,8 +342,9 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                     child: Center(
                       child: Text(
                         text,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: isCurrentDate ? Colors.white : null,
                         ),
                       ),
                     ),
@@ -370,19 +382,23 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                                 "${currentDateData.monthTitleEng}${currentDateData.pakshaTitleEng}${currentDateData.tithiTitleEng}" ??
                                     '',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 10.0,
                                     fontWeight: FontWeight.w400,
-                                    color: Color.fromARGB(255, 127, 126, 126)),
+                                    color: isCurrentDate
+                                        ? Colors.white
+                                        : Color.fromARGB(255, 127, 126, 126)),
                               )
                             : Text(
                                 "${currentDateData.monthTitleGuj}${currentDateData.pakshaTitleGuj}${currentDateData.tithiTitleGuj}" ??
                                     '',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 10.0,
                                     fontWeight: FontWeight.w400,
-                                    color: Color.fromARGB(255, 127, 126, 126)),
+                                    color: isCurrentDate
+                                        ? Colors.white
+                                        : Color.fromARGB(255, 127, 126, 126)),
                               )),
                   ), // Display the month title
                 ],
@@ -405,7 +421,13 @@ Future<void> popupdialog(
     String pakshaTitle,
     String tithiTitle,
     String chandra_title_eng,
-    String nakshatra_title_eng) {
+    String nakshatra_title_eng,
+    String tithi_titl_eGuj,
+    String chandra_title_Guj,
+    String nakshatar_title_Guj,
+    bool gujSelect,
+    String month_title_guj,
+    String paksha_title_guj) {
   var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
   return showDialog(
       context: context,
@@ -461,14 +483,27 @@ Future<void> popupdialog(
                         Padding(
                           padding:
                               const EdgeInsets.only(left: 12.0, right: 10.0),
-                          child: Text(
-                            "${monttitle}" " ${pakshaTitle}" " ${tithiTitle}",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white),
-                          ),
+                          child: gujSelect
+                              ? Text(
+                                  "${month_title_guj}"
+                                  " ${paksha_title_guj}"
+                                  " ${tithi_titl_eGuj}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white),
+                                )
+                              : Text(
+                                  "${monttitle}"
+                                  " ${pakshaTitle}"
+                                  " ${tithiTitle}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white),
+                                ),
                         ),
                       ],
                     ),
@@ -485,12 +520,19 @@ Future<void> popupdialog(
                           fontWeight: FontWeight.w500),
                       children: <TextSpan>[
                         const TextSpan(text: 'Chandra: '),
-                        TextSpan(
-                            text: chandra_title_eng.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 67, 67, 67),
-                                fontSize: 16.0)),
+                        gujSelect
+                            ? TextSpan(
+                                text: chandra_title_Guj.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 67, 67, 67),
+                                    fontSize: 16.0))
+                            : TextSpan(
+                                text: chandra_title_eng.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 67, 67, 67),
+                                    fontSize: 16.0))
                       ],
                     )),
                   ),
@@ -506,12 +548,19 @@ Future<void> popupdialog(
                           fontWeight: FontWeight.w500),
                       children: <TextSpan>[
                         TextSpan(text: 'Nakshatra: '),
-                        TextSpan(
-                            text: nakshatra_title_eng.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 67, 67, 67),
-                                fontSize: 16.0)),
+                        gujSelect
+                            ? TextSpan(
+                                text: nakshatar_title_Guj.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 67, 67, 67),
+                                    fontSize: 16.0))
+                            : TextSpan(
+                                text: nakshatra_title_eng.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 67, 67, 67),
+                                    fontSize: 16.0))
                       ],
                     )),
                   ),

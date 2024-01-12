@@ -37,6 +37,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   @override
   void initState() {
     super.initState();
+    playallclick = false;
     KirtanKatha.getAudio(widget.type!, widget.kathaMasterId!, widget.singerId!);
   }
 
@@ -53,35 +54,6 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   bool isPlayPause = true;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool playallclick = false;
-// Function to play the audios one after another
-  // Future<void> playAll(String audioUrl) async {
-  //   if (playallclick == true) {
-  //     try {
-  //     await _audioPlayer.setUrl(audioUrl);
-
-  //     // Listen for player completion
-  //     _audioPlayer.playerStateStream.listen((state) async {
-  // if (state.processingState == ProcessingState.completed) {
-  //   // Play the next audio
-  //   // Implement your logic to get the next URL
-  //   // For example:
-  //   // final nextUrl = getNextUrl();
-  //   // if (nextUrl != null) {
-  //   //   await play(nextUrl);
-  //   // }
-  // }
-  //     });
-
-  //     // Start playback
-  //     await _audioPlayer.play();
-  //   } catch (e) {
-  //     // Handle any exceptions
-  //     print('Error playing audio: $e');
-  //   }
-  //   } else {
-  //     log("PlayALL is not true yet----------->");
-  //   }
-  // }
   void playAllAudios() {
     // Start playing the first audio
     playNextAudio();
@@ -100,26 +72,14 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
         if (event.processingState == ProcessingState.completed) {
           currentAudioIndex++;
           playNextAudio();
-         
-          //setState(() {});
-          // Play the next audio
-          // Implement your logic to get the next URL
-          // For example:
-          // final nextUrl = getNextUrl();
-          // if (nextUrl != null) {
-          //   await play(nextUrl);
-          // }
         }
       });
 
       // Move to the next audio after a delay (you can adjust the delay according to your needs)
-    }else{
-      currentAudioIndex =0;
-      setState(() {
-        
-      });
+    } else {
+      currentAudioIndex = 0;
+      setState(() {});
     }
-    // currentAudioIndex = -1;
   }
 
   void play() {
@@ -190,6 +150,9 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                             onTap: () {
                               KirtanKatha.playAudio(KirtanKatha
                                   .kirtankathaAudioList[index].uploadAudio!);
+                              playallclick = false;
+                              //    KirtanKatha.audioPlayer.stop();
+                              setState(() {});
                               Get.to(AudioPlayerScreen(
                                 imgUrl: widget.imgUrl,
                                 audioname: KirtanKatha
@@ -349,7 +312,6 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                           ),
                         ],
                       ),
-                   
                     ],
                   ),
                 )

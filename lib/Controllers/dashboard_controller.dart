@@ -58,7 +58,7 @@ class DashboardController extends GetxController {
         dailyDarshanList.add(dailydarshans);
       });
 
-      final upcomingEventData = data['upcomingevent'];
+      final upcomingEventData = data['upcomingevent']['youtube_video'];
       if (upcomingEventData == null || upcomingEventData == []) {
         upcomingEventList = [];
       } else {
