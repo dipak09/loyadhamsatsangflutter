@@ -4,8 +4,12 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/search_controller.dart';
 import 'package:loyadhamsatsang/Models/search.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioPlayer_screen.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../Books Screen/bookViewer.dart';
 
 class SearchAppBar extends StatefulWidget {
   const SearchAppBar({super.key});
@@ -96,10 +100,14 @@ class _SearchAppBarState extends State<SearchAppBar> {
                                 return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: booklistviewLayOut(
-                                        SearchData.book![index].coverImage
+                                        SearchData.book![index].thumbnail
                                             .toString(),
-                                        SearchData.book![index].name
-                                            .toString()));
+                                        SearchData.book![index].name.toString(),
+                                        () {
+                                      Get.to(PdfViewerFromApi(SearchData
+                                          .book![index].link
+                                          .toString()));
+                                    }));
                               },
                             ),
                           ),
@@ -124,12 +132,24 @@ class _SearchAppBarState extends State<SearchAppBar> {
                                 return Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: listviewLayOut(
-                                    
-                                      SearchData.youtubeUs![index].thumbnail
-                                          .toString(),
-                                      SearchData.youtubeUs![index].title
-                                          .toString(),
-                                    ));
+                                        SearchData.youtubeUs![index].thumbnail
+                                            .toString(),
+                                        SearchData.youtubeUs![index].name
+                                            .toString(), () {
+                                      Get.to(() => VideoScreen(
+                                            timeAgo: SearchData
+                                                .youtubeUs![index].time,
+                                            title: SearchData
+                                                .youtubeUs![index].name,
+                                            view: SearchData
+                                                .youtubeUs![index].view,
+                                            publishedDate: "January 13, 2024",
+                                            url: SearchData
+                                                .youtubeUs![index].link,
+                                            videoId: SearchData
+                                                .youtubeUs![index].type,
+                                          ));
+                                    }));
                               },
                             ),
                           ),
@@ -154,11 +174,24 @@ class _SearchAppBarState extends State<SearchAppBar> {
                                 return Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: listviewLayOut(
-                                      SearchData.youtubeIn![index].thumbnail
-                                          .toString(),
-                                      SearchData.youtubeIn![index].title
-                                          .toString(),
-                                    ));
+                                        SearchData.youtubeIn![index].thumbnail
+                                            .toString(),
+                                        SearchData.youtubeIn![index].name
+                                            .toString(), () {
+                                      Get.to(() => VideoScreen(
+                                            timeAgo: SearchData
+                                                .youtubeIn![index].time,
+                                            title: SearchData
+                                                .youtubeIn![index].name,
+                                            view: SearchData
+                                                .youtubeIn![index].view,
+                                            publishedDate: "January 13, 2024",
+                                            url: SearchData
+                                                .youtubeIn![index].link,
+                                            videoId: SearchData
+                                                .youtubeIn![index].type,
+                                          ));
+                                    }));
                               },
                             ),
                           ),
@@ -183,10 +216,20 @@ class _SearchAppBarState extends State<SearchAppBar> {
                                 return Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: listviewLayOut(
-                                        SearchData.kathaAudio![index].coverImage
+                                        SearchData.kathaAudio![index].thumbnail
                                             .toString(),
                                         SearchData.kathaAudio![index].fileName
-                                            .toString()));
+                                            .toString(), () {
+                                      Get.to(AudioPlayerScreen(
+                                        imgUrl: SearchData
+                                            .kathaAudio![index].thumbnail,
+                                        audioname:
+                                            SearchData.kathaAudio![index].name,
+                                        audiofile:
+                                            SearchData.kathaAudio![index].link,
+                                        index: index,
+                                      ));
+                                    }));
                               },
                             ),
                           ),
@@ -198,31 +241,34 @@ class _SearchAppBarState extends State<SearchAppBar> {
               )));
   }
 
-  Widget listviewLayOut(String image, String title) {
-    return SizedBox(
-      height: 180.0,
-      width: 200.0,
-      //color: Colors.red,
-      child: Column(
-        children: [
-          SizedBox(
-              child: Image.network(
-            image,
-            scale: 1.5,
-            fit: BoxFit.cover,
-          )),
-          CustomText(
-            title,
-            fontSize: 10.0,
-          )
-        ],
+  Widget listviewLayOut(String image, String title, Function() ontap) {
+    return GestureDetector(
+      onTap: ontap,
+      child: SizedBox(
+        height: 180.0,
+        width: 200.0,
+        //color: Colors.red,
+        child: Column(
+          children: [
+            SizedBox(
+                child: Image.network(
+              image,
+              scale: 1.5,
+              fit: BoxFit.cover,
+            )),
+            CustomText(
+              title,
+              fontSize: 10.0,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget booklistviewLayOut(String image, String title,  ) {
+  Widget booklistviewLayOut(String image, String title, Function() ontap) {
     return GestureDetector(
-      
+      onTap: ontap,
       child: SizedBox(
         height: 180.0,
         width: 200.0,

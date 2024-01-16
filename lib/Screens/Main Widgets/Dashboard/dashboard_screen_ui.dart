@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Controllers/liveStream_controller.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
@@ -25,6 +26,13 @@ class DashboardScreenUI extends StatefulWidget {
 class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Home = Get.put(DashboardController());
   var Video = Get.put(VideoController());
+  var LiveStream = Get.put(LiveStreamController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    LiveStream.getDashboardData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   }
 
   Widget liveStreamSection() {
-    return Home.livestreamingList.length == 0 && Home.livestreamingList.isEmpty
+    return LiveStream.livestreamchannel.length == 0 &&
+            LiveStream.livestreamchannel.isEmpty
         ? SizedBox.shrink()
         : Column(children: [
             Padding(
@@ -61,16 +70,16 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                 : SizedBox(
                     height: screenHeight(context) * 0.2,
                     child: ListView.builder(
-                        itemCount: Home.livestreamingList.length,
+                        itemCount: LiveStream.livestreamchannel.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (contex, index) {
                           return InkWell(
                               onTap: () {
                                 Get.to(() => VideoScreen(
-                                    url: Home
-                                        .livestreamingList[index].youtubeLink,
-                                    videoId: Home
-                                        .livestreamingList[index].initialId));
+                                    url: LiveStream
+                                        .livestreamchannel[index].youtubeLink,
+                                    videoId: LiveStream
+                                        .livestreamchannel[index].initialId));
                               },
                               child: Container(
                                   height: 125,
@@ -83,16 +92,18 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                           color: Colors.white, width: 3),
                                       borderRadius: BorderRadius.circular(15),
                                       image: DecorationImage(
-                                          image: NetworkImage(Home
-                                              .livestreamingList[index]
-                                              .thumbnail!),
+                                          image: NetworkImage(LiveStream
+                                              .livestreamchannel[index]
+                                              .thumbnail
+                                              .toString()),
                                           fit: BoxFit.fill)),
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: CachedImageWithShimmer(
-                                          imageUrl: Home
-                                              .livestreamingList[index]
-                                              .thumbnail!))));
+                                          imageUrl: LiveStream
+                                              .livestreamchannel[index]
+                                              .thumbnail
+                                              .toString()))));
                         })))
           ]);
   }

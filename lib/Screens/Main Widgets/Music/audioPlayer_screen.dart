@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
+import 'package:loyadhamsatsang/Models/KirtanKatha.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioList_screen_ui.dart';
@@ -29,7 +30,8 @@ class AudioPlayerScreen extends StatefulWidget {
 }
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
-  final KirtanKathaAudioController audioController = Get.find();
+  final KirtanKathaAudioController audioController =
+      Get.put(KirtanKathaAudioController());
   @override
   void initState() {
     // TODO: implement initState
@@ -42,6 +44,19 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void dispose() {
     super.dispose();
+    audioController.audioPlayer.stop();
+
+    audioController.audioPlayer.positionStream.listen((event) {
+      if (event.inMilliseconds != 0) {
+        var durationInSeconds = audioController.audioPlayer.duration!
+            .inSeconds; // get the duration of audio in seconds
+        var progressInSeconds = (event.inMilliseconds /
+            1000); // get the current position in seconds
+        var percentageProgress = (progressInSeconds / durationInSeconds) *
+            100; // convert to percentage
+      }
+    });
+
     // audioController.audioPlayer.stop();
   }
 

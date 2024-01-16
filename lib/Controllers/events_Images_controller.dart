@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart' as r;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -30,14 +32,15 @@ class EventsImagesController extends GetxController {
       isLoading(true);
       update();
       String apiUrl =
-          'https://loyadham.in/api/webservice/eventalbum?album_title=${albumTitle}';
+          'https://loyadham.in/api/webservice/eventalbum?album_title=${albumTitle.removeAllWhitespace}';
 
       final response = await dio.get(
         apiUrl,
       );
 
       final data = response.data;
-      print(data);
+      log(apiUrl);
+      log(data.toString());
       data.forEach((el) {
         Events image = Events.fromJson(el);
         imageList.add(image);

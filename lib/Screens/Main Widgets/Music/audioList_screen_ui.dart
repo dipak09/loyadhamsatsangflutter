@@ -32,6 +32,15 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
     super.dispose();
     playallclick = false;
     KirtanKatha.audioPlayer.stop();
+    KirtanKatha.audioPlayer.positionStream.listen((event) {
+      if (event.inMilliseconds != 0) {
+        var duration = KirtanKatha
+            .audioPlayer.duration!.inMilliseconds; //get the duration of audio
+        var progress = (event.inMilliseconds / duration) *
+            100; // get the current position in percent
+        log(progress.toString());
+      }
+    });
   }
 
   @override
