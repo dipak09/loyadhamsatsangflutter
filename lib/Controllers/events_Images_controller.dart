@@ -32,7 +32,7 @@ class EventsImagesController extends GetxController {
       isLoading(true);
       update();
       String apiUrl =
-          'https://loyadham.in/api/webservice/eventalbum?album_title=${albumTitle.removeAllWhitespace}';
+          'https://loyadham.in/api/webservice/eventalbum?album_title=${albumTitle}';
 
       final response = await dio.get(
         apiUrl,

@@ -9,8 +9,8 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Calendar/calender_screen_
 
 class CalanderController extends GetxController {
   Dio dio = Dio();
-  List<CalenderData> list = [];
-  var calendarDataList = <CalenderData>[].obs;
+  List<Calender> list = [];
+  var calendarDataList = <Calender>[].obs;
   RxBool isLoading = false.obs;
   var startdate, enddate;
   @override
@@ -28,15 +28,15 @@ class CalanderController extends GetxController {
       update();
       //2023-12-31
       String apiUrl =
-          'https://cms.swaminarayanbhagwan.org/wp-json/sb/v1/calendar?start_date=${startdate == null ? "2024-01-01" : startdate}&end_date=${enddate == null ? "2024-12-31" : enddate}';
+          'https://loyadham.in/api/webservice/calender?start_date=${startdate == null ? "2024-01-01" : startdate}&end_date=${enddate == null ? "2024-12-31" : enddate}';
 
       final response = await dio.get(apiUrl);
       log(apiUrl);
 
       final data = response.data;
-      print("Calander Data : ${data['data']}");
-      data['data'].forEach((el) {
-        CalenderData calander = CalenderData.fromJson(el);
+      print("Calander Data : ${data}");
+      data['calender'].forEach((el) {
+        Calender calander = Calender.fromJson(el);
         list.add(calander);
       });
       calendarDataList.value = list;

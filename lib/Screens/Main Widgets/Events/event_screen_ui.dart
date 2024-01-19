@@ -46,7 +46,7 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                         name:
                                             Events.eventList[index].albumTitle,
                                         title:
-                                            "${Events.eventList[index].albumTitle} ${Events.eventList[index].date}"));
+                                            "${Events.eventList[index].albumTitle}"));
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(10),

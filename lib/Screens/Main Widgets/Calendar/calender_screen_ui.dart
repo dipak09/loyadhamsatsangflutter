@@ -7,7 +7,8 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/calander_controller.dart';
 import 'package:loyadhamsatsang/Models/Calander.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/globals.dart';
 
 class CalenderScreenUI extends StatefulWidget {
   const CalenderScreenUI({super.key});
@@ -295,10 +296,10 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
               DateTime(month.year, month.month, index - weekdayOfFirstDay + 2);
           String text = date.day.toString(); // Day number text
           bool isCurrentDate = DateTime.now().isSameDate(date);
-          CalenderData? currentDateData = calendar.list.firstWhere(
+          Calender? currentDateData = calendar.list.firstWhere(
             (element) =>
                 DateTime.parse(element.icDate!.toString()).isSameDate(date),
-            orElse: () => CalenderData(),
+            orElse: () => Calender(),
           );
 
           return InkWell(
@@ -319,7 +320,10 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                   currentDateData.nakshatraTitleGuj.toString(),
                   gujarati,
                   currentDateData.monthTitleGuj.toString(),
-                  currentDateData.pakshaTitleGuj.toString());
+                  currentDateData.pakshaTitleGuj.toString(),
+                  currentDateData.sunset.toString(),
+                  currentDateData.sunrise.toString(),
+                  currentDateData.calenderEvent);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -349,28 +353,36 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                       ),
                     ),
                   ),
-                  if (currentDateData.icon != null)
-                    Expanded(
-                      flex: 0,
-                      child: SizedBox(
-                        child: Image.network(
-                          currentDateData.events!.isEmpty
-                              ? currentDateData.icon
-                              : currentDateData.events![0]['Icon']
-                                  .toString()
-                                  .toString(), // Replace with your image URL
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
+                  //  if (currentDateData.calenderEvent!)
+                  if (currentDateData.calenderEvent!.isNotEmpty)
+                    if (currentDateData.calenderEvent![0].icon != null)
+                      Expanded(
+                        flex: 0,
+                        child: SizedBox(
+                          child: Image.network(
+                            currentDateData.calenderEvent![0].icon.toString(),
+                            // Replace with your image URL
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                  if (currentDateData.icon == null)
+                  if (currentDateData.calenderEvent!.isNotEmpty)
+                    if (currentDateData.calenderEvent![0].icon == null)
+                      const Expanded(
+                        flex: 0,
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                        ),
+                      ),
+                  if (currentDateData.calenderEvent!.isEmpty)
                     const Expanded(
                       flex: 0,
                       child: SizedBox(
-                        width: 30,
-                        height: 30,
+                        width: 40,
+                        height: 40,
                       ),
                     ),
                   Expanded(
@@ -427,7 +439,10 @@ Future<void> popupdialog(
     String nakshatar_title_Guj,
     bool gujSelect,
     String month_title_guj,
-    String paksha_title_guj) {
+    String paksha_title_guj,
+    String sunset,
+    String sunRise,
+    List<CalenderEvent>? calenderEvent) {
   var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
   return showDialog(
       context: context,
@@ -435,7 +450,7 @@ Future<void> popupdialog(
         return Dialog(
             backgroundColor: Colors.white,
             child: SizedBox(
-              height: 250.0,
+              height: screenHeight(context) / 1.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -457,7 +472,7 @@ Future<void> popupdialog(
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Text(aplhaMonth.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w500)),
@@ -467,14 +482,14 @@ Future<void> popupdialog(
                                   left: 10.0, right: 10.0),
                               child: Text(
                                 date,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w500),
                               ),
                             ),
                             Text(year,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w500))
@@ -485,21 +500,27 @@ Future<void> popupdialog(
                               const EdgeInsets.only(left: 12.0, right: 10.0),
                           child: gujSelect
                               ? Text(
+                                  // ignore: unnecessary_brace_in_string_interps
                                   "${month_title_guj}"
+                                  // ignore: unnecessary_brace_in_string_interps
                                   " ${paksha_title_guj}"
+                                  // ignore: unnecessary_brace_in_string_interps
                                   " ${tithi_titl_eGuj}",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white),
                                 )
                               : Text(
+                                  // ignore: unnecessary_brace_in_string_interps
                                   "${monttitle}"
+                                  // ignore: unnecessary_brace_in_string_interps
                                   " ${pakshaTitle}"
+                                  // ignore: unnecessary_brace_in_string_interps
                                   " ${tithiTitle}",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white),
@@ -564,6 +585,126 @@ Future<void> popupdialog(
                       ],
                     )),
                   ),
+                  calenderEvent!.isEmpty || calenderEvent!.length == 0
+                      ? SizedBox()
+                      : Expanded(
+                          child: ListView.builder(
+                          itemCount: calenderEvent!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(calenderEvent[index]
+                                  .vratUtsavNameEng
+                                  .toString()),
+                            );
+                          },
+                        )),
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30.0),
+                              bottomRight: Radius.circular(30.0)),
+                          child: Image.network(
+                            'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
+                            // height: 200.0,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: RichText(
+                                text: TextSpan(
+                              // Note: Styles for TextSpans must be explicitly defined.
+                              // Child text spans will inherit styles from parent
+                              style: const TextStyle(
+                                  fontSize: 17.0,
+                                  color: AppColors.apptheme,
+                                  fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
+                                TextSpan(text: sunRise),
+                              ],
+                            )),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: RichText(
+                                text: TextSpan(
+                              // Note: Styles for TextSpans must be explicitly defined.
+                              // Child text spans will inherit styles from parent
+                              style: const TextStyle(
+                                  fontSize: 17.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
+                                TextSpan(text: sunset),
+                              ],
+                            )),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                  //   child: RichText(
+                  //       text: TextSpan(
+                  //     style: const TextStyle(
+                  //         fontSize: 17.0,
+                  //         color: AppColors.apptheme,
+                  //         fontWeight: FontWeight.w500),
+                  //     children: <TextSpan>[
+                  //       TextSpan(text: 'SunSet: '),
+                  //       TextSpan(
+                  //           text: sunset.toString(),
+                  //           style: const TextStyle(
+                  //               fontWeight: FontWeight.w500,
+                  //               color: Color.fromARGB(255, 67, 67, 67),
+                  //               fontSize: 16.0))
+                  //     ],
+                  //   )),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                  //   child: RichText(
+                  //       text: TextSpan(
+                  //     style: const TextStyle(
+                  //         fontSize: 17.0,
+                  //         color: AppColors.apptheme,
+                  //         fontWeight: FontWeight.w500),
+                  //     children: <TextSpan>[
+                  //       TextSpan(text: 'SunRise: '),
+                  //       TextSpan(
+                  //           text: sunRise.toString(),
+                  //           style: const TextStyle(
+                  //               fontWeight: FontWeight.w500,
+                  //               color: Color.fromARGB(255, 67, 67, 67),
+                  //               fontSize: 16.0))
+                  //     ],
+                  //   )),
+                  // ),
+
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 10.0, top: 10.0),
+                  //   // padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     "Events",
+                  //     style: TextStyle(
+                  //         color: AppColors.apptheme,
+                  //         fontSize: 17.0,
+                  //         fontWeight: FontWeight.w600),
+                  //   ),
+                  // ),
                 ],
               ),
             ));

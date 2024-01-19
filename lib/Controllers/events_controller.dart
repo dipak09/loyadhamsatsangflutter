@@ -58,7 +58,7 @@ class EventsController extends GetxController {
       );
 
       final data = response.data;
-
+      print(data.toString());
       data.forEach((el) {
         Events events = Events.fromJson(el);
         eventList.add(events);
