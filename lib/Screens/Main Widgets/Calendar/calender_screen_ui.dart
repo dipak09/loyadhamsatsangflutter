@@ -44,7 +44,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
         ),
         body: Obx(
           () => Calander.isLoading.value
-              ? const SizedBox.shrink()
+              ? Center(child: CircularProgressIndicator())
               : Column(
                   children: [
                     Row(
@@ -593,17 +593,23 @@ Future<void> popupdialog(
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(calenderEvent[index]
-                                  .vratUtsavNameEng
-                                  .toString()),
+                              child: Text(
+                                calenderEvent[index]
+                                    .vratUtsavNameEng
+                                    .toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black),
+                              ),
                             );
                           },
                         )),
+                  Spacer(),
                   Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(30.0),

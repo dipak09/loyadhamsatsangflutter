@@ -43,6 +43,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.apptheme),
         useMaterial3: true,
+         textSelectionTheme: TextSelectionThemeData(
+            selectionColor: Colors.red, selectionHandleColor: Colors.blue),
       ),
       home: SplashScreenUI(),
       // getPages: [

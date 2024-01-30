@@ -9,6 +9,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Books%20Screen/bookViewer.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BooksScreenUI extends StatefulWidget {
   const BooksScreenUI({super.key});
@@ -52,7 +53,9 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
 
                                 return GestureDetector(
                                     onTap: () {
-                                      Get.to(PdfViewerFromApi(data.uploadPdf!));
+                                      _launchUrl(
+                                          Uri.parse(data.readUrl.toString()));
+                                      //  Get.to(PdfViewerFromApi(data.uploadPdf!));
                                       // Get.to(() => PDFViewerFromUrl(
                                       //     url: data.uploadPdf!,
                                       //     title: data.bookName));
@@ -114,5 +117,11 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
               fillColor: Colors.transparent,
               border: InputBorder.none)),
     );
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

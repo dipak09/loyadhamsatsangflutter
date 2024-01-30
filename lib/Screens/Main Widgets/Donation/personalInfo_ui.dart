@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +8,7 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/donation_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:shimmer/main.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Donation/payPal_payment.dart';
 
 import '../../Custom Widgets/customTextField.dart';
 
@@ -31,8 +30,6 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
   // var totalamount = 0;
   bool donationvalue = false;
 
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -98,145 +95,191 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
 
             // Spacer(),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10.0, top: 20.0),
-              child: Center(
-                child: SizedBox(
-                  height: 40.0,
+                padding: const EdgeInsets.only(bottom: 10.0, top: 20.0),
+                child: Center(
+                    child: SizedBox(
+                        height: 40.0,
+                        width: 300.0,
 
-                  width: 300.0,
+                        //  color: AppColors.apptheme,
 
-                  //  color: AppColors.apptheme,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.apptheme),
+                            onPressed: () {
+                              if (Donation.namecontroller.value.text.isNotEmpty &&
+                                  Donation
+                                      .emailcontroller.value.text.isNotEmpty &&
+                                  Donation
+                                      .citycontroller.value.text.isNotEmpty &&
+                                  Donation
+                                      .zipcontroller.value.text.isNotEmpty &&
+                                  widget.totalamount != 0) {
+                                // log(Donation.namecontroller.value.text
+                                //     .toString());
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => PaypalPayment(
+                                              name: Donation
+                                                  .namecontroller.value
+                                                  .toString(),
+                                              totalAmount:
+                                                  widget.totalamount.toString(),
+                                              city: Donation
+                                                  .citycontroller.value.text,
+                                              state: Donation
+                                                  .statecontroller.value.text,
+                                              zipcode: Donation
+                                                  .zipcontroller.value.text,
+                                              country: Donation
+                                                  .countrycontroller.value.text,
+                                              phoneNumber: Donation
+                                                  .phonecontroller.value.text,
+                                              address: Donation
+                                                  .addresscontroller.value.text,
+                                              onFinish: (number) async {
+                                                Donation.getDonation(
+                                                    amount: widget.totalamount
+                                                        .toString(),
+                                                    tnx_id: number,
+                                                    paymentstatus: "Sucess",
+                                                    paymentdate: DateTime.now()
+                                                        .toString(),
+                                                    payment_gross:
+                                                        "sddffeie49323");
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "Thankyou for Donation. Money Received");
+                                                Donation.namecontroller.clear();
+                                                Donation.addresscontroller
+                                                    .clear();
+                                                Donation.citycontroller.clear();
+                                                Donation.countrycontroller
+                                                    .clear();
+                                                Donation.emailcontroller
+                                                    .clear();
+                                                Donation.phonecontroller
+                                                    .clear();
+                                                Donation.statecontroller
+                                                    .clear();
+                                                Donation.zipcontroller.clear();
+                                                widget.totalamount = 0;
+                                              },
+                                            )));
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Donation should not be zero or Required filled should not be empty");
+                              }
+                            },
+                            // {
+                            //               Navigator.of(context).push(
+                            //                 MaterialPageRoute(
+                            //                   builder: (BuildContext context) => UsePaypal(
+                            //                       sandboxMode: true,
+                            //                       clientId:
+                            //                           "AZAvbuknc_yWC4RA-mHoC1q2auWscZcOZd-pZEVnNK-Kd83p-JMvCl8PvPPmWyAJPjgFFRaPGp2fPjjO",
+                            //                       secretKey:
+                            //                           "EMr3iHKaDX6kgEasACP_LzkRZwx_cEdghpqE1D148GkXynqSefwNUeiwUuCvicS2Va9bmlzxKqcBQUlw",
+                            //                       returnURL: "https://samplesite.com/return",
+                            //                       cancelURL: "https://samplesite.com/cancel",
+                            //                       transactions: [
+                            //                         {
+                            //                           "amount": {
+                            //                             "total":
+                            //                                 '${widget.totalamount.toString()}',
+                            //                             "currency": "USD",
+                            //                             "details": {
+                            //                               "subtotal":
+                            //                                   '${widget.totalamount.toString()}',
+                            //                               "shipping": '0',
+                            //                               "shipping_discount": 0
+                            //                             }
+                            //                           },
 
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.apptheme),
-                      onPressed: () {
-                        if (Donation.namecontroller.value.text.isNotEmpty &&
-                            Donation.emailcontroller.value.text.isNotEmpty &&
-                            Donation.citycontroller.value.text.isNotEmpty &&
-                            Donation.zipcontroller.value.text.isNotEmpty &&
-                            widget.totalamount != 0) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => UsePaypal(
-                                  sandboxMode: true,
-                                  clientId:
-                                      "AZAvbuknc_yWC4RA-mHoC1q2auWscZcOZd-pZEVnNK-Kd83p-JMvCl8PvPPmWyAJPjgFFRaPGp2fPjjO",
-                                  secretKey:
-                                      "EMr3iHKaDX6kgEasACP_LzkRZwx_cEdghpqE1D148GkXynqSefwNUeiwUuCvicS2Va9bmlzxKqcBQUlw",
-                                  returnURL: "https://samplesite.com/return",
-                                  cancelURL: "https://samplesite.com/cancel",
-                                  transactions: [
-                                    {
-                                      "amount": {
-                                        "total":
-                                            '${widget.totalamount.toString()}',
-                                        "currency": "USD",
-                                        "details": {
-                                          "subtotal":
-                                              '${widget.totalamount.toString()}',
-                                          "shipping": '0',
-                                          "shipping_discount": 0
-                                        }
-                                      },
+                            //                           "description": _descriptionController
+                            //                                   .value.text.isEmpty
+                            //                               ? "This is demo"
+                            //                               : _descriptionController.value.text
+                            //                                   .toString(),
 
-                                      "description": _descriptionController
-                                              .value.text.isEmpty
-                                          ? "This is demo"
-                                          : _descriptionController.value.text
-                                              .toString(),
+                            //                           // "payment_options": {
 
-                                      // "payment_options": {
+                            //                           //   "allowed_payment_method":
 
-                                      //   "allowed_payment_method":
+                            //                           //       "INSTANT_FUNDING_SOURCE"
 
-                                      //       "INSTANT_FUNDING_SOURCE"
+                            //                           // },
 
-                                      // },
+                            //                           "item_list": {
+                            //                             "items": [
+                            //                               {
+                            //                                 "name": "Donation",
+                            //                                 "quantity": 1,
+                            //                                 "price":
+                            //                                     '${widget.totalamount.toString()}',
+                            //                                 "currency": "USD"
+                            //                               }
+                            //                             ],
 
-                                      "item_list": {
-                                        "items": [
-                                          {
-                                            "name": "Donation",
-                                            "quantity": 1,
-                                            "price":
-                                                '${widget.totalamount.toString()}',
-                                            "currency": "USD"
-                                          }
-                                        ],
+                            //                             // shipping address is not required though
 
-                                        // shipping address is not required though
+                            //                             "shipping_address": {
+                            //                               "recipient_name": "Jane Foster",
+                            //                               "line1": "Travis County",
+                            //                               "line2": "",
+                            //                               "city": "Austin",
+                            //                               "country_code": "US",
+                            //                               "postal_code": "73301",
+                            //                               "phone": "+00000000",
+                            //                               "state": "Texas"
+                            //                             },
+                            //                           }
+                            //                         }
+                            //                       ],
+                            //                       note:
+                            //                           "Contact us for any questions on your order.",
+                            //                       onSuccess: (Map params) async {
+                            //                         log("onSuccess: $params");
 
-                                        "shipping_address": {
-                                          "recipient_name": "Jane Foster",
-                                          "line1": "Travis County",
-                                          "line2": "",
-                                          "city": "Austin",
-                                          "country_code": "US",
-                                          "postal_code": "73301",
-                                          "phone": "+00000000",
-                                          "state": "Texas"
-                                        },
-                                      }
-                                    }
-                                  ],
-                                  note:
-                                      "Contact us for any questions on your order.",
-                                  onSuccess: (Map params) async {
-                                    log("onSuccess: $params");
+                            //                         Donation.getDonation(
+                            //                             amount: widget.totalamount.toString(),
+                            //                             paymentstatus: "Success",
+                            //                             tnx_id: "MWGWQ6I3T680248G2612284N",
+                            //                             paymentdate: "2023-12-28T12:22:17Z",
+                            //                             payment_gross: "101");
 
-                                    Donation.getDonation(
-                                        amount: widget.totalamount.toString(),
-                                        paymentstatus: "Success",
-                                        tnx_id: "MWGWQ6I3T680248G2612284N",
-                                        paymentdate: "2023-12-28T12:22:17Z",
-                                        payment_gross: "101");
-
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Thankyou for Donation. Money Received");
-                                    Donation.namecontroller.clear();
-                                    Donation.addresscontroller.clear();
-                                    Donation.citycontroller.clear();
-                                    Donation.countrycontroller.clear();
-                                    Donation.emailcontroller.clear();
-                                    Donation.phonecontroller.clear();
-                                    Donation.statecontroller.clear();
-                                    Donation.zipcontroller.clear();
-                                    widget.totalamount = 0;
-                                    setState(() {
-                                      donationsucess = true;
-                                    });
-                                    // Donation.getDonation(
-                                    //     amount: widget.totalamount);
-                                  },
-                                  onError: (error) {
-                                    log("onError: $error");
-                                  },
-                                  onCancel: (params) {
-                                    log('cancelled: $params');
-                                  }),
-                            ),
-                          ); //print(_namecontroller.value.text.toString());
-                          // print(_addresscontroller.value.text);
-                        } else if (donationvalue == true) {
-                          if (_descriptionController.value.text.isEmpty) {
-                            Fluttertoast.showToast(
-                                msg: "Please Enter the Description");
-                          }
-                        } else {
-                          Fluttertoast.showToast(
-                              msg:
-                                  "Donation should not be zero or Required filled should not be empty");
-                        }
-                      },
-                      child: const Text(
-                        "Donate",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-              ),
-            )
+                            //                         setState(() {
+                            //                           donationsucess = true;
+                            //                         });
+                            //                         // Donation.getDonation(
+                            //                         //     amount: widget.totalamount);
+                            //                       },
+                            //                       onError: (error) {
+                            //                         log("onError: $error");
+                            //                       },
+                            //                       onCancel: (params) {
+                            //                         log('cancelled: $params');
+                            //                       }),
+                            //                 ),
+                            //               ); //print(_namecontroller.value.text.toString());
+                            //               // print(_addresscontroller.value.text);
+                            //             } else if (donationvalue == true) {
+                            //               if (_descriptionController.value.text.isEmpty) {
+                            //                 Fluttertoast.showToast(
+                            //                     msg: "Please Enter the Description");
+                            //               }
+                            //             } else {
+                            //               Fluttertoast.showToast(
+                            //                   msg:
+                            //                       "Donation should not be zero or Required filled should not be empty");
+                            //             }
+                            //           },
+                            child: const Text(
+                              "Donate",
+                              style: TextStyle(color: Colors.white),
+                            )))))
           ],
         ),
       ),

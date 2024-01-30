@@ -31,7 +31,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    LiveStream.getDashboardData();
+    //  LiveStream.getDashboardData();
   }
 
   @override
@@ -65,7 +65,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                       CustomText("Live Streaming",
                           color: Colors.black, fontWeight: FontWeight.bold)
                     ])),
-            Obx(() => Home.isLoading.value == true
+            Obx(() => LiveStream.isLoading.value == true
                 ? _loader()
                 : SizedBox(
                     height: screenHeight(context) * 0.2,

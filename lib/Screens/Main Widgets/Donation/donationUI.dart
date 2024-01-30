@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -291,9 +290,11 @@ class _DonationUIState extends State<DonationUI> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => PersonalInfoUI(
+                            builder: (_) => 
+                            PersonalInfoUI(
                                   totalamount: totalamount,
-                                )));
+                                )
+                                ));
                   },
                   child: CustomText(
                     "Next",
