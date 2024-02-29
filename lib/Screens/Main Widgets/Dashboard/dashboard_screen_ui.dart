@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
 import 'package:loyadhamsatsang/Controllers/liveStream_controller.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/Dashboard_Image_slider.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_appbar.dart';
@@ -27,10 +29,12 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Home = Get.put(DashboardController());
   var Video = Get.put(VideoController());
   var LiveStream = Get.put(LiveStreamController());
+  var FeatureMedia = Get.put(FeaturedmediaController());
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // FeatureMedia.getData();
     //  LiveStream.getDashboardData();
   }
 
@@ -132,9 +136,16 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                           print(Home.dailyDarshanList[index].createdAt
                               .toString());
 
+                          // Get.back();
                           Get.to(() => DailyDarshanScreenUI(
                               title: Home.dailyDarshanList[index].title,
                               date: Home.dailyDarshanList[index].albumTitle));
+                          setState(() {
+                            isBottomSheet = false;
+                          });
+                          //  Get.to(() => BottomNavigation(
+                          //   index: 3,
+                          // ));
                         },
                         child: Container(
                             height: 125,
@@ -164,24 +175,24 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
               fontWeight: FontWeight.bold,
             ),
           ])),
-      Obx(() => Video.isLoading.value == true
+      Obx(() => FeatureMedia.isLoading.value == true
           ? _loader()
           : SizedBox(
               height: screenHeight(context) * 0.27,
               child: ListView.builder(
-                  itemCount: Video.videoList.length,
+                  itemCount: FeatureMedia.list.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (contex, index) {
                     return InkWell(
                         onTap: () {
                           Get.to(() => VideoScreen(
-                                timeAgo: Video.videoList[index].timeAgo,
-                                title: Video.videoList[index].title,
-                                view: Video.videoList[index].viewCount,
+                                timeAgo: FeatureMedia.list[index].timeAgo,
+                                title: FeatureMedia.list[index].title,
+                                view: FeatureMedia.list[index].viewCount,
                                 publishedDate:
-                                    Video.videoList[index].publishedDate,
-                                url: Video.videoList[index].youtubeLink,
-                                videoId: Video.videoList[index].initialId,
+                                    FeatureMedia.list[index].publishedDate,
+                                url: FeatureMedia.list[index].youtubeLink,
+                                videoId: FeatureMedia.list[index].initialId,
                               ));
                         },
                         child: Column(
@@ -197,8 +208,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                           topRight: Radius.circular(15)),
                                       child: CachedImageWithShimmer(
                                           fit: BoxFit.fitHeight,
-                                          imageUrl: Video
-                                              .videoList[index].thumbnail!))),
+                                          imageUrl: FeatureMedia
+                                              .list[index].thumbnail!))),
                               Container(
                                   margin: EdgeInsets.symmetric(horizontal: 10),
                                   width: 250,
@@ -214,7 +225,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             horizontal: 10),
                                         width: 250,
                                         child: CustomText(
-                                            Video.videoList[index].title!,
+                                            FeatureMedia.list[index].title!,
                                             fontSize: 9,
                                             overflow: TextOverflow.ellipsis)),
                                     Container(
@@ -222,8 +233,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             horizontal: 10),
                                         width: 250,
                                         child: CustomText(
-                                            Video
-                                                .videoList[index].publishedDate!
+                                            FeatureMedia
+                                                .list[index].publishedDate!
                                                 .toString(),
                                             fontSize: 9,
                                             overflow: TextOverflow.ellipsis)),
@@ -236,12 +247,12 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               CustomText(
-                                                  Video.videoList[index]
-                                                      .timeAgo!,
+                                                  FeatureMedia
+                                                      .list[index].timeAgo!,
                                                   fontSize: 9),
                                               CustomText(
-                                                  Video.videoList[index]
-                                                      .viewCount!,
+                                                  FeatureMedia
+                                                      .list[index].viewCount!,
                                                   fontSize: 9)
                                             ]))
                                   ]))

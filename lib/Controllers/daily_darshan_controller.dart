@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +109,7 @@ class DailyDarshanController extends GetxController {
       final response = await dio.get(
         apiUrl,
       );
-
+      log(apiUrl);
       final data = response.data;
       data.forEach((el) {
         DailyDarshan dailyDarshan = DailyDarshan.fromJson(el);

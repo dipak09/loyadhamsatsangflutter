@@ -40,6 +40,17 @@ class _EventScreenUIState extends State<EventScreenUI> {
                           ? ListView.builder(
                               itemCount: Events.eventList.length,
                               itemBuilder: (context, index) {
+                                int lastIndex = Events
+                                    .eventList[index].albumTitle!
+                                    .lastIndexOf("");
+
+                                // Extract the title and date parts
+                                String title = Events
+                                    .eventList[index].albumTitle!
+                                    .substring(0, lastIndex);
+                                // String date = Events
+                                //     .eventList[index].albumTitle!
+                                //     .substring(lastIndex + 1);
                                 return GestureDetector(
                                   onTap: () {
                                     Get.to(() => EventsPhotosScreenUI(

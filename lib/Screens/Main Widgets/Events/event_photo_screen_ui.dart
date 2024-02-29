@@ -91,7 +91,10 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
         // progressIndicator: Center(child: CircularProgressIndicator()),
         child: Scaffold(
             backgroundColor: Colors.black,
-            appBar: CustomAppBar(title: widget.name),
+            appBar: CustomAppBar(
+              title: widget.name,
+              fontsize: 12.0,
+            ),
             body: Events.imageList.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : Column(children: [
@@ -200,5 +203,6 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
             //   ),
             // ),
             )));
+  
   }
 }

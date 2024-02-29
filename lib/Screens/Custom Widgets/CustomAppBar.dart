@@ -9,8 +9,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool? isBack;
   final List<Widget>? actions;
+  final double? fontsize;
 
-  CustomAppBar({Key? key, this.title, this.isBack = true, this.actions})
+  CustomAppBar(
+      {Key? key, this.title, this.isBack = true, this.actions, this.fontsize})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         actions: actions,
         title: CustomText(
           title!,
-          fontSize: 15,
+          fontSize: fontsize ?? 15,
           textAlign: TextAlign.center,
           color: Colors.white,
           fontWeight: FontWeight.w700,

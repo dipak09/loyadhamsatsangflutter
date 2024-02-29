@@ -72,9 +72,10 @@ class DrawerData extends StatelessWidget {
                     _subMenuCard(
                         title: "Donations",
                         onTap: () {
+                          Get.back();
                           Get.to(() => DonationUI());
                         }),
-                    _subMenuCard(title: "Our Applications", onTap: () {}),
+                    // _subMenuCard(title: "Our Applications", onTap: () {}),
                     _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
                     _subMenuCard(
                         title: "Our Branches",
@@ -94,12 +95,12 @@ class DrawerData extends StatelessWidget {
                             // sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size
                           );
                         }),
-                    _subMenuCard(
-                        title: "Feedback",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => FeedBackScreenUI());
-                        }),
+                    // _subMenuCard(
+                    //     title: "Feedback",
+                    //     onTap: () {
+                    //       Get.back();
+                    //       Get.to(() => FeedBackScreenUI());
+                    //     }),
                     _subMenuCard(
                         title: "Contact us",
                         onTap: () {

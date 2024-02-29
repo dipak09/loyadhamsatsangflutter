@@ -10,6 +10,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:intl/intl.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_photo_viewer.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
@@ -30,6 +31,8 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
     super.initState();
     DailyDarshan.selectItem(widget.title!);
     DailyDarshan.selectDate(widget.date!);
+    isBottomSheet = false;
+    setState(() {});
   }
 
   @override
@@ -54,10 +57,12 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                                     return Stack(children: [
                                       InkWell(
                                         onTap: () {
+                                          
                                           Get.to(() => DailyDarshanPhotoViewer(
                                               title: e.title,
                                               darshanList: DailyDarshan
                                                   .dailyDarshanList));
+                                          
                                         },
                                         child: Container(
                                           height: 335,

@@ -34,40 +34,63 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
   Widget build(BuildContext context) {
     List<String> singerListWithAll = [
       'All',
-      ...SingerList.singerList.map((singer) => singer.name ?? '')
+      ...SingerList.singerList
+          .where((singer) => singer.type == "Kirtan")
+          .map((singer) => singer.name ?? '')
+    ];
+    List<String> singerListWithKatha = [
+      'All',
+      ...SingerList.singerList
+          .where((singer) => singer.type == "Katha")
+          .map((singer) => singer.name ?? '')
     ];
     return Column(
       children: [
         // ChoiceChip(label: label, selected: selected)
         Expanded(
-            // flex: 0,
-            // child: Obx(() => KirtanKatha.isLoading.value
-            //     ? SizedBox()
-            //     : KirtanKatha.kirtankathaList.isNotEmpty &&
-            //             KirtanKatha.kirtankathaList != null
-            //         ?
-            child: ListView.builder(
-          itemCount: singerListWithAll.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: ChoiceChip(
-                  onSelected: (value) {
-                    //  print(value);
-                    setState(() {
-                      selectedChipIndex = value ? index : -1;
-                      KirtanKatha.getData(
-                          widget.type!, "${singerListWithAll[index]}");
-                    });
-                  },
-                  label: Text(singerListWithAll[index]),
-                  selected: selectedChipIndex == index),
-            );
-          },
-        )
-            // : Center(child: CustomText("")))
-            ),
+          // flex: 0,
+          // child: Obx(() => KirtanKatha.isLoading.value
+          //     ? SizedBox()
+          //     : KirtanKatha.kirtankathaList.isNotEmpty &&
+          //             KirtanKatha.kirtankathaList != null
+          //         ?
+          child:
+              // print(widget.type);
+              ListView.builder(
+                  itemCount: widget.type == "katha"
+                      ? singerListWithKatha.length
+                      : singerListWithAll.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: ChoiceChip(
+                          onSelected: (value) {
+                            if (widget.type == 'katha') {
+                              setState(() {
+                                selectedChipIndex = value ? index : -1;
+                                KirtanKatha.getData(widget.type!,
+                                    "${singerListWithKatha[index]}");
+                              });
+                            } else {
+                              setState(() {
+                                selectedChipIndex = value ? index : -1;
+                                KirtanKatha.getData(widget.type!,
+                                    "${singerListWithAll[index]}");
+                              });
+                            }
+                          },
+                          label: widget.type == "katha"
+                              ? Text(singerListWithKatha[index])
+                              : Text(singerListWithAll[index]),
+                          selected: selectedChipIndex == index),
+                    );
+                  }
+                  // },
+                  ),
+
+          // : Center(child: CustomText("")))
+        ),
         Expanded(
           flex: 7,
           child: Obx(() => KirtanKatha.isLoading.value
@@ -120,9 +143,11 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
                                   textAlign: TextAlign.start,
                                   // color: Colors.black,
                                   fontSize: 12),
-                              trailing: CustomText(KirtanKatha
-                                  .kirtankathaList[index].album_total_duration
-                                  .toString()),
+                              trailing: InkWell(
+                                onTap: (){
+                                  
+                                },
+                                child: Icon(Icons.download))
                             ),
                           ),
                         );

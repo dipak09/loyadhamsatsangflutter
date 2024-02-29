@@ -65,11 +65,11 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                       onTap: () {
                         _launchURL('https://loyadham.in/');
                       }),
-                  cards(
-                      title: "FEEDBACK",
-                      onTap: () {
-                        Get.to(() => FeedBackScreenUI());
-                      }),
+                  // cards(
+                  //     title: "FEEDBACK",
+                  //     onTap: () {
+                  //       Get.to(() => FeedBackScreenUI());
+                  //     }),
                   cards(
                       title: "CONTACT US",
                       onTap: () {

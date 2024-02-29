@@ -57,7 +57,9 @@ class _AboutUsScreenUIState extends State<AboutUsScreenUI> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
                                       child: CustomText(data.description!,
-                                          fontSize: 10, color: Colors.black))
+                                          textAlign: TextAlign.justify,
+                                          fontSize: 15,
+                                          color: Colors.black))
                                 ]);
                               })
                           : Center(child: CustomText("No Data Found")))))

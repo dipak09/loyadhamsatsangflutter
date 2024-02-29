@@ -92,6 +92,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 Expanded(
                   child: YoutubePlayer(
                     controller: _controller,
+                  //  aspectRatio: 16 / 4,
                     showVideoProgressIndicator: true,
                     progressIndicatorColor: Colors.blueAccent,
                     onReady: () {},

@@ -23,8 +23,11 @@ import 'package:loyadhamsatsang/globals.dart';
 
 import 'package:intl/intl.dart';
 
+bool? isBottomSheet = false;
+
 class BottomNavigation extends StatefulWidget {
   int index;
+
   BottomNavigation({Key? key, required this.index}) : super(key: key);
 
   @override
@@ -33,10 +36,17 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 2;
+  @override
+  void initState() {
+    super.initState();
+    isBottomSheet = false;
+    setState(() {});
+  }
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-  bool? isBottomSheet = false;
+
   var DailyDarshan = Get.put(DashboardController());
+  @override
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -198,29 +208,29 @@ class _BottomNavigationState extends State<BottomNavigation> {
             CustomText("Version 3.0", fontSize: 15, color: Colors.black)
           ]),
           SizedBox(height: 20),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            InkWell(
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => PrivacyPolicyScreenUI());
-                },
-                child: CustomText("Privacy Policy",
-                    fontSize: 15, color: Colors.black)),
-            SizedBox(width: 5),
-            CustomText("|", fontSize: 15, color: Colors.black),
-            SizedBox(width: 5),
-            InkWell(
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => TermAndConditonsScreenUI());
-                },
-                child: CustomText("Term & Conditions",
-                    fontSize: 15, color: Colors.black))
-          ]),
+          // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //   InkWell(
+          //       onTap: () {
+          //         setState(() {
+          //           isBottomSheet = false;
+          //         });
+          //       //  Get.to(() => PrivacyPolicyScreenUI());
+          //       },
+          //       child: CustomText("Privacy Policy",
+          //           fontSize: 15, color: Colors.black)),
+          //   SizedBox(width: 5),
+          //   CustomText("|", fontSize: 15, color: Colors.black),
+          //   SizedBox(width: 5),
+          //   InkWell(
+          //       onTap: () {
+          //         setState(() {
+          //           isBottomSheet = false;
+          //         });
+          //       //  Get.to(() => TermAndConditonsScreenUI());
+          //       },
+          //       child: CustomText("Term & Conditions",
+          //           fontSize: 15, color: Colors.black))
+          // ]),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             cardBottomSheet(
                 title: "Calendar",
