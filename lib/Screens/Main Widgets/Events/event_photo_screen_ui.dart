@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'dart:io' as platform;
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Utilites/ToastNotification.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -35,9 +37,33 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
     Events.getImages(widget.title!);
   }
 
-  void shareImage(String imageUrl) {
-    Share.share(imageUrl);
+   void shareImage(String imageUrl) async {
+    setState(() {
+   //   isLoading = true; // Set loading state to true
+    });
+    try {
+      var response = await HttpClient().getUrl(Uri.parse(imageUrl));
+      var httpClient = await response.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(httpClient);
+
+      // Save image to device's temporary directory
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/tempImage.png').create();
+      await file.writeAsBytes(bytes);
+
+      // Share the saved image via WhatsApp
+      Share.shareFiles([file.path]);
+      setState(() {
+      //  isLoading = false; // Set loading state to false after sharing
+      });
+    } catch (e) {
+      setState(() {
+     //   isLoading = false; // Set loading state to false after sharing
+      });
+      print('Error sharing image: $e');
+    }
   }
+
 
   Future<void> downloadImage(String imageUrl) async {
     Dio dio = Dio();

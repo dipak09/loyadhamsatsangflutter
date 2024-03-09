@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Models/ImagesData.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
+import 'package:loyadhamsatsang/Models/upcomingEvents.dart';
 
 class DashboardController extends GetxController {
   Dio dio = Dio();
@@ -14,7 +15,7 @@ class DashboardController extends GetxController {
   List<Dashboardata> sliderList = [];
   List<Video> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
-  List<Video> upcomingEventList = [];
+  List<UpcomingEvent> upcomingEventList = [];
   RxBool isLoading = false.obs;
   @override
   void onInit() {
@@ -58,12 +59,12 @@ class DashboardController extends GetxController {
         dailyDarshanList.add(dailydarshans);
       });
 
-      final upcomingEventData = data['upcomingevent']['youtube_video'];
+      final upcomingEventData = data['upcoming_event'];
       if (upcomingEventData == null || upcomingEventData == []) {
         upcomingEventList = [];
       } else {
         upcomingEventData.forEach((el) {
-          Video upcomingEvent = Video.fromJson(el);
+          UpcomingEvent upcomingEvent = UpcomingEvent.fromJson(el);
           upcomingEventList.add(upcomingEvent);
         });
       }

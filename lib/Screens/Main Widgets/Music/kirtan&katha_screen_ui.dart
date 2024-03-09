@@ -1,13 +1,20 @@
 // ignore_for_file: must_be_immutable, unnecessary_null_comparison, prefer_const_constructors
 
+import 'dart:io';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&katha_controller.dart';
 import 'package:loyadhamsatsang/Controllers/singerlist_controller.dart';
+import 'package:loyadhamsatsang/Models/KirtanKatha.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioList_screen_ui.dart';
+import 'package:path_provider/path_provider.dart';
 
 class KirtanKathaScreenUI extends StatefulWidget {
   String? type;
@@ -125,30 +132,34 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: ListTile(
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(KirtanKatha
-                                            .kirtankathaList[index]
-                                            .uploadFile!))),
-                              ),
-                              title: CustomText(
-                                  KirtanKatha.kirtankathaList[index].eventName
-                                      .toString(),
-                                  textAlign: TextAlign.start,
-                                  // color: Colors.black,
-                                  fontSize: 12),
-                              trailing: InkWell(
-                                onTap: (){
-                                  
-                                },
-                                child: Icon(Icons.download))
-                            ),
+                                leading: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(KirtanKatha
+                                              .kirtankathaList[index]
+                                              .uploadFile!))),
+                                ),
+                                title: CustomText(
+                                    KirtanKatha.kirtankathaList[index].eventName
+                                        .toString(),
+                                    textAlign: TextAlign.start,
+                                    // color: Colors.black,
+                                    fontSize: 12),
+                                trailing: InkWell(
+                                    onTap: () {
+                                      downloadAndSaveAudio(
+                                          KirtanKatha.kirtankathaList[index]
+                                              .trackList!,
+                                          KirtanKatha
+                                              .kirtankathaList[index].eventName
+                                              .toString());
+                                    },
+                                    child: Icon(Icons.download))),
                           ),
                         );
                       })
@@ -156,5 +167,48 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
         ),
       ],
     );
+  }
+
+  Future<void> downloadAndSaveAudio(
+      List<TrackList> audioUrls, String audioname) async {
+    Dio dio = Dio();
+
+    for (var audioUrl in audioUrls) {
+      try {
+        var response = await dio.get(audioUrl.uploadAudio.toString(),
+            options: Options(responseType: ResponseType.bytes));
+
+        Directory appDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        String filename = extractFilename(audioUrl.uploadAudio.toString());
+        String filePath =
+            '${appDocumentsDirectory.path}/${filename}_${DateTime.now().millisecondsSinceEpoch}.mp3';
+
+        File file = File(filePath);
+        await file.writeAsBytes(response.data);
+
+        // File is saved to local storage
+        print("Successfully Audio is Saved--------------------->");
+        print('Audio saved to: $filePath');
+        Fluttertoast.showToast(msg: "Song Download Successfully!!!");
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: "Please wait for a while. Try again later!!");
+        print("Error found while downloading------------------->" +
+            audioUrl.toString());
+        print('Error downloading audio: $e');
+      }
+    }
+  }
+
+  String extractFilename(String url) {
+    Uri uri = Uri.parse(url);
+    String path = uri.path;
+    List<String> parts = path.split('/');
+    String filenameWithExtension = parts.last;
+    List<String> filenameParts = filenameWithExtension.split('.');
+    String filename =
+        filenameParts.sublist(1).join('.'); // Exclude the first part (number)
+    return filename;
   }
 }

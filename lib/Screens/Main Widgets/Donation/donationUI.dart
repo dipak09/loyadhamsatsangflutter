@@ -1,15 +1,10 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/donation_controller.dart';
 import 'package:loyadhamsatsang/Controllers/get_donation_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Custom%20Widgets/customTextField.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Donation/personalInfo_ui.dart';
 
 class DonationUI extends StatefulWidget {
@@ -23,9 +18,11 @@ class _DonationUIState extends State<DonationUI> {
   bool donationvalue = false;
   bool thalvalue = false;
   bool hariJaynati = false;
-  bool onchange = false;
+  bool dropdown = false;
+
   var totalamount = 0;
   var mahapujasevTotal = 0;
+  String? dropdownValue;
   var onsubmitvalue = 0;
   bool nilkanthVariAbhishak = false;
   TextEditingController _controller = TextEditingController();
@@ -90,49 +87,94 @@ class _DonationUIState extends State<DonationUI> {
                                       .length,
                                   itemBuilder:
                                       (BuildContext context, int indexs) {
-                                    return ListTile(
-                                      leading: Checkbox(
-                                        value: checkboxValuesList[index]
-                                            [indexs],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checkboxValuesList[index][indexs] =
-                                                value!;
-                                            if (value) {
-                                              totalamount += int.parse(
-                                                  DonationList
-                                                      .getDonationList[index]
-                                                          ['subDonations']
-                                                          [indexs]['amount']
-                                                      .toString());
-                                              mahapujasevTotal += int.parse(
-                                                  DonationList
-                                                      .getDonationList[index]
-                                                          ['subDonations']
-                                                          [indexs]['amount']
-                                                      .toString());
-                                            } else {
-                                              totalamount -= int.parse(
-                                                  DonationList
-                                                      .getDonationList[index]
-                                                          ['subDonations']
-                                                          [indexs]['amount']
-                                                      .toString());
-                                              mahapujasevTotal -= int.parse(
-                                                  DonationList
-                                                      .getDonationList[index]
-                                                          ['subDonations']
-                                                          [indexs]['amount']
-                                                      .toString());
-                                            }
-                                          });
-                                        },
-                                      ),
-                                      title: Text(
-                                        "${DonationList.getDonationList[index]['subDonations'][indexs]['sub_type'].toString()}" +
-                                            " -" +
-                                            "${DonationList.getDonationList[index]['subDonations'][indexs]['amount'].toString()}",
-                                      ),
+                                    bool isCheckboxChecked =
+                                        checkboxValuesList[index][indexs];
+                                    print(isCheckboxChecked);
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          leading: Checkbox(
+                                            value: checkboxValuesList[index]
+                                                [indexs],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                checkboxValuesList[index]
+                                                    [indexs] = value!;
+                                                if (value) {
+                                                  totalamount += int.parse(
+                                                      DonationList
+                                                          .getDonationList[
+                                                              index]
+                                                              ['subDonations']
+                                                              [indexs]['amount']
+                                                          .toString());
+                                                  mahapujasevTotal += int.parse(
+                                                      DonationList
+                                                          .getDonationList[
+                                                              index]
+                                                              ['subDonations']
+                                                              [indexs]['amount']
+                                                          .toString());
+                                                  if (checkboxValuesList[index]
+                                                          [indexs] &&
+                                                      DonationList.getDonationList[
+                                                                          index]
+                                                                      [
+                                                                      'subDonations']
+                                                                  [indexs][
+                                                              'dropdown_name'] !=
+                                                          null) {
+                                                    print(
+                                                        "Enter in the if loop-------->");
+
+                                                    _showDropdownDialog(
+                                                        context,
+                                                        DonationList.getDonationList[
+                                                                        index][
+                                                                    'subDonations']
+                                                                [indexs]
+                                                            ['dropdown_name']);
+                                                  }
+                                                } else {
+                                                  print(
+                                                      "Enter in the else loop-------->");
+                                                  totalamount -= int.parse(
+                                                      DonationList
+                                                          .getDonationList[
+                                                              index]
+                                                              ['subDonations']
+                                                              [indexs]['amount']
+                                                          .toString());
+                                                  mahapujasevTotal -= int.parse(
+                                                      DonationList
+                                                          .getDonationList[
+                                                              index]
+                                                              ['subDonations']
+                                                              [indexs]['amount']
+                                                          .toString());
+                                                  dropdown = false;
+                                                  setState(() {});
+                                                }
+                                              });
+                                              // if (value! &&
+                                              //     DonationList.getDonationList[
+                                              //                         index]
+                                              //                     ['subDonations']
+                                              //                 [indexs]
+                                              //             ['dropdown_name'] !=
+                                              //         null) {
+                                              //   // Show dropdown only when checkbox is checked and dropdown_name is not null
+
+                                              // }
+                                            },
+                                          ),
+                                          title: Text(
+                                            "${DonationList.getDonationList[index]['subDonations'][indexs]['sub_type'].toString()}" +
+                                                " -" +
+                                                "${DonationList.getDonationList[index]['subDonations'][indexs]['amount'].toString()}",
+                                          ),
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),
@@ -190,5 +232,40 @@ class _DonationUIState extends State<DonationUI> {
                   ],
                 ),
         ));
+  }
+
+  void _showDropdownDialog(BuildContext context, List<dynamic>? dropdownItems) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Dropdown Label"), // You can set a custom title here
+          content: DropdownButton<dynamic>(
+            value: dropdownValue, // Set the value of the selected dropdown item
+            onChanged: (dynamic? newValue) {
+              setState(() {
+                dropdownValue = newValue!;
+              });
+            },
+            items: dropdownItems
+                    ?.map<DropdownMenuItem<dynamic>>((dynamic value) {
+                  return DropdownMenuItem<dynamic>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList() ??
+                [], // Convert the dropdownItems list to DropdownMenuItem widgets
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

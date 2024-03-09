@@ -13,6 +13,7 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Daily%20Darshan/daily_darshan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/Dashboard_Image_slider.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_appbar.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Featured%20Media/featuredVideoID.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:shimmer/shimmer.dart';
@@ -51,7 +52,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
           liveStreamSection(),
           dailyDarshanSection(),
           featuredMediaSection(),
-          SizedBox(height: 10),
+          //SizedBox(height: 10),
           upcomingeventSection()
         ])));
   }
@@ -185,7 +186,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                   itemBuilder: (contex, index) {
                     return InkWell(
                         onTap: () {
-                          Get.to(() => VideoScreen(
+                          Get.to(() => FeaturedMediaVideoID(
                                 timeAgo: FeatureMedia.list[index].timeAgo,
                                 title: FeatureMedia.list[index].title,
                                 view: FeatureMedia.list[index].viewCount,
@@ -276,51 +277,104 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
             Obx(() => Home.isLoading.value == true
                 ? _loader()
                 : SizedBox(
-                    height: screenHeight(context) * 0.2,
+                    height: screenHeight(context) / 2,
                     child: ListView.builder(
                         itemCount: Home.upcomingEventList.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (contex, index) {
-                          return InkWell(
-                              onTap: () {
-                                Get.to(() => VideoScreen(
-                                      timeAgo:
-                                          Home.upcomingEventList[index].timeAgo,
-                                      title:
-                                          Home.upcomingEventList[index].title,
-                                      view: Home
-                                          .upcomingEventList[index].viewCount,
-                                      publishedDate: Home
-                                          .upcomingEventList[index]
-                                          .publishedDate,
-                                      url: Home
-                                          .upcomingEventList[index].youtubeLink,
-                                      videoId: Home
-                                          .upcomingEventList[index].initialId,
-                                    ));
-                              },
-                              child: Container(
-                                  height: 125,
-                                  width: 250,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      border: Border.all(
-                                          color: Colors.white, width: 3),
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                          image: NetworkImage(Home
-                                              .upcomingEventList[index]
-                                              .thumbnail!),
-                                          fit: BoxFit.fill)),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: CachedImageWithShimmer(
-                                          fit: BoxFit.fitHeight,
-                                          imageUrl: Home
-                                              .upcomingEventList[index]
-                                              .thumbnail!))));
+                          return Column(
+                            children: [
+                              InkWell(
+                                  onTap: () {},
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            height: 140,
+                                            width: 250,
+                                            margin: EdgeInsets.only(
+                                                top: 10, left: 10),
+                                            child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15)),
+                                                child: CachedImageWithShimmer(
+                                                    fit: BoxFit.fitHeight,
+                                                    imageUrl: Home
+                                                            .upcomingEventList[
+                                                                index]
+                                                            .icon ??
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
+                                        Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            width: 250,
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    179, 221, 218, 218),
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15))),
+                                            child: Column(children: [
+                                              Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  width: 250,
+                                                  child: CustomText(
+                                                      Home
+                                                          .upcomingEventList[
+                                                              index]
+                                                          .vratUtsavNameEng
+                                                          .toString(),
+                                                      fontSize: 9,
+                                                      overflow: TextOverflow
+                                                          .ellipsis)),
+                                              Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  width: 250,
+                                                  child: CustomText(
+                                                      Home
+                                                          .upcomingEventList[
+                                                              index]
+                                                          .eventDate
+                                                          .toString(),
+                                                      fontSize: 9,
+                                                      overflow: TextOverflow
+                                                          .ellipsis)),
+                                              Container(
+                                                  width: 250,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        CustomText(
+                                                            Home
+                                                                    .upcomingEventList[
+                                                                        index]
+                                                                    .utsavTime
+                                                                    .toString() ??
+                                                                "---",
+                                                            fontSize: 9),
+                                                        // CustomText(
+                                                        //      Home.upcomingEventList[index].
+                                                        //   .toString(),
+                                                        //     fontSize: 9)
+                                                      ]))
+                                            ]))
+                                      ]))
+                            ],
+                          );
                         })))
           ]);
   }

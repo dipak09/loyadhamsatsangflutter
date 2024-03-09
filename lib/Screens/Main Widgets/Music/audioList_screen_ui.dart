@@ -68,6 +68,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
     playNextAudio();
   }
 
+//! Play All song button---------------->
 // Function to play the next audio
   void playNextAudio() {
     setState(() {
@@ -89,6 +90,46 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
       currentAudioIndex = 0;
       setState(() {});
     }
+  }
+
+//! play neext song Button-------------->
+  void buttonplayNextAudio() {
+    setState(() {
+      playallclick = true;
+    });
+
+    // Check if there are more audio files in the list
+    if (currentAudioIndex < KirtanKatha.kirtankathaAudioList.length - 1) {
+      currentAudioIndex++; // Move to the next audio
+      // Play the audio here, use your audio player logic
+      KirtanKatha.playAudio(
+          KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
+    } else {
+      // If the current audio is the last one in the list, loop back to the first audio
+      currentAudioIndex = 0;
+      // Play the first audio
+      KirtanKatha.playAudio(
+          KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
+    }
+  }
+
+  //! Pervious Button for the song play----------->
+  void playPreviousAudio() {
+    setState(() {
+      playallclick = true;
+    });
+
+    // Check if there is a previous audio file
+    if (currentAudioIndex > 0) {
+      currentAudioIndex--; // Move to the previous audio
+    } else {
+      // If the current audio is the first one in the list, loop back to the last audio
+      currentAudioIndex = KirtanKatha.kirtankathaAudioList.length - 1;
+    }
+
+    // Play the audio here, use your audio player logic
+    KirtanKatha.playAudio(
+        KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
   }
 
   void play() {
@@ -296,9 +337,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              KirtanKatha.audioPlayer.seek(
-                                  KirtanKatha.audioPlayer.position -
-                                      Duration(seconds: 10));
+                              playPreviousAudio();
                             },
                             child: Icon(Icons.skip_previous),
                           ),
@@ -312,10 +351,9 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // KirtanKatha.audioPlayer.seek(
-                              //     KirtanKatha.audioPlayer.position +
-                              //         Duration(seconds: 10));
-                              stop();
+                              buttonplayNextAudio();
+                              // KirtanKatha.audioPlayer.previousIndex;
+                              // stop();
                             },
                             child: Icon(Icons.skip_next),
                           ),
