@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -142,6 +144,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                     ),
                   ],
                 ),
+
         ));
   }
 
@@ -246,7 +249,11 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
 
 //! Whole Calendar Code-------------------->
   Widget _buildCalendar(DateTime month, CalanderController calendar) {
+    log("Month${month}");
+    log("Month calendar${calendar}");
     int daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    log("daysInMonth${ DateTime(month.year, month.month + 1, 0).day}");
+
     DateTime firstDayOfMonth = DateTime(month.year, month.month, 1);
     int weekdayOfFirstDay =
         firstDayOfMonth.weekday; // Get weekday of the first day
@@ -255,7 +262,8 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     DateTime lastDayOfPreviousMonth =
         firstDayOfMonth.subtract(Duration(days: 1));
     int daysInPreviousMonth = lastDayOfPreviousMonth.day;
-
+    log("itemCount${daysInMonth + weekdayOfFirstDay - 1}");
+    log("itemCount${daysInMonth + weekdayOfFirstDay - 1}");
     return GridView.builder(
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

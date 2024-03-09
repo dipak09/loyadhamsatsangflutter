@@ -45,6 +45,7 @@ class _USAIndiaScreenState extends State<USAIndiaScreen> {
 
       final data = response.data['youtube_video'];
 
+log("data${data}");
       data.forEach((el) {
         ListYoutubeVideo video = ListYoutubeVideo.fromJson(el);
         VideoData.videoList.add(video);
@@ -193,7 +194,13 @@ class _USAIndiaScreenState extends State<USAIndiaScreen> {
                   : const Center(child: CustomText("No Video Found"))),
         ),
         // ElevatedButton(onPressed: () {}, child: Text("Load More")),
-        moreloading ? const CircularProgressIndicator() : const SizedBox.shrink()
+        moreloading ? Container(
+          height: kBottomNavigationBarHeight,
+            color: Colors.transparent,
+            child: Center(
+                child: const CircularProgressIndicator()
+            )
+        ) : const SizedBox.shrink()
       ],
     );
   }
