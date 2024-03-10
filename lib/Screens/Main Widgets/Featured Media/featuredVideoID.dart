@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/fetured_mediaRelated_controller.dart';
+import 'package:loyadhamsatsang/Controllers/videoID_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -10,7 +11,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class FeaturedMediaVideoID extends StatefulWidget {
-   String? url, videoId, title, view, publishedDate, timeAgo;
+  String? url, videoId, title, view, publishedDate, timeAgo;
 
   FeaturedMediaVideoID(
       {super.key,
@@ -21,17 +22,16 @@ class FeaturedMediaVideoID extends StatefulWidget {
       this.publishedDate,
       this.timeAgo});
 
- 
-
   @override
   State<FeaturedMediaVideoID> createState() => _FeaturedMediaVideoIDState();
 }
 
 class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
- late YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
 
   bool isFullScreen = false;
   var VideoIDWise = Get.put(FeatureMediaRelatedController());
+  var VideoIDWises = Get.put(VideoIDWiseController());
   void playNewVideo(String videoId) {
     _controller.load(videoId);
     _controller.play();
@@ -49,6 +49,15 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
         videovideoId: widget.videoId);
 
     VideoIDWise.getData(widget.videoId!);
+    VideoIDWises.assignData(
+        agoTime: widget.timeAgo,
+        videoTitle: widget.title,
+        videoView: widget.view,
+        videopublishedDate: widget.publishedDate,
+        videourl: widget.url,
+        videovideoId: widget.videoId);
+
+    VideoIDWises.getData(widget.videoId!);
     _controller = YoutubePlayerController(
       initialVideoId: VideoIDWise.videoId.value,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false, loop: true),
@@ -92,7 +101,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                 Expanded(
                   child: YoutubePlayer(
                     controller: _controller,
-                  //  aspectRatio: 16 / 4,
+                    //  aspectRatio: 16 / 4,
                     showVideoProgressIndicator: true,
                     progressIndicatorColor: Colors.blueAccent,
                     onReady: () {},
@@ -113,11 +122,11 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomText(VideoIDWise.title.value,
+                                  CustomText(VideoIDWises.title.value,
                                       fontSize: 9,
                                       overflow: TextOverflow.ellipsis),
                                   CustomText(
-                                      VideoIDWise.publishedDate.toString(),
+                                      VideoIDWises.publishedDate.toString(),
                                       fontSize: 9,
                                       overflow: TextOverflow.ellipsis),
                                   Container(
@@ -127,42 +136,42 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             CustomText(
-                                                VideoIDWise.timeAgo.value,
+                                                VideoIDWises.timeAgo.value,
                                                 fontSize: 9),
-                                            CustomText(VideoIDWise.view.value,
+                                            CustomText(VideoIDWises.view.value,
                                                 fontSize: 9)
                                           ]))
                                 ])),
                         Expanded(
-                          child: Obx(() => VideoIDWise.isLoading.value
+                          child: Obx(() => VideoIDWises.isLoading.value
                               ? Center(child: CircularProgressIndicator())
-                              : VideoIDWise.videoList.isNotEmpty &&
-                                      VideoIDWise.videoList != null
+                              : VideoIDWises.videoList.isNotEmpty &&
+                                      VideoIDWises.videoList != null
                                   ? ListView.builder(
                                       // controller: _controller,
-                                      itemCount: VideoIDWise.videoList.length,
+                                      itemCount: VideoIDWises.videoList.length,
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           onTap: () {
-                                            playNewVideo(VideoIDWise
+                                            playNewVideo(VideoIDWises
                                                 .videoList[index].initialId!);
-                                            VideoIDWise.assignData(
-                                                agoTime: VideoIDWise
+                                            VideoIDWises.assignData(
+                                                agoTime: VideoIDWises
                                                     .videoList[index].timeAgo,
-                                                videoTitle: VideoIDWise
+                                                videoTitle: VideoIDWises
                                                     .videoList[index].title,
-                                                videoView: VideoIDWise
+                                                videoView: VideoIDWises
                                                     .videoList[index].viewCount,
-                                                videopublishedDate: VideoIDWise
+                                                videopublishedDate: VideoIDWises
                                                     .videoList[index]
                                                     .publishedDate,
-                                                videourl: VideoIDWise
+                                                videourl: VideoIDWises
                                                     .videoList[index]
                                                     .youtubeLink,
-                                                videovideoId: VideoIDWise
+                                                videovideoId: VideoIDWises
                                                     .videoList[index]
                                                     .initialId);
-                                            VideoIDWise.getData(VideoIDWise
+                                            VideoIDWises.getData(VideoIDWises
                                                 .videoList[index].initialId!);
                                           },
                                           child: Container(
@@ -181,7 +190,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                                                 Radius.circular(
                                                                     15)),
                                                     child: CachedNetworkImage(
-                                                      imageUrl: VideoIDWise
+                                                      imageUrl: VideoIDWises
                                                           .videoList[index]
                                                           .thumbnail!,
                                                       placeholder: (context,
@@ -226,7 +235,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                                                 .start,
                                                         children: [
                                                           CustomText(
-                                                              VideoIDWise
+                                                              VideoIDWises
                                                                   .videoList[
                                                                       index]
                                                                   .title!,
@@ -235,7 +244,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                                                   TextOverflow
                                                                       .ellipsis),
                                                           CustomText(
-                                                              VideoIDWise
+                                                              VideoIDWises
                                                                   .videoList[
                                                                       index]
                                                                   .publishedDate!
@@ -254,14 +263,14 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                                                           .spaceBetween,
                                                                   children: [
                                                                     CustomText(
-                                                                        VideoIDWise
+                                                                        VideoIDWises
                                                                             .videoList[
                                                                                 index]
                                                                             .timeAgo!,
                                                                         fontSize:
                                                                             9),
                                                                     CustomText(
-                                                                        VideoIDWise
+                                                                        VideoIDWises
                                                                             .videoList[
                                                                                 index]
                                                                             .viewCount!,

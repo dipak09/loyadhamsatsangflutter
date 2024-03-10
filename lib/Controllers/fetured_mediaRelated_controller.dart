@@ -42,13 +42,14 @@ class FeatureMediaRelatedController extends GetxController {
       final response = await dio.get(apiUrl);
 
       final data = response.data;
+      print("Throwing----------->" + response.data.toString());
       videoList = [];
 
       data.forEach((el) {
         Video video = Video.fromJson(el);
         videoList.add(video);
       });
-      print("Related Video : ${videoList.length}");
+      print("Related Video : ${videoList}");
 
       isLoading(false);
       update();

@@ -108,16 +108,14 @@ class _EventScreenUIState extends State<EventScreenUI> {
   Widget titleselection() {
     return Obx(() => Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                children: [],
-              ),
               CustomText("Place :"),
-              SizedBox(height: 10),
               Container(
+                  height: 50.0,
+                  width: 290.0,
                   padding: EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.only(left: 10.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: AppColors.apptheme),
                       borderRadius: BorderRadius.circular(15)),
@@ -147,13 +145,16 @@ class _EventScreenUIState extends State<EventScreenUI> {
   Widget yearSelection() {
     return Obx(() => Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomText("Years :"),
               SizedBox(height: 10),
               Container(
+                  height: 50.0,
+                  width: 290.0,
                   padding: EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.only(left: 10.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: AppColors.apptheme),
                       borderRadius: BorderRadius.circular(15)),
