@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'dart:developer';
 import 'dart:io' as platform;
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -31,6 +32,7 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
   var Events = Get.put(EventsImagesController());
   int currentIndex = 0;
   PageController pageController = PageController();
+  ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -135,6 +137,14 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                             setState(() {
                               currentIndex = index;
                             });
+
+                            scrollController.animateTo(
+                              index * 130, // Assuming each item has a height of 100
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                            log("pageIndex${index  * (MediaQuery.of(context).size.width * 0.3)}");
+                            log("pageIndexsecound${index  * 100}");
                           },
                           builder: (context, index) {
                             return PhotoViewGalleryPageOptions(
@@ -143,6 +153,16 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                 minScale: PhotoViewComputedScale.contained,
                                 maxScale: PhotoViewComputedScale.covered * 2);
                           }),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Image ${currentIndex + 1} of ${Events.imageList.length}', // Change the text accordingly
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -175,6 +195,7 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                     Container(
                         height: 100, // Adjust the height as needed
                         child: ListView.builder(
+                            controller: scrollController,
                             scrollDirection: Axis.horizontal,
                             itemCount: Events.imageList.length,
                             itemBuilder: (context, index) {
@@ -197,7 +218,7 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                             ),
                                           ),
                                           child: CachedImageWithShimmer(
-                                              width: 100,
+                                              width: 130-20,
                                               imageUrl: Events
                                                   .imageList[index].source!))));
                             }))

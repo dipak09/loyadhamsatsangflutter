@@ -13,143 +13,132 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class CalenderScreenUI extends StatefulWidget {
-  const CalenderScreenUI({super.key});
+  const CalenderScreenUI({Key? key}) : super(key: key);
 
   @override
   State<CalenderScreenUI> createState() => _CalenderScreenUIState();
 }
 
 class _CalenderScreenUIState extends State<CalenderScreenUI> {
-  // ignore: prefer_final_fields
-  PageController _pageController =
-      PageController(initialPage: DateTime.now().month - 1);
-  var Calander = Get.put(CalanderController());
+  late PageController _pageController;
+  late CalanderController calanderController;
   DateTime _currentMonth = DateTime.now();
   bool english = true;
   bool gujarati = false;
-  bool selectedcurrentyear = false;
+
   @override
   void initState() {
     super.initState();
-    Calander.startdate = null;
-    Calander.enddate = null;
+    _pageController = PageController(initialPage: DateTime.now().month - 1);
+    calanderController = Get.put(CalanderController());
+    calanderController.startdate = null;
+    calanderController.enddate = null;
     english = true;
     gujarati = false;
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(
-          title: "Calendar",
-        ),
-        body: Obx(
-          () => Calander.isLoading.value
-              ? Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              english = true;
-                              gujarati = false;
-                            });
-                          },
-                          child: Container(
-                            height: 30.0,
-                            width: 70.0,
-                            margin: EdgeInsets.only(top: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                                color:
-                                    english ? AppColors.apptheme : Colors.white,
-                                border: Border.all(
-                                    color: english
-                                        ? AppColors.apptheme
-                                        : Colors.black),
-                                borderRadius: BorderRadius.circular(20.0)),
-                            child: Center(
-                              child: Text(
-                                "EN",
-                                style: TextStyle(
-                                    color:
-                                        english ? Colors.white : Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              english = false;
-                              gujarati = true;
-                            });
-                          },
-                          child: Container(
-                            height: 30.0,
-                            width: 70.0,
-                            margin: EdgeInsets.only(top: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                                color: gujarati
-                                    ? AppColors.apptheme
-                                    : Colors.white,
-                                border: Border.all(
-                                    color: gujarati
-                                        ? AppColors.apptheme
-                                        : Colors.black),
-                                borderRadius: BorderRadius.circular(20.0)),
-                            child: Center(
-                              child: Text(
-                                "GUJ",
-                                style: TextStyle(
-                                    color:
-                                        gujarati ? Colors.white : Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+      appBar: CustomAppBar(
+        title: "Calendar",
+      ),
+      body: Obx(
+            () => calanderController.isLoading.value
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+          children: [
+            // Language selection buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      english = true;
+                      gujarati = false;
+                    });
+                  },
+                  child: Container(
+                    height: 30.0,
+                    width: 70.0,
+                    margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      color: english ? AppColors.apptheme : Colors.white,
+                      border: Border.all(
+                        color: english ? AppColors.apptheme : Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    _buildHeader(),
-                    _buildWeeks(),
-                    Expanded(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentMonth =
-                                DateTime(_currentMonth.year, index + 1, 1);
-                            // if (_currentVisibleMonth.year >
-                            //     DateTime.now().year) {
-                            //   _currentVisibleMonth = DateTime(
-                            //       DateTime.now().year,
-                            //       _currentVisibleMonth.month,
-                            //       1);
-                            // }
-                          });
-                        },
-                        itemCount: 12 *
-                            10, // Show 10 years, adjust this count as needed
-                        itemBuilder: (context, pageIndex) {
-                          DateTime month = DateTime(
-                              _currentMonth.year, (pageIndex % 12) + 1, 1);
-                          return _buildCalendar(month, Calander);
-                        },
+                    child: Center(
+                      child: Text(
+                        "EN",
+                        style: TextStyle(
+                          color: english ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-
-        ));
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      english = false;
+                      gujarati = true;
+                    });
+                  },
+                  child: Container(
+                    height: 30.0,
+                    width: 70.0,
+                    margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      color: gujarati ? AppColors.apptheme : Colors.white,
+                      border: Border.all(
+                        color: gujarati ? AppColors.apptheme : Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "GUJ",
+                        style: TextStyle(
+                          color: gujarati ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // Header with month and year selection
+            _buildHeader(),
+            // Display the days of the week
+            _buildWeeks(),
+            // Display the calendar
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentMonth = DateTime(_currentMonth.year, index + 1, 1);
+                  });
+                },
+                itemCount: 12,// Show 10 years
+                itemBuilder: (context, pageIndex) {
+                  DateTime month = DateTime(_currentMonth.year, (pageIndex % 12) + 1, 1);
+                  return _buildCalendar(month, calanderController);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  //DateTime _currentVisibleMonth = DateTime.now();
-//! Months and year dropDown Code---------------->
+  // Build the header with month and year selection
   Widget _buildHeader() {
     bool isLastMonthOfYear = _currentMonth.month == 12;
 
@@ -178,11 +167,10 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             onChanged: (int? year) {
               if (year != null) {
                 setState(() {
-                  _currentMonth = DateTime(
-                      year, 1, 1); // Set to January of the selected year
-                  Calander.enddate = "$year-12-31";
-                  Calander.startdate = "$year-01-01";
-                  Calander.getData("$year-01-01", "$year-12-31");
+                  _currentMonth = DateTime(year, 1, 1);
+                  calanderController.enddate = "$year-12-31";
+                  calanderController.startdate = "$year-01-01";
+                  calanderController.getData("$year-01-01", "$year-12-31");
 
                   int yearDiff = DateTime.now().year - year;
                   int monthIndex = 12 * yearDiff + _currentMonth.month - 1;
@@ -191,9 +179,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
               }
             },
             items: [
-              for (int year = DateTime.now().year;
-                  year <= DateTime.now().year + 10;
-                  year++)
+              for (int year = DateTime.now().year; year <= DateTime.now().year + 10; year++)
                 DropdownMenuItem<int>(
                   value: year,
                   child: Text(year.toString()),
@@ -217,6 +203,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
       ),
     );
   }
+
 
 //! Weeks day Code------------------>
   Widget _buildWeeks() {
