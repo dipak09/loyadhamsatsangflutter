@@ -48,13 +48,14 @@ dependencies:
   path_provider: ^2.0.2
   image_gallery_saver: ^2.0.3
   cached_network_image: ^3.3.0
+  syncfusion_flutter_pdfviewer: ^24.1.45
  
   flutter_cached_pdfview: ^0.4.2
   table_calendar: ^3.0.9
   
   youtube_player_flutter: ^8.1.2
 
-  advance_pdf_viewer2: ^2.0.5+1
+  # advance_pdf_viewer2: ^2.0.5+1
   shimmer: ^3.0.0
   photo_view: ^0.14.0
 

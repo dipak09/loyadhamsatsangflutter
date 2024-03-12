@@ -47,8 +47,7 @@ class BooksController extends GetxController {
       update();
       print(selectedLang);
       print(search);
-      String apiUrl =
-          'https://loyadham.in/api/webservice/book?language=${selectedLang}&search=${search}';
+      String apiUrl = 'https://loyadham.in/api/webservice/book';
 
       final response = await dio.get(
         apiUrl,
@@ -70,5 +69,4 @@ class BooksController extends GetxController {
       print('Error: $error');
     }
   }
-
 }
