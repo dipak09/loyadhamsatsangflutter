@@ -44,96 +44,100 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
         title: "Calendar",
       ),
       body: Obx(
-            () => calanderController.isLoading.value
+        () => calanderController.isLoading.value
             ? Center(child: CircularProgressIndicator())
             : Column(
-          children: [
-            // Language selection buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      english = true;
-                      gujarati = false;
-                    });
-                  },
-                  child: Container(
-                    height: 30.0,
-                    width: 70.0,
-                    margin: EdgeInsets.only(top: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                      color: english ? AppColors.apptheme : Colors.white,
-                      border: Border.all(
-                        color: english ? AppColors.apptheme : Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "EN",
-                        style: TextStyle(
-                          color: english ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
+                children: [
+                  // Language selection buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            english = true;
+                            gujarati = false;
+                          });
+                        },
+                        child: Container(
+                          height: 30.0,
+                          width: 70.0,
+                          margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                          decoration: BoxDecoration(
+                            color: english ? AppColors.apptheme : Colors.white,
+                            border: Border.all(
+                              color:
+                                  english ? AppColors.apptheme : Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "EN",
+                              style: TextStyle(
+                                color: english ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      english = false;
-                      gujarati = true;
-                    });
-                  },
-                  child: Container(
-                    height: 30.0,
-                    width: 70.0,
-                    margin: EdgeInsets.only(top: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                      color: gujarati ? AppColors.apptheme : Colors.white,
-                      border: Border.all(
-                        color: gujarati ? AppColors.apptheme : Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "GUJ",
-                        style: TextStyle(
-                          color: gujarati ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            english = false;
+                            gujarati = true;
+                          });
+                        },
+                        child: Container(
+                          height: 30.0,
+                          width: 70.0,
+                          margin: EdgeInsets.only(top: 10.0, right: 10.0),
+                          decoration: BoxDecoration(
+                            color: gujarati ? AppColors.apptheme : Colors.white,
+                            border: Border.all(
+                              color:
+                                  gujarati ? AppColors.apptheme : Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "GUJ",
+                              style: TextStyle(
+                                color: gujarati ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  // Header with month and year selection
+                  _buildHeader(),
+                  // Display the days of the week
+                  _buildWeeks(),
+                  // Display the calendar
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentMonth =
+                              DateTime(_currentMonth.year, index + 1, 1);
+                        });
+                      },
+                      itemCount: 12, // Show 10 years
+                      itemBuilder: (context, pageIndex) {
+                        DateTime month = DateTime(
+                            _currentMonth.year, (pageIndex % 12) + 1, 1);
+                        return _buildCalendar(month, calanderController);
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-            // Header with month and year selection
-            _buildHeader(),
-            // Display the days of the week
-            _buildWeeks(),
-            // Display the calendar
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentMonth = DateTime(_currentMonth.year, index + 1, 1);
-                  });
-                },
-                itemCount: 12,// Show 10 years
-                itemBuilder: (context, pageIndex) {
-                  DateTime month = DateTime(_currentMonth.year, (pageIndex % 12) + 1, 1);
-                  return _buildCalendar(month, calanderController);
-                },
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -179,7 +183,9 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
               }
             },
             items: [
-              for (int year = DateTime.now().year; year <= DateTime.now().year + 10; year++)
+              for (int year = DateTime.now().year;
+                  year <= DateTime.now().year + 10;
+                  year++)
                 DropdownMenuItem<int>(
                   value: year,
                   child: Text(year.toString()),
@@ -203,7 +209,6 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
       ),
     );
   }
-
 
 //! Weeks day Code------------------>
   Widget _buildWeeks() {
@@ -239,7 +244,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     log("Month${month}");
     log("Month calendar${calendar}");
     int daysInMonth = DateTime(month.year, month.month + 1, 0).day;
-    log("daysInMonth${ DateTime(month.year, month.month + 1, 0).day}");
+    log("daysInMonth${DateTime(month.year, month.month + 1, 0).day}");
 
     DateTime firstDayOfMonth = DateTime(month.year, month.month, 1);
     int weekdayOfFirstDay =
@@ -348,7 +353,16 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                       ),
                     ),
                   ),
-                  //  if (currentDateData.calenderEvent!)
+
+                  if (currentDateData.calenderEvent!.isEmpty)
+                    const Expanded(
+                      flex: 0,
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
+
                   if (currentDateData.calenderEvent!.isNotEmpty)
                     if (currentDateData.calenderEvent![0].icon != null)
                       Expanded(
@@ -372,14 +386,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                           height: 40,
                         ),
                       ),
-                  if (currentDateData.calenderEvent!.isEmpty)
-                    const Expanded(
-                      flex: 0,
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
+
                   Expanded(
                     flex: 2,
                     child: Padding(

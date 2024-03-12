@@ -54,7 +54,7 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
                                 return GestureDetector(
                                     onTap: () {
                                       if (data.readUrl!.endsWith(".pdf")) {
-                                        // Get.to(PdfViewerFromApi(data.readUrl!));
+                                        Get.to(PdfViewerFromApi(data.readUrl!));
                                       } else {
                                         _launchUrl(
                                             Uri.parse(data.readUrl.toString()));

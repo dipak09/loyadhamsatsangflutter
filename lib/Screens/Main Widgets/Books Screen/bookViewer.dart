@@ -13,7 +13,7 @@ class PdfViewerFromApi extends StatefulWidget {
 
 class _PdfViewerFromApiState extends State<PdfViewerFromApi> {
   late PdfViewerController _pdfViewerController;
-  var _pdfDocument;
+
   @override
   void initState() {
     super.initState();
@@ -76,12 +76,10 @@ class _PdfViewerFromApiState extends State<PdfViewerFromApi> {
                   _pdfViewerKey.currentState?.getSelectedTextLines();
 
               if (selectedTextLines != null && selectedTextLines.isNotEmpty) {
-                // Creates a highlight annotation with the selected text lines.
                 final HighlightAnnotation highlightAnnotation =
                     HighlightAnnotation(
                   textBoundsCollection: selectedTextLines,
                 );
-                // Adds the highlight annotation to the PDF document.
                 _pdfViewerController.addAnnotation(highlightAnnotation);
               }
             },
@@ -91,8 +89,9 @@ class _PdfViewerFromApiState extends State<PdfViewerFromApi> {
       body: SfPdfViewer.network(
         widget.pdfUrl,
         scrollDirection: PdfScrollDirection.horizontal,
-        // pageLayoutMode: PdfPageLayoutMode.single,
-        // interactionMode: PdfInteractionMode.selection,
+        pageLayoutMode: PdfPageLayoutMode.single,
+        interactionMode: PdfInteractionMode.selection,
+        enableTextSelection: true,
         onTextSelectionChanged: (PdfTextSelectionChangedDetails details) {
           if (details.selectedText == null && _overlayEntry != null) {
             _overlayEntry!.remove();

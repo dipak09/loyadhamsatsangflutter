@@ -118,9 +118,9 @@ class CalenderEvent {
   String? calenderId;
   String? vratUtsavNameEng;
   String? vratUtsavNameGuj;
-  Null? utsavTime;
-  Null? descriptionEng;
-  Null? descriptionGuj;
+  String? utsavTime;
+  String? descriptionEng;
+  String? descriptionGuj;
   String? icon;
 
   CalenderEvent(
