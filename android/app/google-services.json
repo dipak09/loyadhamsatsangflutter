@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "376155576813",
+    "project_id": "loyadham-satasang",
+    "storage_bucket": "loyadham-satasang.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376155576813:android:55c97e35b0ae00e9732fe4",
+        "android_client_info": {
+          "package_name": "com.example.loyadhamsatsang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4yImpBTBNLXhC98uErECyzwirKQZbsu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
