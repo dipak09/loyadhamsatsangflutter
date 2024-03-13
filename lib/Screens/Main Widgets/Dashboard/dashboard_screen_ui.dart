@@ -15,11 +15,13 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/Dashboard_Image
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Dashboard/dashboard_appbar.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Featured%20Media/featuredVideoID.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/today%20bhajan/today_bhajan.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DashboardScreenUI extends StatefulWidget {
   final GlobalKey<ScaffoldState>? drawer;
+
   const DashboardScreenUI({super.key, this.drawer});
 
   @override
@@ -31,6 +33,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Video = Get.put(VideoController());
   var LiveStream = Get.put(LiveStreamController());
   var FeatureMedia = Get.put(FeaturedmediaController());
+
   @override
   void initState() {
     // TODO: implement initState
@@ -53,7 +56,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
           dailyDarshanSection(),
           featuredMediaSection(),
 
-              todayBhajaneventSection(),
+          todayBhajaneventSection(),
           //SizedBox(height: 10),
           upcomingeventSection()
         ])));
@@ -396,7 +399,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
             Obx(() => Home.isLoading.value == true
                 ? _loader()
                 : Container(
-                    height: screenHeight(context) *0.25,
+                    height: screenHeight(context) * 0.25,
                     color: Colors.transparent,
                     child: ListView.builder(
                         itemCount: Home.todayBhajanEventList.length,
@@ -405,7 +408,16 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                           return Column(
                             children: [
                               InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(() => TodayBhajan(
+                                          description: Home
+                                              .todayBhajanEventList[index].description
+                                              .toString(),
+                                          title: Home
+                                              .todayBhajanEventList[index].title
+                                              .toString(),
+                                        ));
+                                  },
                                   child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -415,7 +427,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             width: 250,
                                             margin: EdgeInsets.only(
                                                 top: 10, left: 10),
-                                           // color: Colors.green,
+                                            // color: Colors.green,
                                             child: ClipRRect(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
@@ -425,8 +437,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                 child: CachedImageWithShimmer(
                                                     fit: BoxFit.fitHeight,
                                                     imageUrl:
-                                                        "https://cdn.crispedge.com/a7aeb4.png"))
-                                        ),
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
                                         Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),

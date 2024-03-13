@@ -37,6 +37,8 @@ class NotificationController extends GetxController {
       update();
     } catch (e) {
       print("Error : ${e}");
+      isLoading(false);
+      update();
     }
   }
 }
