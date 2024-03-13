@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Models/ImagesData.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
+import 'package:loyadhamsatsang/Models/todays_bhajan_model.dart';
 import 'package:loyadhamsatsang/Models/upcomingEvents.dart';
 
 class DashboardController extends GetxController {
@@ -16,6 +17,7 @@ class DashboardController extends GetxController {
   List<Video> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
   List<UpcomingEvent> upcomingEventList = [];
+  List<TodaysBhajan> todayBhajanEventList = [];
   RxBool isLoading = false.obs;
   @override
   void onInit() {
@@ -58,6 +60,13 @@ class DashboardController extends GetxController {
         DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
         dailyDarshanList.add(dailydarshans);
       });
+
+      final todayBhajanData = data['todaysBhajan'];
+      todayBhajanData.forEach((el) {
+        TodaysBhajan todaysBhajanRes = TodaysBhajan.fromJson(el);
+        todayBhajanEventList.add(todaysBhajanRes);
+      });
+
 
       final upcomingEventData = data['upcoming_event'];
       if (upcomingEventData == null || upcomingEventData == []) {
