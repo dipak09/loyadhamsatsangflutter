@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Constants/helper.dart';
 import 'package:loyadhamsatsang/Controllers/firebase_notification_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Bottom%20Navigation%20Bar/bottom_navigation_bar_ui.dart';
 
@@ -19,12 +20,12 @@ class _SplashScreenUIState extends State<SplashScreenUI> {
   @override
   void initState() {
     super.initState();
-    //firebaseNotificationController.getFcmNotification();
+     //firebaseNotificationController.getFcmNotification();
     Timer(Duration(seconds: 5), () {
       Get.off(() => BottomNavigation(index: 2));
     });
   }
-  var firebaseNotificationController = Get.put(FirebaseNotificationController());
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(

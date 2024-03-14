@@ -170,7 +170,9 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   }
 
   Widget featuredMediaSection() {
-    return Column(children: [
+    return FeatureMedia.list.isEmpty
+        ? SizedBox.shrink()
+        :Column(children: [
       Padding(
           padding: EdgeInsets.only(left: 25, right: 25),
           child:
@@ -312,7 +314,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                             .upcomingEventList[
                                                                 index]
                                                             .icon ??
-                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))
+                                        ),
                                         Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),
@@ -364,7 +367,11 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                               .spaceBetween,
                                                       children: [
                                                         CustomText(
-                                                            Home
+                                                  Home
+                                                      .upcomingEventList[
+                                                  index]
+                                                      .utsavTime
+                                                      .toString() == "null"?"":Home
                                                                     .upcomingEventList[
                                                                         index]
                                                                     .utsavTime
@@ -431,13 +438,17 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             child: ClipRRect(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
-                                                        Radius.circular(15),
+                                                    Radius.circular(15),
                                                     topRight:
-                                                        Radius.circular(15)),
+                                                    Radius.circular(15)),
                                                 child: CachedImageWithShimmer(
                                                     fit: BoxFit.fitHeight,
-                                                    imageUrl:
-                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
+                                                    imageUrl: Home
+                                                        .todayBhajanEventList[
+                                                    index]
+                                                        .icon ??
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))
+                                        ),
                                         Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),

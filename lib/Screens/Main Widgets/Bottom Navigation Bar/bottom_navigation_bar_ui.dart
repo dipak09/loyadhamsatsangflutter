@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Controllers/firebase_notification_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Drawer.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/animation.dart';
@@ -42,7 +43,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     isBottomSheet = false;
     setState(() {});
   }
-
+  var firebaseNotificationController = Get.put(FirebaseNotificationController());
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   var DailyDarshan = Get.put(DashboardController());

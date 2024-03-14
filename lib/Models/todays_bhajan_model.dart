@@ -1,21 +1,24 @@
 
 
 class TodaysBhajan {
-  String? date;
-  String? title;
-  String? description;
+  dynamic date;
+  dynamic title;
+  dynamic description;
+  dynamic icon;
 
 
   TodaysBhajan(
       {this.date,
         this.title,
         this.description,
+        this.icon,
         });
 
   TodaysBhajan.fromJson(Map<String, dynamic> json) {
     date = json['date'];
     title = json['title'];
     description = json['description'];
+    icon = json['icon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +26,7 @@ class TodaysBhajan {
     data['date'] = this.date;
     data['title'] = this.title;
     data['description'] = this.description;
+    data['icon'] = this.icon;
     return data;
   }
 }
