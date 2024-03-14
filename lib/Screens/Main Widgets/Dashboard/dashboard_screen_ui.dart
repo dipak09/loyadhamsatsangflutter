@@ -172,101 +172,112 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   Widget featuredMediaSection() {
     return FeatureMedia.list.isEmpty
         ? SizedBox.shrink()
-        :Column(children: [
-      Padding(
-          padding: EdgeInsets.only(left: 25, right: 25),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CustomText(
-              "Featured Media",
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ])),
-      Obx(() => FeatureMedia.isLoading.value == true
-          ? _loader()
-          : SizedBox(
-              height: screenHeight(context) * 0.27,
-              child: ListView.builder(
-                  itemCount: FeatureMedia.list.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (contex, index) {
-                    return InkWell(
-                        onTap: () {
-                          Get.to(() => FeaturedMediaVideoID(
-                                timeAgo: FeatureMedia.list[index].timeAgo,
-                                title: FeatureMedia.list[index].title,
-                                view: FeatureMedia.list[index].viewCount,
-                                publishedDate:
-                                    FeatureMedia.list[index].publishedDate,
-                                url: FeatureMedia.list[index].youtubeLink,
-                                videoId: FeatureMedia.list[index].initialId,
-                              ));
-                        },
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  height: 140,
-                                  width: 250,
-                                  margin: EdgeInsets.only(top: 10, left: 10),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15)),
-                                      child: CachedImageWithShimmer(
-                                          fit: BoxFit.fitHeight,
-                                          imageUrl: FeatureMedia
-                                              .list[index].thumbnail!))),
-                              Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 10),
-                                  width: 250,
-                                  padding: EdgeInsets.symmetric(vertical: 5),
-                                  decoration: BoxDecoration(
-                                      color: Color.fromARGB(179, 221, 218, 218),
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15))),
-                                  child: Column(children: [
+        : Column(children: [
+            Padding(
+                padding: EdgeInsets.only(left: 25, right: 25),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        "Featured Media",
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ])),
+            Obx(() => FeatureMedia.isLoading.value == true
+                ? _loader()
+                : SizedBox(
+                    height: screenHeight(context) * 0.27,
+                    child: ListView.builder(
+                        itemCount: FeatureMedia.list.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (contex, index) {
+                          return InkWell(
+                              onTap: () {
+                                Get.to(() => FeaturedMediaVideoID(
+                                      timeAgo: FeatureMedia.list[index].timeAgo,
+                                      title: FeatureMedia.list[index].title,
+                                      view: FeatureMedia.list[index].viewCount,
+                                      publishedDate: FeatureMedia
+                                          .list[index].publishedDate,
+                                      url: FeatureMedia.list[index].youtubeLink,
+                                      videoId:
+                                          FeatureMedia.list[index].initialId,
+                                    ));
+                              },
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Container(
-                                        padding: EdgeInsets.symmetric(
+                                        height: 140,
+                                        width: 250,
+                                        margin:
+                                            EdgeInsets.only(top: 10, left: 10),
+                                        child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15)),
+                                            child: CachedImageWithShimmer(
+                                                fit: BoxFit.fitHeight,
+                                                imageUrl: FeatureMedia
+                                                    .list[index].thumbnail!))),
+                                    Container(
+                                        margin: EdgeInsets.symmetric(
                                             horizontal: 10),
                                         width: 250,
-                                        child: CustomText(
-                                            FeatureMedia.list[index].title!,
-                                            fontSize: 9,
-                                            overflow: TextOverflow.ellipsis)),
-                                    Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        width: 250,
-                                        child: CustomText(
-                                            FeatureMedia
-                                                .list[index].publishedDate!
-                                                .toString(),
-                                            fontSize: 9,
-                                            overflow: TextOverflow.ellipsis)),
-                                    Container(
-                                        width: 250,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              CustomText(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                179, 221, 218, 218),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15))),
+                                        child: Column(children: [
+                                          Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              width: 250,
+                                              child: CustomText(
                                                   FeatureMedia
-                                                      .list[index].timeAgo!,
-                                                  fontSize: 9),
-                                              CustomText(
-                                                  FeatureMedia
-                                                      .list[index].viewCount!,
-                                                  fontSize: 9)
-                                            ]))
-                                  ]))
-                            ]));
-                  })))
-    ]);
+                                                      .list[index].title!,
+                                                  fontSize: 9,
+                                                  overflow:
+                                                      TextOverflow.ellipsis)),
+                                          Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              width: 250,
+                                              child: CustomText(
+                                                  FeatureMedia.list[index]
+                                                      .publishedDate!
+                                                      .toString(),
+                                                  fontSize: 9,
+                                                  overflow:
+                                                      TextOverflow.ellipsis)),
+                                          Container(
+                                              width: 250,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    CustomText(
+                                                        FeatureMedia.list[index]
+                                                            .timeAgo!,
+                                                        fontSize: 9),
+                                                    CustomText(
+                                                        FeatureMedia.list[index]
+                                                            .viewCount!,
+                                                        fontSize: 9)
+                                                  ]))
+                                        ]))
+                                  ]));
+                        })))
+          ]);
   }
 
   Widget upcomingeventSection() {
@@ -314,8 +325,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                             .upcomingEventList[
                                                                 index]
                                                             .icon ??
-                                                        "https://cdn.crispedge.com/a7aeb4.png"))
-                                        ),
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
                                         Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),
@@ -367,16 +377,19 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                                               .spaceBetween,
                                                       children: [
                                                         CustomText(
-                                                  Home
-                                                      .upcomingEventList[
-                                                  index]
-                                                      .utsavTime
-                                                      .toString() == "null"?"":Home
-                                                                    .upcomingEventList[
-                                                                        index]
-                                                                    .utsavTime
-                                                                    .toString() ??
-                                                                "---",
+                                                            Home
+                                                                        .upcomingEventList[
+                                                                            index]
+                                                                        .utsavTime
+                                                                        .toString() ==
+                                                                    "null"
+                                                                ? ""
+                                                                : Home
+                                                                        .upcomingEventList[
+                                                                            index]
+                                                                        .utsavTime
+                                                                        .toString() ??
+                                                                    "---",
                                                             fontSize: 9),
                                                         // CustomText(
                                                         //      Home.upcomingEventList[index].
@@ -418,7 +431,8 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                   onTap: () {
                                     Get.to(() => TodayBhajan(
                                           description: Home
-                                              .todayBhajanEventList[index].description
+                                              .todayBhajanEventList[index]
+                                              .description
                                               .toString(),
                                           title: Home
                                               .todayBhajanEventList[index].title
@@ -438,17 +452,16 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             child: ClipRRect(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
-                                                    Radius.circular(15),
+                                                        Radius.circular(15),
                                                     topRight:
-                                                    Radius.circular(15)),
+                                                        Radius.circular(15)),
                                                 child: CachedImageWithShimmer(
                                                     fit: BoxFit.fitHeight,
                                                     imageUrl: Home
-                                                        .todayBhajanEventList[
-                                                    index]
-                                                        .icon ??
-                                                        "https://cdn.crispedge.com/a7aeb4.png"))
-                                        ),
+                                                            .todayBhajanEventList[
+                                                                index]
+                                                            .icon ??
+                                                        "https://cdn.crispedge.com/a7aeb4.png"))),
                                         Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),

@@ -19,9 +19,11 @@ class _DonationUIState extends State<DonationUI> {
   bool thalvalue = false;
   bool hariJaynati = false;
   bool dropdown = false;
-
+  bool generalDonation = false;
+  int? previousValue;
   var totalamount = 0;
   var mahapujasevTotal = 0;
+  int initialValue = 0;
   String? dropdownValue;
   var onsubmitvalue = 0;
   bool nilkanthVariAbhishak = false;
@@ -89,7 +91,7 @@ class _DonationUIState extends State<DonationUI> {
                                       (BuildContext context, int indexs) {
                                     bool isCheckboxChecked =
                                         checkboxValuesList[index][indexs];
-                                    print(isCheckboxChecked);
+
                                     return Column(
                                       children: [
                                         ListTile(
@@ -115,8 +117,16 @@ class _DonationUIState extends State<DonationUI> {
                                                               ['subDonations']
                                                               [indexs]['amount']
                                                           .toString());
-                                                  if (checkboxValuesList[index]
-                                                          [indexs] &&
+                                                  if (DonationList.getDonationList[
+                                                                  index]
+                                                              ['subDonations'][
+                                                          indexs]['sub_type'] ==
+                                                      "General") {
+                                                    generalDonation = true;
+                                                  } else {
+                                                    generalDonation = false;
+                                                  }
+                                                  if (value &&
                                                       DonationList.getDonationList[
                                                                           index]
                                                                       [
@@ -124,9 +134,6 @@ class _DonationUIState extends State<DonationUI> {
                                                                   [indexs][
                                                               'dropdown_name'] !=
                                                           null) {
-                                                    print(
-                                                        "Enter in the if loop-------->");
-
                                                     _showDropdownDialog(
                                                         context,
                                                         DonationList.getDonationList[
@@ -136,8 +143,6 @@ class _DonationUIState extends State<DonationUI> {
                                                             ['dropdown_name']);
                                                   }
                                                 } else {
-                                                  print(
-                                                      "Enter in the else loop-------->");
                                                   totalamount -= int.parse(
                                                       DonationList
                                                           .getDonationList[
@@ -152,20 +157,8 @@ class _DonationUIState extends State<DonationUI> {
                                                               ['subDonations']
                                                               [indexs]['amount']
                                                           .toString());
-                                                  dropdown = false;
-                                                  setState(() {});
                                                 }
                                               });
-                                              // if (value! &&
-                                              //     DonationList.getDonationList[
-                                              //                         index]
-                                              //                     ['subDonations']
-                                              //                 [indexs]
-                                              //             ['dropdown_name'] !=
-                                              //         null) {
-                                              //   // Show dropdown only when checkbox is checked and dropdown_name is not null
-
-                                              // }
                                             },
                                           ),
                                           title: Text(
@@ -174,6 +167,43 @@ class _DonationUIState extends State<DonationUI> {
                                                 "${DonationList.getDonationList[index]['subDonations'][indexs]['amount'].toString()}",
                                           ),
                                         ),
+                                        if (generalDonation ||
+                                            DonationList.getDonationList[index]
+                                                        ['subDonations'][indexs]
+                                                    ['sub_type'] ==
+                                                "General")
+                                          TextFormField(
+                                            controller: _controller,
+                                            keyboardType: TextInputType.number,
+                                            onFieldSubmitted: (newValue) {
+                                              int currentValue =
+                                                  int.tryParse(newValue) ?? 0;
+                                              if (previousValue != null) {
+                                                // Subtract the previous value and add the new value
+                                                mahapujasevTotal =
+                                                    mahapujasevTotal -
+                                                        previousValue! +
+                                                        currentValue;
+                                                setState(() {});
+                                              } else {
+                                                // If there's no previous value, simply add the current value
+                                                mahapujasevTotal +=
+                                                    currentValue;
+                                                setState(() {});
+                                              }
+                                              // Store the current value as the previous value for next submission
+                                              previousValue = currentValue;
+                                              setState(() {});
+
+                                              // Optionally, you can clear the form field after submission
+                                              // _controller.clear();
+                                            },
+                                            decoration: InputDecoration(
+                                              labelText: 'Enter Amount',
+                                            ),
+                                          )
+                                        else
+                                          SizedBox.shrink(),
                                       ],
                                     );
                                   },

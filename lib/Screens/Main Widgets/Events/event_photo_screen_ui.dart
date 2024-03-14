@@ -39,9 +39,9 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
     Events.getImages(widget.title!);
   }
 
-   void shareImage(String imageUrl) async {
+  void shareImage(String imageUrl) async {
     setState(() {
-   //   isLoading = true; // Set loading state to true
+      //   isLoading = true; // Set loading state to true
     });
     try {
       var response = await HttpClient().getUrl(Uri.parse(imageUrl));
@@ -56,16 +56,15 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
       // Share the saved image via WhatsApp
       Share.shareFiles([file.path]);
       setState(() {
-      //  isLoading = false; // Set loading state to false after sharing
+        //  isLoading = false; // Set loading state to false after sharing
       });
     } catch (e) {
       setState(() {
-     //   isLoading = false; // Set loading state to false after sharing
+        //   isLoading = false; // Set loading state to false after sharing
       });
       print('Error sharing image: $e');
     }
   }
-
 
   Future<void> downloadImage(String imageUrl) async {
     Dio dio = Dio();
@@ -139,12 +138,13 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                             });
 
                             scrollController.animateTo(
-                              index * 130, // Assuming each item has a height of 100
+                              index *
+                                  130, // Assuming each item has a height of 100
                               duration: Duration(milliseconds: 500),
                               curve: Curves.ease,
                             );
-                            log("pageIndex${index  * (MediaQuery.of(context).size.width * 0.3)}");
-                            log("pageIndexsecound${index  * 100}");
+                            log("pageIndex${index * (MediaQuery.of(context).size.width * 0.3)}");
+                            log("pageIndexsecound${index * 100}");
                           },
                           builder: (context, index) {
                             return PhotoViewGalleryPageOptions(
@@ -153,16 +153,16 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                 minScale: PhotoViewComputedScale.contained,
                                 maxScale: PhotoViewComputedScale.covered * 2);
                           }),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                'Image ${currentIndex + 1} of ${Events.imageList.length}', // Change the text accordingly
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Image ${currentIndex + 1} of ${Events.imageList.length}', // Change the text accordingly
+                            style: TextStyle(color: Colors.white),
                           ),
+                        ),
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -218,10 +218,11 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                             ),
                                           ),
                                           child: CachedImageWithShimmer(
-                                              width: 130-20,
+                                              width: 130 - 20,
                                               imageUrl: Events
                                                   .imageList[index].source!))));
                             }))
+                  
                   ])
             // bottomNavigationBar: BottomAppBar(
             //   color: Colors.black,
@@ -250,6 +251,5 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
             //   ),
             // ),
             )));
-  
   }
 }

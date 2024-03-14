@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Utilites/ToastNotification.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
@@ -35,6 +36,7 @@ class DailyDarshanPhotoViewer extends StatefulWidget {
 
 class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
   PageController pageController = PageController();
+  ScrollController scrollController = ScrollController();
   int currentIndex = 0;
   bool isLoading = false;
   @override
@@ -133,6 +135,15 @@ class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
                             setState(() {
                               currentIndex = index;
                             });
+
+                            scrollController.animateTo(
+                              index *
+                                  130, // Assuming each item has a height of 100
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                            // log("pageIndex${index  * (MediaQuery.of(context).size.width * 0.3)}");
+                            // log("pageIndexsecound${index  * 100}");
                           },
                           builder: (context, index) {
                             return PhotoViewGalleryPageOptions(
@@ -179,37 +190,34 @@ class _DailyDarshanPhotoViewerState extends State<DailyDarshanPhotoViewer> {
                   ),
                 ),
                 Container(
-                  height: 100, // Adjust the height as needed
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.darshanList!.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            pageController.animateToPage(index,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: index == currentIndex
-                                    ? Colors.blue
-                                    : Colors.transparent,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: CachedImageWithShimmer(
-                                width: 100,
-                                imageUrl: widget.darshanList![index].source),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                    height: 100, // Adjust the height as needed
+                    child: ListView.builder(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.darshanList!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    pageController.animateToPage(index,
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.ease);
+                                  },
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: index == currentIndex
+                                              ? Colors.blue
+                                              : Colors.transparent,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      child: CachedImageWithShimmer(
+                                          width: 130 - 20,
+                                          imageUrl: widget
+                                              .darshanList![index].source))));
+                        }))
               ],
             ),
       // bottomNavigationBar: BottomAppBar(
