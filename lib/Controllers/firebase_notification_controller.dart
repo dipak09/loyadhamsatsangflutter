@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/helper.dart';
+import 'package:loyadhamsatsang/Utilites/messaging_service.dart';
 
 class FirebaseNotificationController extends GetxController {
   Dio dio = Dio();
@@ -13,10 +14,13 @@ class FirebaseNotificationController extends GetxController {
   void onInit() {
     super.onInit();
     getFcmNotification();
+    update();
   }
 
   Future<void> getFcmNotification() async {
+   // String Token = FcmTokenService.getDeviceToken().toString();
     try {
+      log("Firebase Notification Fcm Token111 -->$deviceToken");
       isLoading(true);
       update();
       String apiUrl = 'https://loyadham.in/api/webservice/getDeviceToken?token=$deviceToken';
@@ -25,7 +29,6 @@ class FirebaseNotificationController extends GetxController {
       final data = response.data["result"];
       log("Firebase Notification Api Response-->$data");
       log("Firebase Notification Fcm Token -->$deviceToken");
-
       isLoading(false);
       update();
     } catch (e) {

@@ -23,13 +23,13 @@ class FeaturedMedia {
 }
 
 class FeaturedMediaDetail {
-  String? title;
-  String? thumbnail;
-  String? youtubeLink;
-  String? initialId;
-  String? publishedDate;
-  String? timeAgo;
-  String? viewCount;
+  dynamic title;
+  dynamic thumbnail;
+  dynamic youtubeLink;
+  dynamic initialId;
+  dynamic publishedDate;
+  dynamic timeAgo;
+  dynamic viewCount;
 
   FeaturedMediaDetail(
       {this.title,

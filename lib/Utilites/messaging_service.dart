@@ -100,8 +100,16 @@ class MessagingService {
     // Retrieving the FCM token
     fcmToken = await _fcm.getToken();
     print('fcmToken: $fcmToken');
-    deviceToken = fcmToken.toString();
+    if (fcmToken != null) {
+      print('FCM Token: $fcmToken');
+      deviceToken = fcmToken!;
+    } else {
+      print('Failed to retrieve FCM Token');
+      // Handle the case where the FCM token is null
+    }
 
+// Save FCM token
+   // FcmTokenService.saveDeviceToken(fcmToken.toString());
     // Handling background messages using the specified handler
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

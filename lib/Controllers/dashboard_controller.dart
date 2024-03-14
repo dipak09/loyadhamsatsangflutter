@@ -42,10 +42,15 @@ class DashboardController extends GetxController {
       print("Daily Darshan : ${dailyDarshan_date}");
 
       final sliderData = data['slider'];
-      sliderData.forEach((el) {
-        Dashboardata slider = Dashboardata.fromJson(el);
-        sliderList.add(slider);
-      });
+      if(sliderData == null || sliderData == []){
+        sliderList = [];
+      }else{
+        sliderData.forEach((el) {
+          Dashboardata slider = Dashboardata.fromJson(el);
+          sliderList.add(slider);
+        });
+      }
+
       final livestreamingData = data['livestreaming'];
       if (livestreamingData == null || livestreamingData == []) {
         livestreamingList = [];
@@ -56,18 +61,26 @@ class DashboardController extends GetxController {
         });
       }
       final dailydarshansData = data['dailydarshans'];
-      dailydarshansData.forEach((el) {
-        DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
-        dailyDarshanList.add(dailydarshans);
-      });
+      if(dailydarshansData == null || dailydarshansData == []){
+        dailyDarshanList = [];
+      }else{
+        dailydarshansData.forEach((el) {
+          DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
+          dailyDarshanList.add(dailydarshans);
+        });
+      }
 
       final todayBhajanData = data['todaysBhajan'];
-      todayBhajanData.forEach((el) {
-        TodaysBhajan todaysBhajanRes = TodaysBhajan.fromJson(el);
-        todayBhajanEventList.add(todaysBhajanRes);
-      });
+      if (todayBhajanData == null || todayBhajanData == []) {
+        todayBhajanEventList = [];
+      }else{
+        todayBhajanData.forEach((el) {
+          TodaysBhajan todaysBhajanRes = TodaysBhajan.fromJson(el);
+          todayBhajanEventList.add(todaysBhajanRes);
+          print("today bhajan List#${todayBhajanEventList.length}");
+        });
 
-
+      }
       final upcomingEventData = data['upcoming_event'];
       if (upcomingEventData == null || upcomingEventData == []) {
         upcomingEventList = [];
@@ -81,6 +94,8 @@ class DashboardController extends GetxController {
       isLoading(false);
       update();
     } catch (e) {
+      isLoading(false);
+      update();
       print("Error : ${e}");
     }
   }

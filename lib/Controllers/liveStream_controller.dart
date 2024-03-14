@@ -35,6 +35,8 @@ class LiveStreamController extends GetxController {
       isLoading(false);
       update();
     } catch (e) {
+      isLoading(false);
+      update();
       print("Error : ${e}");
     }
   }

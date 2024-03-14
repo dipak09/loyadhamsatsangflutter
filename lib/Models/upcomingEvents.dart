@@ -1,13 +1,13 @@
 
 
 class UpcomingEvent {
-  String? eventDate;
-  String? vratUtsavNameEng;
-  String? vratUtsavNameGuj;
-  Null? utsavTime;
-  Null? descriptionEng;
-  Null? descriptionGuj;
-  String? icon;
+  dynamic eventDate;
+  dynamic vratUtsavNameEng;
+  dynamic vratUtsavNameGuj;
+  dynamic utsavTime;
+  dynamic descriptionEng;
+  dynamic descriptionGuj;
+  dynamic icon;
 
   UpcomingEvent(
       {this.eventDate,
