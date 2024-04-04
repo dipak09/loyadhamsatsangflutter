@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,6 +126,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
           },
         ),
         builder: (context, player) {
+          log("VideoIDWises.videoList.isNotEmpty${VideoIDWises.videoList.length}");
           return Scaffold(
             appBar: isFullScreen ? null : CustomAppBar(title: 'Video Player'),
             body: Stack(
@@ -173,8 +176,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                               Expanded(
                                 child: Obx(() => VideoIDWises.isLoading.value
                                     ? Center(child: CircularProgressIndicator())
-                                    : VideoIDWises.videoList.isNotEmpty &&
-                                    VideoIDWises.videoList != null
+                                    : VideoIDWises.videoList.isNotEmpty
                                     ? ListView.builder(
                                   // controller: _controller,
                                     itemCount: VideoIDWises.videoList.length,

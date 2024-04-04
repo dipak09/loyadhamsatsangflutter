@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, body_might_complete_normally_nullable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -41,25 +43,26 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
     // FeatureMedia.getData();
     //  LiveStream.getDashboardData();
   }
-
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
+        key: _drawerKey,
         backgroundColor: Colors.white54,
         appBar: DashboardAppBar(drawer: widget.drawer),
         body: SingleChildScrollView(
             child: Column(children: [
-          Obx(() => Home.isLoading.value == true
-              ? _loaderSlider()
-              : DashBoardImageSlider()),
-          liveStreamSection(),
-          dailyDarshanSection(),
-          featuredMediaSection(),
+               Home.isLoading.value == true
+                  ? _loaderSlider()
+                  : DashBoardImageSlider(),
+              liveStreamSection(),
+              dailyDarshanSection(),
+              featuredMediaSection(),
 
-          todayBhajaneventSection(),
-          //SizedBox(height: 10),
-          upcomingeventSection()
-        ])));
+              todayBhajaneventSection(),
+              //SizedBox(height: 10),
+              upcomingeventSection()
+            ]))));
   }
 
   Widget liveStreamSection() {
@@ -170,6 +173,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   }
 
   Widget featuredMediaSection() {
+    log("FeatureMediaList${FeatureMedia.list.length}");
     return FeatureMedia.list.isEmpty
         ? SizedBox.shrink()
         : Column(children: [

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -144,12 +145,32 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
                                               .kirtankathaList[index]
                                               .uploadFile!))),
                                 ),
-                                title: CustomText(
-                                    KirtanKatha.kirtankathaList[index].eventName
-                                        .toString(),
-                                    textAlign: TextAlign.start,
-                                    // color: Colors.black,
-                                    fontSize: 12),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: CustomText(
+                                          KirtanKatha.kirtankathaList[index].eventName
+                                              .toString(),
+                                          textAlign: TextAlign.start,
+                                          // color: Colors.black,
+                                          fontSize: 12),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                        shape: BoxShape.circle
+                                      ),
+                                      child: CustomText(KirtanKatha
+                                          .kirtankathaList[index].trackList!.length.toString(),
+                                          textAlign: TextAlign.start,
+                                          // color: Colors.black,
+                                          fontSize: 12),
+                                    ),
+                                  ],
+                                ),
                                 trailing: InkWell(
                                     onTap: () {
                                       downloadAndSaveAudio(

@@ -39,7 +39,7 @@ class _USAIndiaScreenState extends State<USAIndiaScreen> {
 
       String apiUrl =
           "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${VideoData.pageno.value.toString()}&youtube=${widget.type.isEmpty ? "IN" : widget.type}&pageToken=${apitoken ?? ""}";
-      log(apiUrl);
+      log("ApiUrl${apiUrl}");
 
       final response = await dio.get(apiUrl);
 

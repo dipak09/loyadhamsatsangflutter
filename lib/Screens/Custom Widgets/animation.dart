@@ -10,7 +10,7 @@ class CustomSlidetransition extends StatefulWidget {
       {required this.child,
       this.dx = 2,
       this.dy = 0,
-      this.duration = 400,
+      this.duration = 10,
       this.isCompleted});
   @override
   _CustomSlidetransitionState createState() => _CustomSlidetransitionState();
@@ -25,7 +25,7 @@ class _CustomSlidetransitionState extends State<CustomSlidetransition>
     super.initState();
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: widget.duration));
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 10), () {
       try {
         _animationController.forward();
       } catch (error) {}
@@ -50,10 +50,11 @@ class _CustomSlidetransitionState extends State<CustomSlidetransition>
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-        position:
-            Tween<Offset>(begin: Offset(widget.dx, widget.dy), end: Offset.zero)
-                .animate(_animationController),
-        child: widget.child);
+    return widget.child;
+    // return SlideTransition(
+    //     position:
+    //         Tween<Offset>(begin: Offset(widget.dx, widget.dy), end: Offset.zero)
+    //             .animate(_animationController),
+    //     child: widget.child);
   }
 }

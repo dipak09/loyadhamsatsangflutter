@@ -43,7 +43,7 @@ class VideoController extends GetxController {
       final response = await dio.get(apiUrl);
 
       final data = response.data['youtube_video'];
-      log(apiUrl);
+      log("ApiUrl${apiUrl}");
       apitoken = response.data['pageToken'].toString();
 
       List<ListYoutubeVideo> newVideos = [];

@@ -79,12 +79,39 @@ class DailyDarshanController extends GetxController {
     }
   }
 
+  // Future<void> pickDate(BuildContext context) async {
+  //   final pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate.value,
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime.now(),
+  //   );
+  //
+  //   if (pickedDate != null && pickedDate != selectedDate.value) {
+  //     selectedDate.value = pickedDate;
+  //     getValue();
+  //   }
+  // }
   Future<void> pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            child!,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, DateTime.now());
+              },
+              child: Text('Current Date'),
+            ),
+          ],
+        );
+      },
     );
 
     if (pickedDate != null && pickedDate != selectedDate.value) {

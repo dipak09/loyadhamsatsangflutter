@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
+import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
 import 'package:loyadhamsatsang/Controllers/firebase_notification_controller.dart';
+import 'package:loyadhamsatsang/Controllers/liveStream_controller.dart';
+import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Drawer.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/animation.dart';
@@ -36,18 +39,25 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  int currentIndex = 2;
+  // int currentIndex = 2;
   @override
   void initState() {
+    widget.index;
     super.initState();
     isBottomSheet = false;
     setState(() {});
   }
-  var firebaseNotificationController = Get.put(FirebaseNotificationController());
+
+  var firebaseNotificationController =
+      Get.put(FirebaseNotificationController());
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   var DailyDarshan = Get.put(DashboardController());
-  @override
+  var Video = Get.put(VideoController());
+  var LiveStream = Get.put(LiveStreamController());
+  var FeatureMedia = Get.put(FeaturedmediaController());
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -90,7 +100,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         child: Scaffold(
             key: _drawerKey,
             bottomSheet: isBottomSheet!
-                ? CustomSlidetransition(dx: 400, dy: 1, child: bottomSheet())
+                ? CustomSlidetransition(dx: 1, dy: 1, child: bottomSheet())
                 : SizedBox.shrink(),
             drawer: Drawer(
               width: MediaQuery.of(context).size.width * .9,
@@ -185,6 +195,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           if (onTap != null) onTap();
         },
         child: Container(
+          color: Colors.transparent,
+          width: screenWidth(context,dividedBy: 6),
             margin: EdgeInsets.only(top: 10),
             child: Column(children: [
               Image.asset(imageName!, height: 20, width: 20),
@@ -197,10 +209,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Container(
         height: screenHeight(context) * 0.35,
         width: screenWidth(context),
+
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          color: Colors.white,
+          color: Colors.transparent,
         ),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -232,58 +245,65 @@ class _BottomNavigationState extends State<BottomNavigation> {
           //       child: CustomText("Term & Conditions",
           //           fontSize: 15, color: Colors.black))
           // ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            cardBottomSheet(
-                title: "Calendar",
-                imageName: AppImages.calenderBottomSheet,
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => CalenderScreenUI());
-                }),
-            cardBottomSheet(
-                title: "Books",
-                imageName: AppImages.booksBottomSheet,
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => BooksScreenUI());
-                }),
-            cardBottomSheet(
-                title: "Sant Mandal",
-                imageName: AppImages.santmandalBottomSheet,
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => SantMandalScreenUI());
-                }),
-            cardBottomSheet(
-                title: "Daily Darshan",
-                imageName: AppImages.dailyDarshanBottomSheet,
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
-                      .parse(DailyDarshan.dailyDarshan_date.toString());
+          Container(
+            alignment: Alignment.center,
+            width: screenWidth(context),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  cardBottomSheet(
+                      title: "Calendar",
+                      imageName: AppImages.calenderBottomSheet,
+                      onTap: () {
+                        setState(() {
+                          isBottomSheet = false;
+                        });
+                        Get.to(() => CalenderScreenUI());
+                      }),
+                  cardBottomSheet(
+                      title: "Books",
+                      imageName: AppImages.booksBottomSheet,
+                      onTap: () {
+                        setState(() {
+                          isBottomSheet = false;
+                        });
+                        Get.to(() => BooksScreenUI());
+                      }),
+                  cardBottomSheet(
+                      title: "Sant Mandal",
+                      imageName: AppImages.santmandalBottomSheet,
+                      onTap: () {
+                        setState(() {
+                          isBottomSheet = false;
+                        });
+                        Get.to(() => SantMandalScreenUI());
+                      }),
+                  cardBottomSheet(
+                      title: "Daily Darshan",
+                      imageName: AppImages.dailyDarshanBottomSheet,
+                      onTap: () {
+                        setState(() {
+                          isBottomSheet = false;
+                        });
+                        final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+                            .parse(DailyDarshan.dailyDarshan_date.toString());
 
-                  Get.to(() => DailyDarshanScreenUI(
-                      title: DailyDarshan.dailyDarshan_title.toString(),
-                      date: selectedDate));
-                }),
-            cardBottomSheet(
-                title: "Setting",
-                imageName: AppImages.settingBottomSheet,
-                onTap: () {
-                  setState(() {
-                    isBottomSheet = false;
-                  });
-                  Get.to(() => SettingScreenUI());
-                }),
-          ]),
+                        Get.to(() => DailyDarshanScreenUI(
+                            title: DailyDarshan.dailyDarshan_title.toString(),
+                            date: selectedDate));
+                      }),
+                  cardBottomSheet(
+                      title: "Setting",
+                      imageName: AppImages.settingBottomSheet,
+                      onTap: () {
+                        setState(() {
+                          isBottomSheet = false;
+                        });
+                        Get.to(() => SettingScreenUI());
+                      }),
+                ]),
+          ),
         ]));
   }
 
@@ -293,11 +313,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
           if (onTap != null) onTap();
         },
         child: Container(
+            width: screenWidth(context,dividedBy: 6),
+            color: Colors.transparent,
             margin: EdgeInsets.only(top: 10),
-            child: Column(children: [
+            child:
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center, children: [
               Image.asset(imageName!, height: 20, width: 20),
               SizedBox(height: 5),
-              CustomText(title!, fontSize: 10)
+              CustomText(title!, fontSize: 10,textAlign: TextAlign.center,)
             ])));
   }
 }

@@ -10,9 +10,11 @@ import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioPlayer_screen.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/kirtanPlayer_screen.dart';
 
 class AudioListScreenUI extends StatefulWidget {
   String? title, imgUrl, kathaMasterId, singerId, type;
+
   AudioListScreenUI(
       {super.key,
       this.title,
@@ -27,6 +29,7 @@ class AudioListScreenUI extends StatefulWidget {
 
 class _AudioListScreenUIState extends State<AudioListScreenUI> {
   var KirtanKatha = Get.put(KirtanKathaAudioController());
+
   @override
   void dispose() {
     super.dispose();
@@ -63,34 +66,52 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   bool isPlayPause = true;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool playallclick = false;
+
   void playAllAudios() {
     // Start playing the first audio
-    playNextAudio();
+    if (!playallclick) {
+      playNextAudio();
+    }
   }
-
 //! Play All song button---------------->
 // Function to play the next audio
   void playNextAudio() {
     setState(() {
       playallclick = true;
     });
-    if (currentAudioIndex < KirtanKatha.kirtankathaAudioList.length) {
-      // Play the audio here, use your audio player logic
-      KirtanKatha.playAudio(
-          KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
-      KirtanKatha.audioPlayer.playerStateStream.listen((event) {
-        if (event.processingState == ProcessingState.completed) {
-          currentAudioIndex++;
-          playNextAudio();
-        }
-      });
+      if (currentAudioIndex < KirtanKatha.kirtankathaAudioList.length) {
+        // Play the audio here, use your audio player logic
+        KirtanKatha.playAudio(
+            KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
 
-      // Move to the next audio after a delay (you can adjust the delay according to your needs)
-    } else {
-      currentAudioIndex = 0;
-      setState(() {});
-    }
+        // Add a listener to detect when the audio playback is completed
+        KirtanKatha.audioPlayer.playerStateStream.listen((event) {
+          if (event.processingState == ProcessingState.completed) {
+            // Increment the current index to play the next audio
+            currentAudioIndex++;
+            if (currentAudioIndex < KirtanKatha.kirtankathaAudioList.length) {
+              // Play the next audio if available
+              KirtanKatha.playAudio(
+                  KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
+              setState(() {
+
+              });
+            } else {
+              // If all audio files are played, reset the index and update the UI
+              currentAudioIndex = 0;
+              setState(() {
+                playallclick = false;
+              });
+            }
+            log("completeIndex${currentAudioIndex}");
+          }
+        });
+      } else {
+        // If the current index exceeds the audio list length, reset it
+        currentAudioIndex = 0;
+      }
   }
+
 
 //! play neext song Button-------------->
   void buttonplayNextAudio() {
@@ -110,6 +131,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
       // Play the first audio
       KirtanKatha.playAudio(
           KirtanKatha.kirtankathaAudioList[currentAudioIndex].uploadAudio!);
+
     }
   }
 
@@ -155,6 +177,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
 
   @override
   Widget build(BuildContext context) {
+    log("currentIndex${currentAudioIndex}");
     return Scaffold(
       appBar: CustomAppBar(title: widget.title),
       body: Column(
@@ -203,13 +226,13 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                               playallclick = false;
                               //    KirtanKatha.audioPlayer.stop();
                               setState(() {});
-                              Get.to(AudioPlayerScreen(
+                              Get.to(KirtanPlayerScreen(
                                 imgUrl: widget.imgUrl,
                                 audioname: KirtanKatha
                                     .kirtankathaAudioList[index].fileName,
                                 audiofile: KirtanKatha
                                     .kirtankathaAudioList[index].uploadAudio,
-                                index: index,
+                                index: index, kirtankathaAudioList:KirtanKatha.kirtankathaAudioList,
                               ));
                             },
                             child: Container(

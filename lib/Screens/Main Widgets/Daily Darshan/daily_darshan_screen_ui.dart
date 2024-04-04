@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, unnecessary_string_interpolations, must_be_immutable
 
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -167,10 +169,12 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Obx(() {
+                     // final selectedDate = DailyDarshan.selectedDate;
                       final selectedDate = DailyDarshan.selectedDate;
 
                       final formattedDate =
                           DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
+                      log("formattedDate${formattedDate}");
 
                       return CustomText('${formattedDate.toString()}');
                     }),

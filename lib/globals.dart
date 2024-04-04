@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
-double screenHeight(context) {
-  return MediaQuery.of(context).size.height;
+Size screenSize(BuildContext context) {
+  return MediaQuery.of(context).size;
 }
 
-double screenWidth(context) {
-  return MediaQuery.of(context).size.width;
+double screenHeight(BuildContext context, {double dividedBy = 1}) {
+  return screenSize(context).height / dividedBy;
+}
+
+double screenWidth(BuildContext context, {double dividedBy = 1}) {
+  return screenSize(context).width / dividedBy;
 }
