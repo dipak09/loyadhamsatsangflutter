@@ -1,10 +1,13 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Models/ImagesData.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
+import 'package:loyadhamsatsang/Models/live_stream.dart';
 import 'package:loyadhamsatsang/Models/todays_bhajan_model.dart';
 import 'package:loyadhamsatsang/Models/upcomingEvents.dart';
 
@@ -14,7 +17,7 @@ class DashboardController extends GetxController {
   String? dailyDarshan_date;
 
   List<Dashboardata> sliderList = [];
-  List<Video> livestreamingList = [];
+  List<Channel1> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
   List<UpcomingEvent> upcomingEventList = [];
   List<TodaysBhajan> todayBhajanEventList = [];
@@ -56,7 +59,7 @@ class DashboardController extends GetxController {
         livestreamingList = [];
       } else {
         livestreamingData.forEach((el) {
-          Video livestreaming = Video.fromJson(el);
+          Channel1 livestreaming = Channel1.fromJson(el);
           livestreamingList.add(livestreaming);
         });
       }
@@ -90,6 +93,8 @@ class DashboardController extends GetxController {
           upcomingEventList.add(upcomingEvent);
         });
       }
+
+      log("liveStreamData!!!${livestreamingList.length}");
 
       isLoading(false);
       update();

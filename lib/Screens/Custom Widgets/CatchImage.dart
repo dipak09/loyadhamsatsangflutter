@@ -30,7 +30,7 @@ class CachedImageWithShimmer extends StatelessWidget {
       errorWidget: (context, url, error) => Icon(Icons.error),
       width: width,
       height: height,
-      fit: fit,
+     // fit: fit,
     );
   }
 }

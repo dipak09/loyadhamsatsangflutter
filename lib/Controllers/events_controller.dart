@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/Events.dart';
@@ -12,16 +14,16 @@ class EventsController extends GetxController {
   RxString selectedYear = '2023'.obs;
   List<String> years = List.generate(3, (index) => (2024 - index).toString());
   RxBool isLoading = false.obs;
-  final List<String> items = [
-    'Loyadham Canada',
-    'Loyadham Vadodara',
-    'Loyadham FL',
-    'Loyadham Macon',
-    'Loyadham NJ',
-    'Loyadham Kandari',
-    'Loyadham India',
-    'Loyadham Surat',
-  ];
+  // final List<String> items = [
+  //   'Loyadham Canada',
+  //   'Loyadham Vadodara',
+  //   'Loyadham FL',
+  //   'Loyadham Macon',
+  //   'Loyadham NJ',
+  //   'Loyadham Kandari',
+  //   'Loyadham India',
+  //   'Loyadham Surat',
+  // ];
 
   void selectItem(String item) {
     selectedTitle.value = item;
@@ -56,7 +58,7 @@ class EventsController extends GetxController {
       final response = await dio.get(
         apiUrl,
       );
-
+log("photosUrl${apiUrl}");
       final data = response.data;
       print(data.toString());
       data.forEach((el) {

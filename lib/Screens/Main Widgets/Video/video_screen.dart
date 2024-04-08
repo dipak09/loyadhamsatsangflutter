@@ -106,7 +106,7 @@ class _VideoScreenState extends State<VideoScreen> {
       child: YoutubePlayerBuilder(
         player: YoutubePlayer(
           controller: _controller,
-          showVideoProgressIndicator: true,
+          showVideoProgressIndicator: false,
           progressIndicatorColor: Colors.blueAccent,
           onReady: () {
             _initializePlayer();

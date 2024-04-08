@@ -11,7 +11,9 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:loyadhamsatsang/Controllers/events_Images_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
+import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Utilites/ToastNotification.dart';
+import 'package:loyadhamsatsang/globals.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,8 +23,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:dio/dio.dart' as r;
 
 class EventsPhotosScreenUI extends StatefulWidget {
-  String? title, name, date;
-  EventsPhotosScreenUI({super.key, this.title, this.name, this.date});
+  String? title, name, date, newTitle;
+
+  EventsPhotosScreenUI(
+      {super.key, this.title, this.name, this.date, this.newTitle});
 
   @override
   State<EventsPhotosScreenUI> createState() => _EventsPhotosScreenUIState();
@@ -33,6 +37,7 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
   int currentIndex = 0;
   PageController pageController = PageController();
   ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -119,12 +124,27 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
         child: Scaffold(
             backgroundColor: Colors.black,
             appBar: CustomAppBar(
-              title: widget.name,
-              fontsize: 12.0,
+              //title: widget.name,
+              title: "Album",
+              fontsize: 16.0,
             ),
             body: Events.imageList.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : Column(children: [
+                    Align(
+                      // alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CustomText(widget.newTitle.toString(),color: Colors.white,fontSize: 16,)
+                      ),
+                    ),
+                    Align(
+                       alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: CustomText(widget.date.toString(),color: Colors.white,fontSize: 16,)
+                      ),
+                    ),
                     Expanded(
                         child: Stack(children: [
                       PhotoViewGallery.builder(
@@ -138,8 +158,8 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                             });
 
                             scrollController.animateTo(
-                              index *
-                                  130, // Assuming each item has a height of 100
+                              index * 130,
+                              // Assuming each item has a height of 100
                               duration: Duration(milliseconds: 500),
                               curve: Curves.ease,
                             );
@@ -222,7 +242,6 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
                                               imageUrl: Events
                                                   .imageList[index].source!))));
                             }))
-                  
                   ])
             // bottomNavigationBar: BottomAppBar(
             //   color: Colors.black,

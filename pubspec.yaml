@@ -53,20 +53,20 @@ dependencies:
   flutter_cached_pdfview: ^0.4.2
   table_calendar: ^3.0.9
   
-  youtube_player_flutter: ^8.1.2
+  youtube_player_flutter: ^9.0.0
 
   # advance_pdf_viewer2: ^2.0.5+1
   shimmer: ^3.0.0
   photo_view: ^0.14.0
 
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.0.0
   webview_flutter: ^4.4.2
   http_auth: ^1.0.4
 
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.10
   flutter_local_notifications: ^16.3.2
-  
+  intl: ^0.19.0
   
 
 

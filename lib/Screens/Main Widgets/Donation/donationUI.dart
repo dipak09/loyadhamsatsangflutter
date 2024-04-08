@@ -1,11 +1,17 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/donation_controller.dart';
 import 'package:loyadhamsatsang/Controllers/get_donation_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Donation/personalInfo_ui.dart';
+import 'package:loyadhamsatsang/globals.dart';
 
 class DonationUI extends StatefulWidget {
   const DonationUI({super.key});
@@ -15,29 +21,52 @@ class DonationUI extends StatefulWidget {
 }
 
 class _DonationUIState extends State<DonationUI> {
-  bool donationvalue = false;
-  bool thalvalue = false;
-  bool hariJaynati = false;
-  bool dropdown = false;
-  bool generalDonation = false;
-  int? previousValue;
-  var totalamount = 0;
-  var mahapujasevTotal = 0;
-  int initialValue = 0;
-  String? dropdownValue;
-  var onsubmitvalue = 0;
-  bool nilkanthVariAbhishak = false;
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
   var Donation = Get.put(DonationController());
-  var DonationList = Get.put(GetDonationControlloer());
-  List<List<bool>> checkboxValuesList = [];
-  bool nutanMandirSeva = false;
+  var _getDonationController = Get.put(GetDonationControlloer());
+
+  late List<List<bool>> _subDonationCheckboxValues;
+  late double _totalAmount;
+  List<Map<String, dynamic>> _selectedDonations = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    DonationList.getData();
+    _getDonationController.getDonationData().then((_) {
+      // Initialize the list of checkbox values for each sub-donation
+      _subDonationCheckboxValues = List.generate(
+        _getDonationController.donationList.length,
+        (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          false,
+        ),
+      );
+      setState(() {
+        _totalAmount = 0;
+      });
+    });
+  }
+
+  void _updateTotalAmount() {
+    double totalAmount = 0;
+    List<Map<String, dynamic>> selectedDonations = [];
+    for (int i = 0; i < _getDonationController.donationList.length; i++) {
+      var donationType = _getDonationController.donationList[i];
+      for (int j = 0; j < donationType.subDonations.length; j++) {
+        if (_subDonationCheckboxValues[i][j]) {
+          double amount =
+              double.parse(donationType.subDonations[j].amount.toString());
+          totalAmount += amount;
+          selectedDonations.add({
+            'subtype': donationType.subDonations[j].subType,
+            'amount': amount,
+          });
+        }
+      }
+    }
+    setState(() {
+      _totalAmount = totalAmount;
+      _selectedDonations = selectedDonations;
+    });
   }
 
   @override
@@ -47,255 +76,392 @@ class _DonationUIState extends State<DonationUI> {
           title: "Donate to Loyadham Mandir",
         ),
         body: Obx(
-          () => DonationList.isLoading.value
+          () => _getDonationController.isLoading.value
               ? Center(child: CircularProgressIndicator())
-              : Column(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 8,
-                      child: ListView.builder(
-                        itemBuilder: (BuildContext context, int index) {
-                          // Initialize checkboxValues for each ExpansionTile
-                          if (checkboxValuesList.length <= index) {
-                            checkboxValuesList.add(List.filled(
-                              DonationList
-                                  .getDonationList[index]['subDonations']
-                                  .length,
-                              false,
-                            ));
-                          }
-
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.apptheme,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            margin: EdgeInsets.only(
-                                top: 12.0, left: 10.0, right: 10.0),
-                            child: ExpansionTile(
-                              title: CustomText(
-                                  DonationList.getDonationList[index]['type']),
-                              // trailing: mahapujasevTotal == 0
-                              //     ? CustomText("\$0")
-                              //     : CustomText("\$${mahapujasevTotal}"),
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: DonationList
-                                      .getDonationList[index]['subDonations']
-                                      .length,
-                                  itemBuilder:
-                                      (BuildContext context, int indexs) {
-                                    bool isCheckboxChecked =
-                                        checkboxValuesList[index][indexs];
-
-                                    return Column(
-                                      children: [
-                                        ListTile(
-                                          leading: Checkbox(
-                                            value: checkboxValuesList[index]
-                                                [indexs],
-                                            onChanged: (value) {
-                                              setState(() {
-                                                checkboxValuesList[index]
-                                                    [indexs] = value!;
-                                                if (value) {
-                                                  totalamount += int.parse(
-                                                      DonationList
-                                                          .getDonationList[
-                                                              index]
-                                                              ['subDonations']
-                                                              [indexs]['amount']
-                                                          .toString());
-                                                  mahapujasevTotal += int.parse(
-                                                      DonationList
-                                                          .getDonationList[
-                                                              index]
-                                                              ['subDonations']
-                                                              [indexs]['amount']
-                                                          .toString());
-                                                  if (DonationList.getDonationList[
+              : Container(
+                  height: screenHeight(context),
+                  width: screenWidth(context),
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 70),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _getDonationController
+                                        .donationList.length,
+                                    itemBuilder: (context, index) {
+                                      var donationType = _getDonationController
+                                          .donationList[index];
+                                      return ExpansionTileWithBorder(
+                                        title: CustomText(
+                                            donationType.type.toString()),
+                                        children: donationType.subDonations
+                                            .asMap()
+                                            .entries
+                                            .map((entry) => ExpansionTileChild(
+                                                  title: entry.value.subType +
+                                                          " \$${entry.value.amount}" ??
+                                                      "",
+                                                  isChecked:
+                                                      _subDonationCheckboxValues[
+                                                          index][entry.key],
+                                                  descriptionRequired: entry
+                                                          .value
+                                                          .descriptionRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  descriptionMandatory: entry
+                                                          .value
+                                                          .descriptionMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  onChanged: (isChecked) {
+                                                    setState(() {
+                                                      // Update the checkbox state for the corresponding sub-donation
+                                                      _subDonationCheckboxValues[
                                                                   index]
-                                                              ['subDonations'][
-                                                          indexs]['sub_type'] ==
-                                                      "General") {
-                                                    generalDonation = true;
-                                                  } else {
-                                                    generalDonation = false;
-                                                  }
-                                                  if (value &&
-                                                      DonationList.getDonationList[
-                                                                          index]
-                                                                      [
-                                                                      'subDonations']
-                                                                  [indexs][
-                                                              'dropdown_name'] !=
-                                                          null) {
-                                                    _showDropdownDialog(
-                                                        context,
-                                                        DonationList.getDonationList[
-                                                                        index][
-                                                                    'subDonations']
-                                                                [indexs]
-                                                            ['dropdown_name']);
-                                                  }
-                                                } else {
-                                                  totalamount -= int.parse(
-                                                      DonationList
-                                                          .getDonationList[
-                                                              index]
-                                                              ['subDonations']
-                                                              [indexs]['amount']
-                                                          .toString());
-                                                  mahapujasevTotal -= int.parse(
-                                                      DonationList
-                                                          .getDonationList[
-                                                              index]
-                                                              ['subDonations']
-                                                              [indexs]['amount']
-                                                          .toString());
-                                                }
-                                              });
-                                            },
-                                          ),
-                                          title: Text(
-                                            "${DonationList.getDonationList[index]['subDonations'][indexs]['sub_type'].toString()}" +
-                                                " -" +
-                                                "${DonationList.getDonationList[index]['subDonations'][indexs]['amount'].toString()}",
-                                          ),
-                                        ),
-                                        if (generalDonation ||
-                                            DonationList.getDonationList[index]
-                                                        ['subDonations'][indexs]
-                                                    ['sub_type'] ==
-                                                "General")
-                                          TextFormField(
-                                            controller: _controller,
-                                            keyboardType: TextInputType.number,
-                                            onFieldSubmitted: (newValue) {
-                                              int currentValue =
-                                                  int.tryParse(newValue) ?? 0;
-                                              if (previousValue != null) {
-                                                // Subtract the previous value and add the new value
-                                                mahapujasevTotal =
-                                                    mahapujasevTotal -
-                                                        previousValue! +
-                                                        currentValue;
-                                                setState(() {});
-                                              } else {
-                                                // If there's no previous value, simply add the current value
-                                                mahapujasevTotal +=
-                                                    currentValue;
-                                                setState(() {});
-                                              }
-                                              // Store the current value as the previous value for next submission
-                                              previousValue = currentValue;
-                                              setState(() {});
+                                                              [entry.key] =
+                                                          isChecked!;
 
-                                              // Optionally, you can clear the form field after submission
-                                              // _controller.clear();
-                                            },
-                                            decoration: InputDecoration(
-                                              labelText: 'Enter Amount',
+                                                      _updateTotalAmount();
+                                                    });
+                                                  },
+                                                  dateMandatory: entry
+                                                          .value.dateMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  dateRequired: entry
+                                                          .value.dateRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  description: entry
+                                                      .value.description
+                                                      .toString(),
+                                                  dropdownMandatory: entry.value
+                                                          .dropdownMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  dropdownRequired: entry.value
+                                                          .dropdownRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  dropdownLabel: entry
+                                                      .value.dropdownLabel
+                                                      .toString(),
+                                                  dropdownName:
+                                                      entry.value.dropdownName,
+                                                  amount: entry.value.amount
+                                                      .toString(),
+                                                ))
+                                            .toList(),
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 50.0,
+                                        width: screenWidth(context),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black
+                                                    .withOpacity(0.4)),
+                                            color: AppColors.apptheme
+                                            //borderRadius: BorderRadius.circular(10),
+
                                             ),
-                                          )
-                                        else
-                                          SizedBox.shrink(),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ],
+                                        child: CustomText(
+                                          "Donation Summary",
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      _selectedDonations.isNotEmpty
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black
+                                                          .withOpacity(0.4))),
+                                              child: ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    _selectedDonations.length,
+                                                itemBuilder: (context, index) {
+                                                  return ListTile(
+                                                    tileColor: index.isEven
+                                                        ? Colors.grey
+                                                            .withOpacity(0.5)
+                                                        : Colors.white,
+                                                    // contentPadding: EdgeInsets.zero,
+                                                    title: Text(
+                                                        _selectedDonations[
+                                                                    index]
+                                                                ['subtype'] ??
+                                                            ""),
+                                                    trailing: Text(
+                                                        "\$${_selectedDonations[index]['amount']}"),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      height: 60.0,
+                                      width: screenWidth(context),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black
+                                                  .withOpacity(0.4)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          CustomText("Total"),
+                                          CustomText("\$$_totalAmount"),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          );
-                        },
-                        itemCount: DonationList.getDonationList.length,
-                      ),
-                    ),
-                    Container(
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.apptheme,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        margin: EdgeInsets.only(
-                          top: 12.0,
-                          left: 10.0,
-                          right: 10.0,
-                        ),
-                        child: ListTile(
-                          title: CustomText("Total:- "),
-                          trailing: CustomText("\$${mahapujasevTotal}"),
-                        )),
-                    Expanded(
-                      child: Center(
-                        child: SizedBox(
-                          height: 40.0,
-                          width: 300.0,
-                          child: ElevatedButton(
-                              style: mahapujasevTotal != 0
-                                  ? ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.apptheme)
-                                  : ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey),
-                              onPressed: () {
-                                if (mahapujasevTotal != 0) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => PersonalInfoUI(
-                                                totalamount: mahapujasevTotal,
-                                              )));
-                                }
-                              },
-                              child: CustomText(
-                                "Next",
-                                color: Colors.white,
-                              )),
+                          ],
                         ),
                       ),
-                    )
-                  ],
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 60.0,
+                          width: screenWidth(context),
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 40.0,
+                                width: 300.0,
+                                color: Colors.transparent,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.apptheme),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => PersonalInfoUI(
+                                                    totalamount: 100,
+                                                  )));
+                                    },
+                                    child: CustomText(
+                                      "Next",
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
         ));
   }
+}
 
-  void _showDropdownDialog(BuildContext context, List<dynamic>? dropdownItems) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Dropdown Label"), // You can set a custom title here
-          content: DropdownButton<dynamic>(
-            value: dropdownValue, // Set the value of the selected dropdown item
-            onChanged: (dynamic? newValue) {
-              setState(() {
-                dropdownValue = newValue!;
-              });
-            },
-            items: dropdownItems
-                    ?.map<DropdownMenuItem<dynamic>>((dynamic value) {
-                  return DropdownMenuItem<dynamic>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList() ??
-                [], // Convert the dropdownItems list to DropdownMenuItem widgets
+class ExpansionTileWithBorder extends StatelessWidget {
+  final Widget title;
+  final List<Widget> children;
+
+  const ExpansionTileWithBorder({
+    Key? key,
+    required this.title,
+    required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey), // Border color
+        borderRadius: BorderRadius.circular(8.0), // Border radius
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          title: title,
+          children: children,
+        ),
+      ),
+    );
+  }
+}
+
+class ExpansionTileChild extends StatefulWidget {
+  final String title;
+  final String amount;
+  final bool isChecked;
+  final Function(bool?)? onChanged;
+  final bool descriptionRequired;
+  final bool descriptionMandatory;
+
+  final bool dateRequired;
+  final bool dateMandatory;
+  final bool dropdownRequired;
+  final bool dropdownMandatory;
+  final String? description;
+  final String? dropdownLabel;
+  final List<dynamic>? dropdownName;
+
+  const ExpansionTileChild({
+    Key? key,
+    required this.title,
+    required this.amount,
+    required this.isChecked,
+    required this.onChanged,
+    required this.descriptionMandatory,
+    required this.descriptionRequired,
+    required this.dateMandatory,
+    required this.dateRequired,
+    required this.description,
+    required this.dropdownMandatory,
+    required this.dropdownRequired,
+    required this.dropdownLabel,
+    required this.dropdownName,
+  }) : super(key: key);
+
+  @override
+  State<ExpansionTileChild> createState() => _ExpansionTileChildState();
+}
+
+class _ExpansionTileChildState extends State<ExpansionTileChild> {
+  DateTime? selectedDate;
+  String? selectedDropdownValue;
+
+  @override
+  Widget build(BuildContext context) {
+    log("descriptionMandatory@@@${widget.descriptionMandatory}");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CheckboxListTile(
+          title: Text(
+            widget.title,
+            style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
+          value: widget.isChecked,
+          onChanged: widget.onChanged,
+          controlAffinity: ListTileControlAffinity.leading,
+          dense: true,
+        ),
+        if (widget.isChecked && widget.amount == "0")
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "\$ 0",
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        if (widget.isChecked &&
+            widget.descriptionRequired &&
+            widget.descriptionMandatory)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: widget.description ?? 'Name and Purpose',
+              ),
+            ),
+          ),
+        if (widget.isChecked && widget.dateRequired && widget.dateMandatory)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () async {
+                      // Show date picker dialog
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        // Set selected date
+                        setState(() {
+                          selectedDate = pickedDate;
+                        });
+                      }
+                    },
+                    child: Text(selectedDate.toString() == "null"
+                        ? "Select Date"
+                        : DateFormat('yyyy-MM-dd').format(selectedDate!)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (widget.isChecked &&
+            widget.dropdownRequired &&
+            widget.dropdownMandatory)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: widget.dropdownLabel,
+              ),
+              value: selectedDropdownValue,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedDropdownValue = newValue;
+                });
+              },
+              items: widget.dropdownName!
+                  .map<DropdownMenuItem<String>>(
+                    (value) => DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+      ],
     );
   }
 }

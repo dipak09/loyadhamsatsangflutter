@@ -20,7 +20,7 @@ class FirebaseNotificationController extends GetxController {
   Future<void> getFcmNotification() async {
    // String Token = FcmTokenService.getDeviceToken().toString();
     try {
-      log("Firebase Notification Fcm Token111 -->$deviceToken");
+      log("Firebase Notification Fcm Token#### -->$deviceToken");
       isLoading(true);
       update();
       String apiUrl = 'https://loyadham.in/api/webservice/getDeviceToken?token=$deviceToken';

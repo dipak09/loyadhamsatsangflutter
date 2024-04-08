@@ -37,7 +37,31 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
     KirtanKatha.getData(widget.type!, "All");
     SingerList.getData();
   }
-
+  double _progress = 0;
+  void showDownloadDialog(List<TrackList> audioUrls, String audioname) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Downloading"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Please wait...'),
+              SizedBox(height: 20),
+              LinearProgressIndicator(value: _progress / 100),
+            ],
+          ),
+        );
+      },
+    );
+    // downloadAndSaveAudio(
+    //     audioUrls,
+    //     audioname);
+    // Start downloading
+    //downloadAndSaveAudio();
+  }
   @override
   Widget build(BuildContext context) {
     List<String> singerListWithAll = [
@@ -173,6 +197,11 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
                                 ),
                                 trailing: InkWell(
                                     onTap: () {
+                                      // showDownloadDialog(KirtanKatha.kirtankathaList[index]
+                                      //     .trackList!,
+                                      //     KirtanKatha
+                                      //         .kirtankathaList[index].eventName
+                                      //         .toString());
                                       downloadAndSaveAudio(
                                           KirtanKatha.kirtankathaList[index]
                                               .trackList!,
@@ -180,7 +209,8 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
                                               .kirtankathaList[index].eventName
                                               .toString());
                                     },
-                                    child: Icon(Icons.download))),
+                                    child: Icon(Icons.download))
+                            ),
                           ),
                         );
                       })
@@ -221,6 +251,60 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
       }
     }
   }
+
+
+  // Future<void> downloadAndSaveAudio(List<TrackList> audioUrls, String audioname) async {
+  //   Dio dio = Dio();
+  //
+  //   for (var audioUrl in audioUrls) {
+  //     try {
+  //       var response = await dio.get(
+  //         audioUrl.uploadAudio.toString(),
+  //         options: Options(
+  //           responseType: ResponseType.bytes,
+  //           followRedirects: false,
+  //           validateStatus: (status) {
+  //             return status! < 500;
+  //           },
+  //         ),
+  //         onReceiveProgress: (received, total) {
+  //           if (total != -1) {
+  //             // Calculate the progress percentage
+  //             double progress = (received / total * 100);
+  //             setState(() {
+  //               _progress = progress;
+  //             });
+  //           }
+  //         },
+  //       );
+  //
+  //       Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+  //       String filename = extractFilename(audioUrl.uploadAudio.toString());
+  //       String filePath = '${appDocumentsDirectory.path}/${filename}_${DateTime.now().millisecondsSinceEpoch}.mp3';
+  //
+  //       File file = File(filePath);
+  //       await file.writeAsBytes(response.data);
+  //
+  //       // File is saved to local storage
+  //       print("Successfully Audio is Saved--------------------->");
+  //       print('Audio saved to: $filePath');
+  //       Fluttertoast.showToast(msg: "Song Download Successfully!!!");
+  //     } catch (e) {
+  //       Fluttertoast.showToast(msg: "Please wait for a while. Try again later!!");
+  //       print("Error found while downloading------------------->" + audioUrl.toString());
+  //       print('Error downloading audio: $e');
+  //     }
+  //   }
+  // }
+
+  void updateProgress(double progress) {
+    // Update UI with the progress value
+    // For example, update a progress bar
+    setState(() {
+      // Update your progress bar state here
+    });
+  }
+
 
   String extractFilename(String url) {
     Uri uri = Uri.parse(url);

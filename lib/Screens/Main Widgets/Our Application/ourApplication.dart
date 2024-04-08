@@ -24,22 +24,23 @@ class _OurApplicationState extends State<OurApplication> {
       body: GetBuilder<OurApplicationController>(
           builder: (OurApplicationController controller) {
         return ListView.builder(
+          padding: EdgeInsets.only(bottom: 30),
             itemCount: OurApplication.list.length,
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: const EdgeInsets.only(left: 18.0, top: 10.0),
+                   Padding(
+                    padding:  EdgeInsets.only(left: 18.0, top: 10.0),
                     child: CustomText(
-                      "LOYADHAM SATSANG APP",
+                      OurApplication.list[index].appName.toString(),
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
+                    padding:  EdgeInsets.only(
                         left: 18.0, top: 10.0, right: 10.0),
                     child: CustomText(
                       OurApplication.list[index].description.toString(),
@@ -73,6 +74,7 @@ class _OurApplicationState extends State<OurApplication> {
                           label: Text("DOWNLOAD")),
                     ],
                   ),
+                  Divider(),
                 ],
               );
             });

@@ -40,23 +40,25 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   // int currentIndex = 2;
+  bool isBottomSheetOpen = false;
+
   @override
   void initState() {
     widget.index;
     super.initState();
-    isBottomSheet = false;
+    //isBottomSheet = false;
     setState(() {});
   }
 
   var firebaseNotificationController =
       Get.put(FirebaseNotificationController());
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  GlobalKey<ScaffoldState> _bottomSheetKey = GlobalKey();
 
   var DailyDarshan = Get.put(DashboardController());
   var Video = Get.put(VideoController());
   var LiveStream = Get.put(LiveStreamController());
   var FeatureMedia = Get.put(FeaturedmediaController());
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     )
                   ],
                 ),
+                // buildBottomSheet()
               ],
             ),
             bottomNavigationBar: buildMyNavBar(context)));
@@ -195,8 +198,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           if (onTap != null) onTap();
         },
         child: Container(
-          color: Colors.transparent,
-          width: screenWidth(context,dividedBy: 6),
+            color: Colors.transparent,
+            width: screenWidth(context, dividedBy: 6),
             margin: EdgeInsets.only(top: 10),
             child: Column(children: [
               Image.asset(imageName!, height: 20, width: 20),
@@ -205,11 +208,50 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ])));
   }
 
+  Widget buildBottomSheet() {
+    return GestureDetector(
+      onVerticalDragEnd: (details) {
+        if (details.primaryVelocity! < 0) {
+          // Swiped up
+          if (!isBottomSheetOpen) {
+            setState(() {
+              isBottomSheetOpen = true;
+            });
+          }
+        } else if (details.primaryVelocity! > 0) {
+          // Swiped down
+          if (isBottomSheetOpen) {
+            setState(() {
+              isBottomSheetOpen = false;
+            });
+          }
+        }
+      },
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          child: AnimatedContainer(
+            key: _bottomSheetKey,
+            duration: Duration(milliseconds: 300),
+            height: isBottomSheetOpen
+                ? MediaQuery.of(context).size.height * 0.35
+                : 0,
+            width: double.infinity,
+            color: Colors.white,
+            // Adjust the color as needed
+            child: bottomSheet(),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget bottomSheet() {
     return Container(
         height: screenHeight(context) * 0.35,
         width: screenWidth(context),
-
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -313,15 +355,18 @@ class _BottomNavigationState extends State<BottomNavigation> {
           if (onTap != null) onTap();
         },
         child: Container(
-            width: screenWidth(context,dividedBy: 6),
+            width: screenWidth(context, dividedBy: 6),
             color: Colors.transparent,
             margin: EdgeInsets.only(top: 10),
             child:
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.center, children: [
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Image.asset(imageName!, height: 20, width: 20),
               SizedBox(height: 5),
-              CustomText(title!, fontSize: 10,textAlign: TextAlign.center,)
+              CustomText(
+                title!,
+                fontSize: 10,
+                textAlign: TextAlign.center,
+              )
             ])));
   }
 }

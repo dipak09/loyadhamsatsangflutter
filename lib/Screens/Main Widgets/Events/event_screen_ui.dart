@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
+import 'package:loyadhamsatsang/Controllers/event_place_controller.dart';
 import 'package:loyadhamsatsang/Controllers/events_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -20,6 +23,7 @@ class EventScreenUI extends StatefulWidget {
 
 class _EventScreenUIState extends State<EventScreenUI> {
   var Events = Get.put(EventsController());
+  var EventPlaces = Get.put(EventsPlaceController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +60,8 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                     Get.to(() => EventsPhotosScreenUI(
                                         name:
                                             Events.eventList[index].albumTitle,
+                                        date:Events.eventList[index].album_date_new,
+                                        newTitle:Events.eventList[index].album_title_new,
                                         title:
                                             "${Events.eventList[index].albumTitle}"));
                                   },
@@ -89,7 +95,13 @@ class _EventScreenUIState extends State<EventScreenUI> {
                                             )),
                                         SizedBox(height: 10),
                                         CustomText(
-                                            Events.eventList[index].albumTitle
+                                            Events.eventList[index].album_title_new
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            color: Colors.black,
+                                            fontSize: 12),
+                                        CustomText(
+                                            Events.eventList[index].album_date_new
                                                 .toString(),
                                             textAlign: TextAlign.center,
                                             color: Colors.black,
@@ -106,14 +118,16 @@ class _EventScreenUIState extends State<EventScreenUI> {
   }
 
   Widget titleselection() {
-    return Obx(() => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            children: [
-              CustomText("Place :"),
-              Container(
+    return GetBuilder<EventsPlaceController>(builder: (controller) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Row(
+          children: [
+            CustomText("Place :"),
+            Expanded(
+              child: Container(
                   height: 50.0,
-                  width: 290.0,
+                  // width: screenWidth(context),
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   margin: EdgeInsets.only(left: 10.0),
                   decoration: BoxDecoration(
@@ -127,19 +141,21 @@ class _EventScreenUIState extends State<EventScreenUI> {
                           fontWeight: FontWeight.w600),
                       underline: SizedBox.shrink(),
                       isExpanded: true,
-                      value: Events.selectedTitle.value,
-                      items: Events.items
+                      value: EventPlaces.eventPlaceItems.isNotEmpty?EventPlaces.eventPlaceItems.first:null,
+                      items: EventPlaces.eventPlaceItems
                           .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ))
+                        value: item,
+                        child: Text(item),
+                      ))
                           .toList(),
                       onChanged: (item) {
                         Events.selectItem(item!);
                       })),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      );
+    },);
   }
 
   Widget yearSelection() {
@@ -149,33 +165,35 @@ class _EventScreenUIState extends State<EventScreenUI> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomText("Years :"),
-              SizedBox(height: 10),
-              Container(
-                  height: 50.0,
-                  width: 290.0,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  margin: EdgeInsets.only(left: 10.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.apptheme),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: DropdownButton<String>(
-                      icon: Icon(Icons.arrow_drop_down,
-                          color: AppColors.apptheme),
-                      style: GoogleFonts.poppins(
-                          color: AppColors.apptheme,
-                          fontWeight: FontWeight.w600),
-                      underline: SizedBox.shrink(),
-                      isExpanded: true,
-                      value: Events.selectedYear.value,
-                      items: Events.years
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ))
-                          .toList(),
-                      onChanged: (item) {
-                        Events.selectYear(item!);
-                      })),
+              //SizedBox(height: 10),
+              Expanded(
+                child: Container(
+                    height: 50.0,
+                   // width: 290.0,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    margin: EdgeInsets.only(left: 10.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.apptheme),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: DropdownButton<String>(
+                        icon: Icon(Icons.arrow_drop_down,
+                            color: AppColors.apptheme),
+                        style: GoogleFonts.poppins(
+                            color: AppColors.apptheme,
+                            fontWeight: FontWeight.w600),
+                        underline: SizedBox.shrink(),
+                        isExpanded: true,
+                        value: Events.selectedYear.value,
+                        items: Events.years
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(item),
+                                ))
+                            .toList(),
+                        onChanged: (item) {
+                          Events.selectYear(item!);
+                        })),
+              ),
             ],
           ),
         ));

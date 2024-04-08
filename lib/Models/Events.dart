@@ -14,6 +14,8 @@ class Events {
   DateTime? createdAt;
   String? status;
   String? date;
+  String? album_date_new;
+  String? album_title_new;
 
   Events({
     this.id,
@@ -31,6 +33,8 @@ class Events {
     this.createdAt,
     this.status,
     this.date,
+    this.album_date_new,
+    this.album_title_new,
   });
 
   factory Events.fromJson(Map<String, dynamic> json) => Events(
@@ -51,6 +55,8 @@ class Events {
             : DateTime.parse(json["created_at"]),
         status: json["status"],
         date: json["date"],
+    album_date_new: json["album_date_new"],
+    album_title_new: json["album_title_new"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,5 +75,7 @@ class Events {
         "created_at": createdAt?.toIso8601String(),
         "status": status,
         "date": date,
+    "album_date_new":album_date_new,
+    "album_title_new":album_title_new
       };
 }
