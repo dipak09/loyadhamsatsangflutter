@@ -11,3 +11,6 @@ double screenHeight(BuildContext context, {double dividedBy = 1}) {
 double screenWidth(BuildContext context, {double dividedBy = 1}) {
   return screenSize(context).width / dividedBy;
 }
+
+String? userSelectedDate;
+String? userSelectDropDownValue;

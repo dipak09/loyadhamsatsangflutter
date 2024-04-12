@@ -33,8 +33,8 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
   late YoutubePlayerController _controller;
 
   bool isFullScreen = false;
-  var VideoIDWise = Get.put(FeatureMediaRelatedController());
-  var VideoIDWises = Get.put(VideoIDWiseController());
+  var VideoIDWises = Get.put(FeatureMediaRelatedController());
+ // var VideoIDWises = Get.put(VideoIDWiseController());
   Duration? _savedPosition;
 
   void playNewVideo(String videoId) {
@@ -63,7 +63,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
   @override
   void initState() {
     super.initState();
-    VideoIDWise.assignData(
+    VideoIDWises.assignData(
         agoTime: widget.timeAgo,
         videoTitle: widget.title,
         videoView: widget.view,
@@ -71,7 +71,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
         videourl: widget.url,
         videovideoId: widget.videoId);
 
-    VideoIDWise.getData(widget.videoId!);
+    VideoIDWises.getData(widget.videoId!);
     // VideoIDWises.assignData(
     //     agoTime: widget.timeAgo,
     //     videoTitle: widget.title,
@@ -82,7 +82,7 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
     //
     // VideoIDWises.getData(widget.videoId!);
     _controller = YoutubePlayerController(
-      initialVideoId: VideoIDWise.videoId.value,
+      initialVideoId: VideoIDWises.videoId.value,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false, loop: true),
     );
 

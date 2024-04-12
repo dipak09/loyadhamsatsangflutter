@@ -13,14 +13,14 @@ class DailyDarshanController extends GetxController {
   Dio dio = Dio();
   List<DailyDarshan> dailyDarshanList = [];
   RxString selectedTitle = 'Thakorji Maharaj'.obs;
-  final List<String> items = [
-    'Thakorji Maharaj',
-    'Loyadham NJ',
-    'Loyadham Kandari',
-    'Loyadham India',
-    'Loyadham Surat',
-    'Loyadham Canada',
-  ];
+  // final List<String> items = [
+  //   'Thakorji Maharaj',
+  //   'Loyadham NJ',
+  //   'Loyadham Kandari',
+  //   'Loyadham India',
+  //   'Loyadham Surat',
+  //   'Loyadham Canada',
+  // ];
   RxBool isLoading = false.obs;
   Rx<DateTime> selectedDate = Rx<DateTime>(DateTime.now());
   @override
@@ -40,7 +40,7 @@ class DailyDarshanController extends GetxController {
 
   selectDate(DateTime date) {
     selectedDate.value = date;
-
+    update();
     final formattedDate = DateFormat('dd-MMMM-yyyy').format(selectedDate.value);
     getData(date: formattedDate, title: selectedTitle.value);
 
@@ -55,6 +55,7 @@ class DailyDarshanController extends GetxController {
 
   void title(String item) {
     selectedTitle.value = item;
+    update();
     //getValue();
   }
 

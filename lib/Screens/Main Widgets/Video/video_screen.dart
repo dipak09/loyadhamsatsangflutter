@@ -15,7 +15,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoScreen extends StatefulWidget {
-  String? url, videoId, title, view, publishedDate, timeAgo;
+  String? url, videoId, title, view, publishedDate, timeAgo,type;
 
   VideoScreen(
       {Key? key,
@@ -24,6 +24,7 @@ class VideoScreen extends StatefulWidget {
         this.title,
         this.view,
         this.publishedDate,
+        this.type,
         this.timeAgo})
       : super(key: key);
 
@@ -82,7 +83,7 @@ class _VideoScreenState extends State<VideoScreen> {
         videourl: widget.url,
         videovideoId: widget.videoId);
 
-    VideoIDWise.getData(widget.videoId!);
+    VideoIDWise.getData(widget.videoId!,widget.type!);
 
     _controller = YoutubePlayerController(
       initialVideoId: VideoIDWise.videoId.value,
@@ -188,7 +189,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                             videourl: VideoIDWise.videoList[index].youtubeLink,
                                             videovideoId: VideoIDWise.videoList[index].initialId);
                                         VideoIDWise.getData(
-                                            VideoIDWise.videoList[index].initialId!);
+                                            VideoIDWise.videoList[index].initialId!,widget.type!);
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(horizontal: 20),

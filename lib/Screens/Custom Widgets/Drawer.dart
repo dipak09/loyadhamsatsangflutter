@@ -77,7 +77,7 @@ class DrawerData extends StatelessWidget {
                           Get.back();
                           Get.to(() => DonationUI());
                         }),
-                    _subMenuCard(title: "Our Applications", onTap: () {
+                    _subMenuCard(title: "Publications", onTap: () {
                         Get.back();
                           Get.to(() => OurApplication());
                     }),

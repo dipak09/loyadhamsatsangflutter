@@ -37,7 +37,7 @@ class FeatureMediaRelatedController extends GetxController {
       update();
 
       String apiUrl =
-          'https://loyadham.in/api/webservice/getFeatureMediaRelatedVideos_get?videoId==${id}';
+          'https://loyadham.in/api/webservice/getFeatureMediaRelatedVideos?videoId=${id}';
 
       final response = await dio.get(apiUrl);
 

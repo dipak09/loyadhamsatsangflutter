@@ -10,6 +10,7 @@ import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/india_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/usa_india_ui_screen.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
@@ -69,7 +70,6 @@ class _VideoScreenUIState extends State<VideoScreenUI>
 
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
-    
   }
 
   @override
@@ -107,7 +107,7 @@ class _VideoScreenUIState extends State<VideoScreenUI>
                   children: [
                 //  KirtanKathaScreenUI(type: "All"),
                 USAIndiaScreen(type: "US"),
-                USAIndiaScreen(type: "IN")
+                IndiaScreen(type: "IN")
               ]))
         ]));
   }

@@ -4,10 +4,12 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 class CustomTextField extends StatefulWidget {
   String hintname;
   TextEditingController ?controller;
+  TextInputType? keyboardType;
   CustomTextField({
     Key? key,
     required this.hintname,
      this.controller,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
         controller: widget.controller,
+        keyboardType: widget.keyboardType,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(left: 15.0, bottom: 10.0),
           hintText: widget.hintname,

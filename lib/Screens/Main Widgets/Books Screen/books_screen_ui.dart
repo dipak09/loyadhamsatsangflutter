@@ -53,12 +53,13 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
 
                                 return GestureDetector(
                                     onTap: () {
-                                      if (data.readUrl!.endsWith(".pdf")) {
-                                        Get.to(PdfViewerFromApi(data.readUrl!));
-                                      } else {
-                                        _launchUrl(
-                                            Uri.parse(data.readUrl.toString()));
-                                      }
+                                      Get.to(PdfViewerFromApi(data.uploadPdf!,data.bookName!));
+                                      // if (data.readUrl!.endsWith(".pdf")) {
+                                      //   Get.to(PdfViewerFromApi(data.readUrl!));
+                                      // } else {
+                                      //   _launchUrl(
+                                      //       Uri.parse(data.readUrl.toString()));
+                                      // }
 
                                       // Get.to(() => PDFViewerFromUrl(
                                       //     url: data.uploadPdf!,
@@ -114,7 +115,9 @@ class _BooksScreenUIState extends State<BooksScreenUI> {
           borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
           controller: Books.searchController,
-          onChanged: (value) => Books.getBooks(search: value),
+          onChanged: (value) {
+            Books.getBooks(search: Books.searchController.text.trim());
+          },
           decoration: InputDecoration(
               hintText: "Search Books",
               filled: true,

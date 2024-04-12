@@ -31,13 +31,13 @@ class VideoIDWiseController extends GetxController {
     print("here");
   }
 
-  Future<void> getData(String id) async {
+  Future<void> getData(String id,String type) async {
     try {
       isLoading(true);
       update();
 
       String apiUrl =
-          'https://loyadham.in/api/webservice/getYoutubeChannellrelated?id=${id}';
+          'https://loyadham.in/api/webservice/getYoutubeChannellrelated?id=${id}&youtube=$type';
 
       final response = await dio.get(apiUrl);
 

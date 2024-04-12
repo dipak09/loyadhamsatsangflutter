@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Controllers/dashan_place_controller.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
 import 'package:loyadhamsatsang/Controllers/firebase_notification_controller.dart';
@@ -58,7 +59,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   var DailyDarshan = Get.put(DashboardController());
   var Video = Get.put(VideoController());
   var LiveStream = Get.put(LiveStreamController());
-  var FeatureMedia = Get.put(FeaturedmediaController());
+  //var FeatureMedia = Get.put(FeaturedmediaController());
+  var dailyDarshanPlaceController = Get.put(DarshanPlaceController());
 
   @override
   Widget build(BuildContext context) {

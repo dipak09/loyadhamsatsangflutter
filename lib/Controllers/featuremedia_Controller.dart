@@ -37,8 +37,8 @@ class FeaturedmediaController extends GetxController {
         FeaturedMediaDetail featuredMediaDetail =
             FeaturedMediaDetail.fromJson(el);
         list.add(featuredMediaDetail);
-        print("Featured Media--------->" + list.toString());
-        // Calender calander = Calender.fromJson(el);
+       // print("Featured Media--------->" + list.toString());
+        //         // Calender calander = Calender.fromJson(el);
         // list.add(calander);
       });
       //calendarDataList.value = list;

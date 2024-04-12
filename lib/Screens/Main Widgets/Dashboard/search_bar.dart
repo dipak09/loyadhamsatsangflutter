@@ -106,7 +106,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                                         () {
                                       Get.to(PdfViewerFromApi(SearchData
                                           .book![index].link
-                                          .toString()));
+                                          .toString(),SearchData.book![index].name.toString()));
                                     }));
                               },
                             ),

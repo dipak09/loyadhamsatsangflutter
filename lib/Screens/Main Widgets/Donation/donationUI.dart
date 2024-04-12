@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -27,6 +30,9 @@ class _DonationUIState extends State<DonationUI> {
   late List<List<bool>> _subDonationCheckboxValues;
   late double _totalAmount;
   List<Map<String, dynamic>> _selectedDonations = [];
+  List<List<TextEditingController>> _textEditingControllerList = [];
+  List<List<String>> _selectDropDownList = [];
+  List<List<String>> _selectDate = [];
 
   @override
   void initState() {
@@ -38,6 +44,20 @@ class _DonationUIState extends State<DonationUI> {
         (index) => List.filled(
           _getDonationController.donationList[index].subDonations.length,
           false,
+        ),
+      );
+      _textEditingControllerList = List.generate(
+        _getDonationController.donationList.length,
+        (index) => List.generate(
+          _getDonationController.donationList[index].subDonations.length,
+          (subIndex) => TextEditingController(),
+        ),
+      );
+      _selectDropDownList = List.generate(
+        _getDonationController.donationList.length,
+        (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          '', // Initialize with empty string or any default value
         ),
       );
       setState(() {
@@ -55,6 +75,12 @@ class _DonationUIState extends State<DonationUI> {
         if (_subDonationCheckboxValues[i][j]) {
           double amount =
               double.parse(donationType.subDonations[j].amount.toString());
+          if (amount == 0) {
+            // If amount is zero, check if there's a value entered in the text field
+            if (_textEditingControllerList[i][j].text.isNotEmpty) {
+              amount = double.parse(_textEditingControllerList[i][j].text);
+            }
+          }
           totalAmount += amount;
           selectedDonations.add({
             'subtype': donationType.subDonations[j].subType,
@@ -67,6 +93,61 @@ class _DonationUIState extends State<DonationUI> {
       _totalAmount = totalAmount;
       _selectedDonations = selectedDonations;
     });
+  }
+
+  double calculateTotalAmount() {
+    double totalAmount = 0;
+    for (int i = 0; i < _getDonationController.donationList.length; i++) {
+      var donationType = _getDonationController.donationList[i];
+      for (int j = 0; j < donationType.subDonations.length; j++) {
+        if (_subDonationCheckboxValues[i][j]) {
+          double amount =
+              double.parse(donationType.subDonations[j].amount.toString());
+          if (amount == 0) {
+            // If amount is zero, check if there's a value entered in the text field
+            String enteredText = _textEditingControllerList[i][j].text;
+            if (enteredText.isNotEmpty) {
+              amount = double.parse(enteredText);
+            }
+          }
+          totalAmount += amount;
+        }
+      }
+    }
+    return totalAmount;
+  }
+
+  String generateEnteredDataJSON() {
+    List<Map<String, dynamic>> enteredDataJson = [];
+    for (int i = 0; i < _getDonationController.donationList.length; i++) {
+      var donationType = _getDonationController.donationList[i];
+      for (int j = 0; j < donationType.subDonations.length; j++) {
+        if (_subDonationCheckboxValues[i][j]) {
+          double amount =
+              double.parse(donationType.subDonations[j].amount.toString());
+          String subtype = donationType.subDonations[j].subType;
+          String? description = _textEditingControllerList[i][j].text.isNotEmpty
+              ? _textEditingControllerList[i][j].text
+              : null;
+          String? selectedDate =
+              userSelectedDate; // Implement selection of date if needed
+          //String? selectedDropdownValue =_selectDropDownList[i][j].toString(); // Implement selection of dropdown value if needed
+          String? selectedDropdownValue =
+              ""; // Implement selection of dropdown value if needed
+
+          DonationData donationData = DonationData(
+            subtype: subtype,
+            amount: amount,
+            description: description,
+            selectedDate: selectedDate,
+            selectedDropdownValue: selectedDropdownValue,
+          );
+          enteredDataJson.add(donationData.toJson());
+        }
+      }
+    }
+
+    return jsonEncode(enteredDataJson);
   }
 
   @override
@@ -109,6 +190,14 @@ class _DonationUIState extends State<DonationUI> {
                                             .asMap()
                                             .entries
                                             .map((entry) => ExpansionTileChild(
+                                                  zeroAmtController:
+                                                      _textEditingControllerList[
+                                                          index][entry.key],
+                                                  zeroAmtOnChanged: (p0) {
+                                                    setState(() {
+                                                      _updateTotalAmount();
+                                                    });
+                                                  },
                                                   title: entry.value.subType +
                                                           " \$${entry.value.amount}" ??
                                                       "",
@@ -276,12 +365,20 @@ class _DonationUIState extends State<DonationUI> {
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.apptheme),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => PersonalInfoUI(
-                                                    totalamount: 100,
-                                                  )));
+                                      String result = generateEnteredDataJSON();
+                                      log("finalResult${result}");
+                                      if (_totalAmount == 0) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Amount should not be zero or Required filled should not be empty");
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => PersonalInfoUI(
+                                                      totalamount: _totalAmount,
+                                                    )));
+                                      }
                                     },
                                     child: CustomText(
                                       "Next",
@@ -342,7 +439,9 @@ class ExpansionTileChild extends StatefulWidget {
   final bool dropdownMandatory;
   final String? description;
   final String? dropdownLabel;
+  final TextEditingController? zeroAmtController;
   final List<dynamic>? dropdownName;
+  final Function(String)? zeroAmtOnChanged;
 
   const ExpansionTileChild({
     Key? key,
@@ -359,6 +458,8 @@ class ExpansionTileChild extends StatefulWidget {
     required this.dropdownRequired,
     required this.dropdownLabel,
     required this.dropdownName,
+    this.zeroAmtController,
+    this.zeroAmtOnChanged,
   }) : super(key: key);
 
   @override
@@ -389,9 +490,14 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: TextField(
+              controller: widget.zeroAmtController,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]+|\s")),
+              ], //
               keyboardType: TextInputType.number,
+              onChanged: widget.zeroAmtOnChanged,
               decoration: InputDecoration(
-                labelText: "\$ 0",
+                labelText: "\$",
               ),
             ),
           ),
@@ -425,6 +531,9 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
                         // Set selected date
                         setState(() {
                           selectedDate = pickedDate;
+                          userSelectedDate = DateFormat('yyyy-MM-dd')
+                              .format(selectedDate!)
+                              .toString();
                         });
                       }
                     },
@@ -449,6 +558,7 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               onChanged: (newValue) {
                 setState(() {
                   selectedDropdownValue = newValue;
+                  userSelectDropDownValue = newValue.toString();
                 });
               },
               items: widget.dropdownName!
@@ -463,5 +573,33 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
           ),
       ],
     );
+  }
+}
+
+class DonationData {
+  String subtype;
+  double amount;
+  String? description;
+  String? selectedDate;
+  String? selectedDropdownValue;
+
+  DonationData({
+    required this.subtype,
+    required this.amount,
+    this.description,
+    this.selectedDate,
+    this.selectedDropdownValue,
+  });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {
+      'subtype': subtype,
+      'amount': amount,
+    };
+    if (description != null) json['description'] = description;
+    if (selectedDate != null) json['selectedDate'] = selectedDate;
+    if (selectedDropdownValue != null)
+      json['selectedDropdownValue'] = selectedDropdownValue;
+    return json;
   }
 }

@@ -7,7 +7,7 @@ import 'package:loyadhamsatsang/Models/youtubevideo.dart';
 
 var apitoken;
 
-class VideoController extends GetxController {
+class IndiaChannelController extends GetxController {
   Dio dio = Dio();
   List<ListYoutubeVideo> videoList = [];
   var isLoading = false.obs;
@@ -48,12 +48,12 @@ class VideoController extends GetxController {
       update();
 
       String apiUrl =
-          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${1}&youtube=${type.isEmpty ? "IN" : type}&pageToken=${token ?? ""}";
+          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${1}&youtube=${"IN"}&pageToken=${token ?? ""}";
 
       final response = await dio.get(apiUrl);
 
       final data = response.data['youtube_video'];
-      log("Base url first${apiUrl}");
+      log("IndiaScreen Base url first${apiUrl}");
       apitoken = response.data['pageToken'].toString();
 
       List<ListYoutubeVideo> newVideos = [];

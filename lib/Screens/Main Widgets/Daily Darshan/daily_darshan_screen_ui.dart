@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/daily_darshan_controller.dart';
+import 'package:loyadhamsatsang/Controllers/dashan_place_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
@@ -27,6 +28,7 @@ class DailyDarshanScreenUI extends StatefulWidget {
 
 class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
   var DailyDarshan = Get.put(DailyDarshanController());
+  var dailyDarshanPlaceController = Get.put(DarshanPlaceController());
 
   @override
   void initState() {
@@ -116,40 +118,43 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
   }
 
   Widget titleselection() {
-    return Obx(() => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText("Place :"),
-              SizedBox(height: 10),
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.apptheme),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: DropdownButton<String>(
-                      icon: Icon(Icons.arrow_drop_down,
-                          color: AppColors.apptheme),
-                      style: GoogleFonts.poppins(
-                          color: AppColors.apptheme,
-                          fontWeight: FontWeight.w600),
-                      underline: SizedBox.shrink(),
-                      isExpanded: true,
-                      value: DailyDarshan.selectedTitle.value,
-                      items: DailyDarshan.items
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ))
-                          .toList(),
-                      onChanged: (item) {
-                        DailyDarshan.title(item!);
-                        DailyDarshan.getValue();
-                      })),
-            ],
-          ),
-        ));
+    return GetBuilder<DarshanPlaceController>(builder: (controller) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText("Place :"),
+            SizedBox(height: 10),
+            Container(
+              height: 50,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.apptheme),
+                    borderRadius: BorderRadius.circular(15)),
+                child: DropdownButton<String>(
+                    icon: Icon(Icons.arrow_drop_down,
+                        color: AppColors.apptheme),
+                    style: GoogleFonts.poppins(
+                        color: AppColors.apptheme,
+                        fontWeight: FontWeight.w600),
+                    underline: SizedBox.shrink(),
+                    isExpanded: true,
+                    value: dailyDarshanPlaceController.darshanPlaceItems.isNotEmpty?dailyDarshanPlaceController.darshanPlaceItems.first:null,
+                    items: dailyDarshanPlaceController.darshanPlaceItems
+                        .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    ))
+                        .toList(),
+                    onChanged: (item) {
+                      DailyDarshan.title(item!);
+                      DailyDarshan.getValue();
+                    })),
+          ],
+        ),
+      );
+    },);
   }
 
   Widget dateSelection() {

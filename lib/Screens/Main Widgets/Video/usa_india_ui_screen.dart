@@ -24,7 +24,7 @@ class USAIndiaScreen extends StatefulWidget {
 }
 
 class _USAIndiaScreenState extends State<USAIndiaScreen> {
-  var VideoData = Get.put(VideoController());
+  var videoController = Get.put(VideoController());
   var moreloading = false;
   int pagenumber = 1;
   ScrollController _controller = ScrollController();
@@ -33,35 +33,82 @@ class _USAIndiaScreenState extends State<USAIndiaScreen> {
   void loadmore() async {
     // print("here scroller postion ${_controller.position.extentAfter}");
     if (_controller.position.maxScrollExtent == _controller.position.pixels) {
-      VideoData.pageno.value += 1;
-      setState(() {});
-      moreloading = true;
 
-      String apiUrl =
-          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${VideoData.pageno.value.toString()}&youtube=${widget.type.isEmpty ? "IN" : widget.type}&pageToken=${apitoken ?? ""}";
-      log("ApiUrl${apiUrl}");
-
-      final response = await dio.get(apiUrl);
-
-      final data = response.data['youtube_video'];
-
-log("data${data}");
-      data.forEach((el) {
-        ListYoutubeVideo video = ListYoutubeVideo.fromJson(el);
-        VideoData.videoList.add(video);
+      setState(() {
+        moreloading = true;
       });
+      moreloading = true;
+      videoController.pageno.value += 1;
+      String apiUrl =
+          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${videoController.pageno.value.toString()}&youtube=${widget.type.isEmpty ? "IN" : widget.type}&pageToken=${apitoken ?? ""}";
+      log("BaseURL${apiUrl}");
+      try{
+        final response = await dio.get(apiUrl);
 
-      moreloading = false;
-      setState(() {});
+        final data = response.data['youtube_video'];
+
+        log("data${data}");
+        data.forEach((el) {
+          ListYoutubeVideo video = ListYoutubeVideo.fromJson(el);
+          videoController.videoList.add(video);
+        });
+
+        setState(() {
+          moreloading = false;
+        });
+      }catch(e){
+        log("Error loading more data: $e");
+        setState(() {
+          moreloading = false;
+        });
+      }
     }
   }
 
+
+  void _loadData() async {
+    try {
+      final String apiUrl =
+          "http://loyadham.in/api/webservice/getYoutubeChannellatest?page=${videoController.pageno.value.toString()}&youtube=${widget.type.isEmpty ? "IN" : widget.type}&pageToken=${apitoken ?? ""}";
+      log("ApiUrl: $apiUrl");
+
+      final response = await dio.get(apiUrl);
+      final data = response.data['youtube_video'];
+
+      data.forEach((el) {
+        ListYoutubeVideo video = ListYoutubeVideo.fromJson(el);
+        videoController.videoList.add(video);
+      });
+
+      setState(() {
+        moreloading = true; // Set loaded to true after data is loaded for the first time
+      });
+    } catch (e) {
+      log("Error loading data: $e");
+    }
+  }
+
+  // void _loadData() {
+  //   if (!moreloading) {
+  //     // Load data only if it hasn't been loaded yet
+  //     videoController.get(widget.type == 'US' ? 0 : 1);
+  //     moreloading = true; // Set loaded to true after data is loaded for this tab
+  //   }
+  // }
+  //
+  // void _loadMore() async {
+  //   if (_controller.position.maxScrollExtent == _controller.position.pixels &&
+  //       !videoController.isLoading.value) {
+  //     videoController.pageno.value++;
+  //     await videoController.getData(widget.type, apitoken ?? "", videoController.pageno.value.toString());
+  //   }
+  // }
   @override
   void initState() {
     _controller = ScrollController()..addListener(loadmore);
-
     // TODO: implement initState
     super.initState();
+   // _loadData();
   }
 
   @override
@@ -69,30 +116,31 @@ log("data${data}");
     return Column(
       children: [
         Expanded(
-          child: Obx(() => VideoData.isLoading.value
+          child: Obx(() => videoController.isLoading.value
               ? Center(child: CircularProgressIndicator())
-              : VideoData.videoList.isNotEmpty && VideoData.videoList != null
+              : videoController.videoList.isNotEmpty
                   ? GetBuilder<VideoController>(
                       builder: (controller) {
                         return ListView.builder(
                             controller: _controller,
-                            itemCount: VideoData.videoList.length,
+                            itemCount: videoController.videoList.length,
                             itemBuilder: (context, index) {
-                              log(VideoData.videoList.length.toString());
+                              log(videoController.videoList.length.toString());
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(() => VideoScreen(
                                         timeAgo:
-                                            VideoData.videoList[index].timeAgo,
-                                        title: VideoData.videoList[index].title,
-                                        view: VideoData
+                                            videoController.videoList[index].timeAgo,
+                                        title: videoController.videoList[index].title,
+                                        view: videoController
                                             .videoList[index].viewCount,
-                                        publishedDate: VideoData
+                                        publishedDate: videoController
                                             .videoList[index].publishedDate,
-                                        url: VideoData
+                                        url: videoController
                                             .videoList[index].youtubeLink,
-                                        videoId: VideoData
+                                        videoId: videoController
                                             .videoList[index].initialId,
+                                    type: "US",
                                       ));
                                 },
                                 child: Container(
@@ -105,12 +153,12 @@ log("data${data}");
                                           borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(15),
                                               topRight: Radius.circular(15)),
-                                          child: VideoData.videoList[index]
+                                          child: videoController.videoList[index]
                                                       .thumbnail ==
                                                   null
                                               ? SizedBox()
                                               : CachedNetworkImage(
-                                                  imageUrl: VideoData
+                                                  imageUrl: videoController
                                                       .videoList[index]
                                                       .thumbnail!,
                                                   placeholder: (context, url) =>
@@ -149,13 +197,13 @@ log("data${data}");
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 CustomText(
-                                                    VideoData.videoList[index]
+                                                    videoController.videoList[index]
                                                         .title!,
                                                     fontSize: 9,
                                                     overflow:
                                                         TextOverflow.ellipsis),
                                                 CustomText(
-                                                    VideoData.videoList[index]
+                                                    videoController.videoList[index]
                                                         .publishedDate!
                                                         .toString(),
                                                     fontSize: 9,
@@ -169,13 +217,13 @@ log("data${data}");
                                                                 .spaceBetween,
                                                         children: [
                                                           CustomText(
-                                                              VideoData
+                                                              videoController
                                                                   .videoList[
                                                                       index]
                                                                   .timeAgo!,
                                                               fontSize: 9),
                                                           CustomText(
-                                                              VideoData
+                                                              videoController
                                                                   .videoList[
                                                                       index]
                                                                   .viewCount!,

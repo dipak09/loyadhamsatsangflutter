@@ -8,6 +8,7 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/About%20Us/aboutus_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Feedback%20Screen/feedback_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/main_screen.dart';
 import 'package:loyadhamsatsang/globals.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
@@ -79,6 +80,11 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                       title: "ABOUT US",
                       onTap: () {
                         Get.to(() => AboutUsScreenUI());
+                      }),
+                  cards(
+                      title: "Setting",
+                      onTap: () {
+                        Get.to(() => MainScreen());
                       }),
                   cards(
                       title: "OFFLINE DOWNLOADS",

@@ -61,12 +61,15 @@ class BottomSheetUI extends StatelessWidget {
                 title: "Daily Darshan",
                 imageName: AppImages.dailyDarshanBottomSheet,
                 onTap: () {
-                  final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
-                      .parse(DailyDarshan.dailyDarshan_date.toString());
+                  final now = DateTime.now();
+                  // final selectedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+                  //     .parse(DailyDarshan.dailyDarshan_date.toString());
+
+                  final formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss").format(now);
 
                   Get.to(() => DailyDarshanScreenUI(
                       title: DailyDarshan.dailyDarshan_title.toString(),
-                      date: selectedDate));
+                      date: now));
                 }),
             card(
                 title: "Setting",

@@ -2,7 +2,9 @@
 
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -163,7 +165,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             },
           ),
           Text(
-            '${DateFormat('MMMM').format(_currentMonth)}',
+            DateFormat('MMMM').format(_currentMonth),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           DropdownButton<int>(
@@ -229,6 +231,45 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     );
   }
 
+  Widget _buildEventItem(CalenderEvent event, String monthDate) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+      child: ListTile(
+        leading: event.icon != null
+            ? Image.network(
+                event.icon!,
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              )
+            : SizedBox(width: 40, height: 40), // Placeholder if icon is null
+        title: Text(
+          gujarati
+              ? event.vratUtsavNameGuj.toString()
+              : event.vratUtsavNameEng.toString(),
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(
+          monthDate,
+          style: TextStyle(
+            fontSize: 14.0,
+          ),
+        ),
+        onTap: () {
+          // Handle event tap
+          // Add your logic here
+        },
+      ),
+    );
+  }
+
   Widget _buildWeekDay(String day) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -256,171 +297,250 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
     int daysInPreviousMonth = lastDayOfPreviousMonth.day;
     log("itemCount${daysInMonth + weekdayOfFirstDay - 1}");
     log("itemCount${daysInMonth + weekdayOfFirstDay - 1}");
-    return GridView.builder(
-      padding: EdgeInsets.zero,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7,
-        childAspectRatio: 0.4,
-        //crossAxisSpacing: 4.0,
-        //  mainAxisSpacing: 4.0,
-      ),
-      itemCount: daysInMonth + weekdayOfFirstDay - 1,
-      itemBuilder: (context, index) {
-        if (index < weekdayOfFirstDay - 1) {
-          // Show dates from the previous month in grey
-          int previousMonthDay =
-              daysInPreviousMonth - (weekdayOfFirstDay - index) + 2;
-          DateTime date =
-              DateTime(month.year, month.month, index - weekdayOfFirstDay + 2);
-
-          return Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide.none, // Remove top line
-                left: BorderSide(
-                    width: 1.0, color: Colors.grey), // Example: left border
-                right: BorderSide(
-                    width: 1.0, color: Colors.grey), // Example: right border
-                bottom: BorderSide(
-                    width: 1.0, color: Colors.grey), // Example: bottom border
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          Container(
+            height: 500,
+            width: screenWidth(context),
+            color: Colors.transparent,
+            child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                childAspectRatio: 0.6,
+                //crossAxisSpacing: 4.0,
+                //  mainAxisSpacing: 4.0,
               ),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              previousMonthDay.toString(),
-              style: TextStyle(color: Colors.grey),
-            ),
-          );
-        } else {
-          DateTime date =
-              DateTime(month.year, month.month, index - weekdayOfFirstDay + 2);
-          String text = date.day.toString(); // Day number text
-          bool isCurrentDate = DateTime.now().isSameDate(date);
-          Calender? currentDateData = calendar.list.firstWhere(
-            (element) =>
-                DateTime.parse(element.icDate!.toString()).isSameDate(date),
-            orElse: () => Calender(),
-          );
+              itemCount: daysInMonth + weekdayOfFirstDay - 1,
+              itemBuilder: (context, index) {
+                if (index < weekdayOfFirstDay - 1) {
+                  // Show dates from the previous month in grey
+                  int previousMonthDay =
+                      daysInPreviousMonth - (weekdayOfFirstDay - index) + 2;
+                  DateTime date = DateTime(
+                      month.year, month.month, index - weekdayOfFirstDay + 2);
 
-          return InkWell(
-            onTap: () {
-              // Handle date cell tap
-              popupdialog(
-                  context,
-                  text,
-                  month.year.toString(),
-                  month.month,
-                  currentDateData.monthTitleEng.toString(),
-                  currentDateData.pakshaTitleEng.toString(),
-                  currentDateData.tithiTitleEng.toString(),
-                  currentDateData.chandraTitleEng.toString(),
-                  currentDateData.nakshatraTitleEng.toString(),
-                  currentDateData.tithiTitleGuj.toString(),
-                  currentDateData.chandraTitleGuj.toString(),
-                  currentDateData.nakshatraTitleGuj.toString(),
-                  gujarati,
-                  currentDateData.monthTitleGuj.toString(),
-                  currentDateData.pakshaTitleGuj.toString(),
-                  currentDateData.sunset.toString(),
-                  currentDateData.sunrise.toString(),
-                  currentDateData.calenderEvent);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: const Border(
-                  top: BorderSide.none, // Remove top line
-                  left: BorderSide(
-                      width: 1.0, color: Colors.grey), // Example: left border
-                  right: BorderSide(
-                      width: 1.0, color: Colors.grey), // Example: right border
-                  bottom: BorderSide(
-                      width: 1.0, color: Colors.grey), // Example: bottom border
-                ),
-                color: isCurrentDate ? AppColors.apptheme : null,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Center(
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: isCurrentDate ? Colors.white : null,
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide.none,
+                        // Remove top line
+                        left: BorderSide(width: 1.0, color: Colors.grey),
+                        // Example: left border
+                        right: BorderSide(width: 1.0, color: Colors.grey),
+                        // Example: right border
+                        bottom: BorderSide(
+                            width: 1.0,
+                            color: Colors.grey), // Example: bottom border
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      previousMonthDay.toString(),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                } else {
+                  DateTime date = DateTime(
+                      month.year, month.month, index - weekdayOfFirstDay + 2);
+                  String text = date.day.toString(); // Day number text
+                  bool isCurrentDate = DateTime.now().isSameDate(date);
+                  Calender? currentDateData = calendar.list.firstWhere(
+                    (element) => DateTime.parse(element.icDate!.toString())
+                        .isSameDate(date),
+                    orElse: () => Calender(),
+                  );
+
+                  return InkWell(
+                    onTap: () {
+                      // Handle date cell tap
+                      popupdialog(
+                          context,
+                          text,
+                          month.year.toString(),
+                          month.month,
+                          currentDateData.monthTitleEng.toString(),
+                          currentDateData.pakshaTitleEng.toString(),
+                          currentDateData.tithiTitleEng.toString(),
+                          currentDateData.chandraTitleEng.toString(),
+                          currentDateData.nakshatraTitleEng.toString(),
+                          currentDateData.tithiTitleGuj.toString(),
+                          currentDateData.chandraTitleGuj.toString(),
+                          currentDateData.nakshatraTitleGuj.toString(),
+                          gujarati,
+                          currentDateData.monthTitleGuj.toString(),
+                          currentDateData.pakshaTitleGuj.toString(),
+                          currentDateData.sunset.toString(),
+                          currentDateData.sunrise.toString(),
+                          currentDateData.calenderEvent);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: const Border(
+                          top: BorderSide.none,
+                          // Remove top line
+                          left: BorderSide(width: 1.0, color: Colors.grey),
+                          // Example: left border
+                          right: BorderSide(width: 1.0, color: Colors.grey),
+                          // Example: right border
+                          bottom: BorderSide(
+                              width: 1.0,
+                              color: Colors.grey), // Example: bottom border
                         ),
+                        color: isCurrentDate ? AppColors.apptheme : null,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                text,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: isCurrentDate ? Colors.white : null,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // if (currentDateData.calenderEvent!.isEmpty)
+                          //   const Expanded(
+                          //     flex: 0,
+                          //     child: SizedBox(
+                          //       width: 40,
+                          //       height: 40,
+                          //     ),
+                          //   ),
+
+                          if (currentDateData.calenderEvent!.isNotEmpty)
+                            if (currentDateData.calenderEvent![0].icon != null)
+                              Expanded(
+                                flex: 0,
+                                child: SizedBox(
+                                  child: Image.network(
+                                    currentDateData.calenderEvent![0].icon
+                                        .toString(),
+                                    // Replace with your image URL
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                          // if (currentDateData.calenderEvent!.isNotEmpty)
+                          //   if (currentDateData.calenderEvent![0].icon == null)
+                          //     const Expanded(
+                          //       flex: 0,
+                          //       child: SizedBox(
+                          //         width: 40,
+                          //         height: 40,
+                          //       ),
+                          //     ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 3.0, right: 3.0),
+                                child: english
+                                    ? Text(
+                                        "${currentDateData.monthTitleEng}${currentDateData.pakshaTitleEng}${currentDateData.tithiTitleEng}" ??
+                                            '',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w400,
+                                            color: isCurrentDate
+                                                ? Colors.white
+                                                : Color.fromARGB(
+                                                    255, 127, 126, 126)),
+                                      )
+                                    : Text(
+                                        "${currentDateData.monthTitleGuj}${currentDateData.pakshaTitleGuj}${currentDateData.tithiTitleGuj}" ??
+                                            '',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w400,
+                                            color: isCurrentDate
+                                                ? Colors.white
+                                                : Color.fromARGB(
+                                                    255, 127, 126, 126)),
+                                      )),
+                          ),
+                          // Display the month title
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+          if (calendar.list.isNotEmpty)
+            Container(
+              //height: 200,
+              width: screenWidth(context),
+              margin: EdgeInsets.only(bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                    child: Text(
+                      'Calender Events',
+                      style: TextStyle(
+                        fontSize: 17.0,
+                        color: AppColors.apptheme,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-
-                  if (currentDateData.calenderEvent!.isEmpty)
-                    const Expanded(
-                      flex: 0,
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-
-                  if (currentDateData.calenderEvent!.isNotEmpty)
-                    if (currentDateData.calenderEvent![0].icon != null)
-                      Expanded(
-                        flex: 0,
-                        child: SizedBox(
-                          child: Image.network(
-                            currentDateData.calenderEvent![0].icon.toString(),
-                            // Replace with your image URL
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                  if (currentDateData.calenderEvent!.isNotEmpty)
-                    if (currentDateData.calenderEvent![0].icon == null)
-                      const Expanded(
-                        flex: 0,
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                        child: english
-                            ? Text(
-                                "${currentDateData.monthTitleEng}${currentDateData.pakshaTitleEng}${currentDateData.tithiTitleEng}" ??
-                                    '',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: isCurrentDate
-                                        ? Colors.white
-                                        : Color.fromARGB(255, 127, 126, 126)),
-                              )
-                            : Text(
-                                "${currentDateData.monthTitleGuj}${currentDateData.pakshaTitleGuj}${currentDateData.tithiTitleGuj}" ??
-                                    '',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: isCurrentDate
-                                        ? Colors.white
-                                        : Color.fromARGB(255, 127, 126, 126)),
-                              )),
-                  ), // Display the month title
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: calendar.list.length,
+                    itemBuilder: (context, index) {
+                      Calender monthData = calendar.list[index];
+                      if (DateTime.parse(monthData.icDate!).year ==
+                              month.year &&
+                          DateTime.parse(monthData.icDate!).month ==
+                              month.month) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: monthData.calenderEvent!
+                              .map((event) =>
+                                  _buildEventItem(event, monthData.icDate!))
+                              .toList(),
+                        );
+                      } else {
+                        return SizedBox(); // Return an empty container for months without events
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
-          );
-        }
-      },
+          if (calendar.list
+              .where((monthData) =>
+          DateTime.parse(monthData.icDate!).year == month.year &&
+              DateTime.parse(monthData.icDate!).month == month.month)
+              .every((monthData) => monthData.calenderEvent!.isEmpty))
+            Container(
+              //height: 100,
+              color: Colors.transparent,
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                'No events for this month',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

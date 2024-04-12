@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,12 +25,14 @@ class BooksController extends GetxController {
   ];
   void selectLang(String item) {
     selectedLang.value = item;
+    update();
     getBooks();
   }
 
   void searchBook(String item) {
     searchQuery.value = item;
-    getBooks();
+    update();
+    getBooks(search: searchQuery.value);
   }
 
   // loadPdfFromUrl(String url) {
@@ -47,7 +51,8 @@ class BooksController extends GetxController {
       update();
       print(selectedLang);
       print(search);
-      String apiUrl = 'https://loyadham.in/api/webservice/book';
+      String apiUrl = 'https://loyadham.in/api/webservice/book?language=$selectedLang&search=${searchController.text}';
+      log("finalUrl${apiUrl}");
 
       final response = await dio.get(
         apiUrl,
