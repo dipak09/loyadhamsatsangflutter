@@ -14,6 +14,8 @@ class DarshanPlaceController extends GetxController {
   RxBool isLoading = false.obs;
   List<String> darshanPlaceItems = [];
 
+  RxString selectedPlace = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -46,6 +48,7 @@ class DarshanPlaceController extends GetxController {
       for (int i = 0; i < darshanPlaceList.length; i++) {
         darshanPlaceItems.add(darshanPlaceList[i].title.toString());
       }
+      selectedPlace.value = darshanPlaceItems.first;
       log("eventPlaceItems${darshanPlaceItems.length}");
       isLoading(false);
       update();

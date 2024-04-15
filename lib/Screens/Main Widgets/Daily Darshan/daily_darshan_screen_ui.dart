@@ -140,7 +140,7 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                         fontWeight: FontWeight.w600),
                     underline: SizedBox.shrink(),
                     isExpanded: true,
-                    value: dailyDarshanPlaceController.darshanPlaceItems.isNotEmpty?dailyDarshanPlaceController.darshanPlaceItems.first:null,
+                    value: dailyDarshanPlaceController.selectedPlace.value !=""?dailyDarshanPlaceController.selectedPlace.value:null,
                     items: dailyDarshanPlaceController.darshanPlaceItems
                         .map((item) => DropdownMenuItem<String>(
                       value: item,
@@ -148,8 +148,12 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                     ))
                         .toList(),
                     onChanged: (item) {
-                      DailyDarshan.title(item!);
-                      DailyDarshan.getValue();
+                      log("item${item}");
+                      setState(() {
+                        dailyDarshanPlaceController.selectedPlace.value = item.toString();
+                      });
+                      DailyDarshan.title(dailyDarshanPlaceController.selectedPlace.value);
+                      //DailyDarshan.getValue();
                     })),
           ],
         ),

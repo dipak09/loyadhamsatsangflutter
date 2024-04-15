@@ -14,7 +14,7 @@ class EventsPlaceController extends GetxController {
   RxBool isLoading = false.obs;
    List<String> eventPlaceItems = [];
 
-
+  RxString selectedPlace = ''.obs;
   @override
   void onInit() {
     super.onInit();
@@ -48,7 +48,8 @@ class EventsPlaceController extends GetxController {
       for(int i = 0 ; i<eventPlaceList.length ; i++){
         eventPlaceItems.add(eventPlaceList[i].eventTitle.toString());
       }
-      log("eventPlaceItems${eventPlaceItems.length}");
+      selectedPlace.value = eventPlaceItems.first;
+      log("selectedPlace${eventPlaceItems.first}");
       isLoading(false);
       update();
     } catch (error) {

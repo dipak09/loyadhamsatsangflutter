@@ -12,7 +12,7 @@ import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 class DailyDarshanController extends GetxController {
   Dio dio = Dio();
   List<DailyDarshan> dailyDarshanList = [];
-  RxString selectedTitle = 'Thakorji Maharaj'.obs;
+  RxString selectedTitle = ''.obs;
   // final List<String> items = [
   //   'Thakorji Maharaj',
   //   'Loyadham NJ',
@@ -56,7 +56,8 @@ class DailyDarshanController extends GetxController {
   void title(String item) {
     selectedTitle.value = item;
     update();
-    //getValue();
+    log("selectedTitle$selectedTitle");
+    getValue();
   }
 
   var currentIndex = 0.obs;

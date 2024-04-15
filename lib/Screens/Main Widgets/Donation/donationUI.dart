@@ -30,7 +30,8 @@ class _DonationUIState extends State<DonationUI> {
   late List<List<bool>> _subDonationCheckboxValues;
   late double _totalAmount;
   List<Map<String, dynamic>> _selectedDonations = [];
-  List<List<TextEditingController>> _textEditingControllerList = [];
+  List<List<TextEditingController>> _amtTextEditingControllerList = [];
+  List<List<TextEditingController>> _decTextEditingControllerList = [];
   List<List<String>> _selectDropDownList = [];
   List<List<String>> _selectDate = [];
 
@@ -46,16 +47,30 @@ class _DonationUIState extends State<DonationUI> {
           false,
         ),
       );
-      _textEditingControllerList = List.generate(
+      _amtTextEditingControllerList = List.generate(
         _getDonationController.donationList.length,
         (index) => List.generate(
           _getDonationController.donationList[index].subDonations.length,
           (subIndex) => TextEditingController(),
         ),
       );
+      _decTextEditingControllerList = List.generate(
+        _getDonationController.donationList.length,
+            (index) => List.generate(
+          _getDonationController.donationList[index].subDonations.length,
+              (subIndex) => TextEditingController(),
+        ),
+      );
       _selectDropDownList = List.generate(
         _getDonationController.donationList.length,
         (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          '', // Initialize with empty string or any default value
+        ),
+      );
+      _selectDate = List.generate(
+        _getDonationController.donationList.length,
+            (index) => List.filled(
           _getDonationController.donationList[index].subDonations.length,
           '', // Initialize with empty string or any default value
         ),
@@ -77,8 +92,8 @@ class _DonationUIState extends State<DonationUI> {
               double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
-            if (_textEditingControllerList[i][j].text.isNotEmpty) {
-              amount = double.parse(_textEditingControllerList[i][j].text);
+            if (_amtTextEditingControllerList[i][j].text.isNotEmpty) {
+              amount = double.parse(_amtTextEditingControllerList[i][j].text);
             }
           }
           totalAmount += amount;
@@ -105,7 +120,7 @@ class _DonationUIState extends State<DonationUI> {
               double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
-            String enteredText = _textEditingControllerList[i][j].text;
+            String enteredText = _amtTextEditingControllerList[i][j].text;
             if (enteredText.isNotEmpty) {
               amount = double.parse(enteredText);
             }
@@ -118,26 +133,35 @@ class _DonationUIState extends State<DonationUI> {
   }
 
   String generateEnteredDataJSON() {
+    double userEnterAmount = 0;
     List<Map<String, dynamic>> enteredDataJson = [];
     for (int i = 0; i < _getDonationController.donationList.length; i++) {
       var donationType = _getDonationController.donationList[i];
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
-          double amount =
+
+           userEnterAmount =
               double.parse(donationType.subDonations[j].amount.toString());
+          if (userEnterAmount == 0) {
+            // If amount is zero, check if there's a value entered in the text field
+            String enteredText = _amtTextEditingControllerList[i][j].text;
+            if (enteredText.isNotEmpty) {
+              userEnterAmount = double.parse(enteredText);
+            }
+          }
           String subtype = donationType.subDonations[j].subType;
-          String? description = _textEditingControllerList[i][j].text.isNotEmpty
-              ? _textEditingControllerList[i][j].text
-              : null;
-          String? selectedDate =
-              userSelectedDate; // Implement selection of date if needed
+          String? description = _decTextEditingControllerList[i][j].text.isNotEmpty
+              ? _decTextEditingControllerList[i][j].text
+              : "";
+          String? selectedDate =_selectDate[i][j].isNotEmpty?_selectDate[i][j]:"";//ement selection of date if needed
           //String? selectedDropdownValue =_selectDropDownList[i][j].toString(); // Implement selection of dropdown value if needed
-          String? selectedDropdownValue =
-              ""; // Implement selection of dropdown value if needed
+          String? selectedDropdownValue = _selectDropDownList[i][j].isNotEmpty
+              ? _selectDropDownList[i][j].toString()
+              : "";// Implement selection of dropdown value if needed
 
           DonationData donationData = DonationData(
             subtype: subtype,
-            amount: amount,
+            amount: userEnterAmount,
             description: description,
             selectedDate: selectedDate,
             selectedDropdownValue: selectedDropdownValue,
@@ -190,8 +214,39 @@ class _DonationUIState extends State<DonationUI> {
                                             .asMap()
                                             .entries
                                             .map((entry) => ExpansionTileChild(
+                                          selectedDate: _selectDate[index][entry.key].toString(),
+                                          selectDateOnPressed: () async {
+                                            String selectedDate = "";
+                                            // Show date picker dialog
+                                            final DateTime? pickedDate = await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2100),
+                                            );
+                                            if (pickedDate != null) {
+                                              // Set selected date
+                                              setState(() {
+                                                selectedDate = DateFormat('yyyy-MM-dd')
+                                                    .format(pickedDate)
+                                                    .toString();
+                                              });
+
+                                              setState(() {
+                                                _selectDate[index][entry.key] = selectedDate;
+                                              });
+                                            }
+                                          },
+                                        //  selectValue: _selectDropDownList,
+                                          dropDownOnChanged: (p0) {
+                                              setState(() {
+                                                _selectDropDownList[index][entry.key] = p0.toString();
+                                              });
+
+                                          },
+                                          decController: _decTextEditingControllerList[index][entry.key],
                                                   zeroAmtController:
-                                                      _textEditingControllerList[
+                                                      _amtTextEditingControllerList[
                                                           index][entry.key],
                                                   zeroAmtOnChanged: (p0) {
                                                     setState(() {
@@ -439,11 +494,20 @@ class ExpansionTileChild extends StatefulWidget {
   final bool dropdownMandatory;
   final String? description;
   final String? dropdownLabel;
+ //  List<List<String>>? selectValue;
   final TextEditingController? zeroAmtController;
+  final TextEditingController? decController;
   final List<dynamic>? dropdownName;
+
   final Function(String)? zeroAmtOnChanged;
 
-  const ExpansionTileChild({
+  Function(String?)? dropDownOnChanged;
+
+   Function()? selectDateOnPressed;
+
+  String? selectedDate;
+
+   ExpansionTileChild({
     Key? key,
     required this.title,
     required this.amount,
@@ -460,6 +524,11 @@ class ExpansionTileChild extends StatefulWidget {
     required this.dropdownName,
     this.zeroAmtController,
     this.zeroAmtOnChanged,
+    this.decController,
+    this.dropDownOnChanged,
+    this.selectDateOnPressed,
+     this.selectedDate
+     //this.selectValue
   }) : super(key: key);
 
   @override
@@ -467,8 +536,11 @@ class ExpansionTileChild extends StatefulWidget {
 }
 
 class _ExpansionTileChildState extends State<ExpansionTileChild> {
-  DateTime? selectedDate;
+
   String? selectedDropdownValue;
+  String? getSelectedDropdownValue() {
+    return selectedDropdownValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -507,6 +579,7 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: TextField(
+              controller: widget.decController,
               decoration: InputDecoration(
                 labelText: widget.description ?? 'Name and Purpose',
               ),
@@ -519,29 +592,31 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () async {
-                      // Show date picker dialog
-                      final DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        // Set selected date
-                        setState(() {
-                          selectedDate = pickedDate;
-                          userSelectedDate = DateFormat('yyyy-MM-dd')
-                              .format(selectedDate!)
-                              .toString();
-                        });
-                      }
-                    },
-                    child: Text(selectedDate.toString() == "null"
-                        ? "Select Date"
-                        : DateFormat('yyyy-MM-dd').format(selectedDate!)),
+                    onPressed: widget.selectDateOnPressed,
+                    // onPressed: () async {
+                    //   // Show date picker dialog
+                    //   final DateTime? pickedDate = await showDatePicker(
+                    //     context: context,
+                    //     initialDate: DateTime.now(),
+                    //     firstDate: DateTime(2000),
+                    //     lastDate: DateTime(2100),
+                    //   );
+                    //   if (pickedDate != null) {
+                    //     // Set selected date
+                    //     setState(() {
+                    //       selectedDate = pickedDate;
+                    //       // userSelectedDate = DateFormat('yyyy-MM-dd')
+                    //       //     .format(selectedDate!)
+                    //       //     .toString();
+                    //     });
+                    //   }
+                    // },
+                    child: Text(widget.selectedDate.toString() == ""
+                        ? "Select Date":widget.selectedDate.toString()
+                        //: DateFormat('yyyy-MM-dd').format(widget.selectedDate!)),
                   ),
                 ),
+                )
               ],
             ),
           ),
@@ -551,16 +626,24 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: DropdownButtonFormField<String>(
+
               decoration: InputDecoration(
                 labelText: widget.dropdownLabel,
               ),
               value: selectedDropdownValue,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedDropdownValue = newValue;
-                  userSelectDropDownValue = newValue.toString();
-                });
-              },
+              onChanged: widget.dropDownOnChanged,
+              // onChanged: (newValue) {
+              //   setState(() {
+              //     selectedDropdownValue = newValue;
+              //    // widget.selectValue! = newValue.toString();
+              //     //String? selectedValue = getSelectedDropdownValue();
+              //    // widget.selectValue?.add([newValue.toString()]);
+              //     selectedDropDownValues!.add([newValue.toString()]);
+              //    // log("final selectValue${widget.selectValue}");
+              // //    widget.selectValue?.add(newValue.toString());
+              // //    userSelectDropDownValue = newValue.toString();
+              //   });
+              // },
               items: widget.dropdownName!
                   .map<DropdownMenuItem<String>>(
                     (value) => DropdownMenuItem<String>(

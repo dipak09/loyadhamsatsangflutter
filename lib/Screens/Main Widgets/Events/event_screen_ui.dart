@@ -141,7 +141,7 @@ class _EventScreenUIState extends State<EventScreenUI> {
                           fontWeight: FontWeight.w600),
                       underline: SizedBox.shrink(),
                       isExpanded: true,
-                      value: EventPlaces.eventPlaceItems.isNotEmpty?EventPlaces.eventPlaceItems.first:null,
+                      value: EventPlaces.selectedPlace.value !=""?EventPlaces.selectedPlace.value:null,
                       items: EventPlaces.eventPlaceItems
                           .map((item) => DropdownMenuItem<String>(
                         value: item,
@@ -149,7 +149,10 @@ class _EventScreenUIState extends State<EventScreenUI> {
                       ))
                           .toList(),
                       onChanged: (item) {
-                        Events.selectItem(item!);
+                        setState(() {
+                          EventPlaces.selectedPlace.value =item.toString();
+                        });
+                        Events.selectItem(EventPlaces.selectedPlace.value);
                       })),
             ),
           ],
