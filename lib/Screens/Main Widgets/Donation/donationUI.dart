@@ -186,7 +186,7 @@ class _DonationUIState extends State<DonationUI> {
               : Container(
                   height: screenHeight(context),
                   width: screenWidth(context),
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  margin: EdgeInsets.symmetric( horizontal: 10),
                   child: Stack(
                     children: [
                       SingleChildScrollView(
@@ -431,7 +431,7 @@ class _DonationUIState extends State<DonationUI> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) => PersonalInfoUI(
-                                                      totalamount: _totalAmount,
+                                                      totalamount: _totalAmount, donationData: result,
                                                     )));
                                       }
                                     },

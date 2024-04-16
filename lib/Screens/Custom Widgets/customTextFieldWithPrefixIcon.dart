@@ -2,26 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 
-class CustomTextField extends StatefulWidget {
+class CustomTextFieldWithPrefixIcon extends StatefulWidget {
   String hintname;
   TextEditingController ?controller;
   TextInputType? keyboardType;
   bool? readOnly;
+  Widget? prefixIcon;
   Function(String)? onChanged;
-  CustomTextField({
+  CustomTextFieldWithPrefixIcon({
     Key? key,
     required this.hintname,
-     this.controller,
-     this.onChanged,
+    this.controller,
+    this.onChanged,
     this.readOnly,
+    this.prefixIcon,
     this.keyboardType,
   }) : super(key: key);
 
   @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
+  State<CustomTextFieldWithPrefixIcon> createState() => _CustomTextFieldWithPrefixIconState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _CustomTextFieldWithPrefixIconState extends State<CustomTextFieldWithPrefixIcon> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,12 +33,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
           border: Border.all(color: AppColors.apptheme),
           borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
+
         readOnly: widget.readOnly??false,
         onChanged: widget.onChanged,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 15.0, bottom: 10.0),
+          prefixIcon: widget.prefixIcon??SizedBox.shrink(),
+          //contentPadding:  EdgeInsets.only(left: 13, top: 18, bottom: 18),
           hintText: widget.hintname,
           hintStyle: TextStyle(color: Color.fromARGB(255, 54, 73, 102)),
           border: InputBorder.none,

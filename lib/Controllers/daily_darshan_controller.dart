@@ -7,11 +7,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:loyadhamsatsang/Controllers/dashan_place_controller.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 
 class DailyDarshanController extends GetxController {
   Dio dio = Dio();
   List<DailyDarshan> dailyDarshanList = [];
+  var dailyDarshanPlaceController = Get.put(DarshanPlaceController());
   RxString selectedTitle = ''.obs;
   // final List<String> items = [
   //   'Thakorji Maharaj',
@@ -26,7 +28,6 @@ class DailyDarshanController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getValue();
     Future.delayed(Duration(seconds: 1), () {
       getValue();
     });
@@ -49,6 +50,8 @@ class DailyDarshanController extends GetxController {
 
   void selectItem(String item) {
     selectedTitle.value = item;
+    dailyDarshanPlaceController.selectedPlace.value = item;
+    update();
     // print(item);
     //getValue();
   }
@@ -125,20 +128,18 @@ class DailyDarshanController extends GetxController {
   Future<void> getData({String? title, String? date}) async {
     try {
       isLoading(true);
-      update();
       print(date);
       print(title);
 
-      dailyDarshanList = [];
-      isLoading(true);
-      update();
+      //dailyDarshanList = [];
       String apiUrl =
           'https://loyadham.in/api/webservice/dailydarshan/?title=${title}&album_title=${date}';
 
       final response = await dio.get(
         apiUrl,
       );
-      log(apiUrl);
+      log("apiUrl$apiUrl");
+      dailyDarshanList.clear();
       final data = response.data;
       data.forEach((el) {
         DailyDarshan dailyDarshan = DailyDarshan.fromJson(el);
