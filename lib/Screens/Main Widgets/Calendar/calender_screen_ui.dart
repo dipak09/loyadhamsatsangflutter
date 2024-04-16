@@ -651,67 +651,67 @@ Future<void> popupdialog(
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                    child: RichText(
-                        text: TextSpan(
-                      // Note: Styles for TextSpans must be explicitly defined.
-                      // Child text spans will inherit styles from parent
-                      style: const TextStyle(
-                          fontSize: 17.0,
-                          color: AppColors.apptheme,
-                          fontWeight: FontWeight.w500),
-                      children: <TextSpan>[
-                        const TextSpan(text: 'Chandra: '),
-                        gujSelect
-                            ? TextSpan(
-                                text: chandra_title_Guj.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 67, 67, 67),
-                                    fontSize: 16.0))
-                            : TextSpan(
-                                text: chandra_title_eng.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 67, 67, 67),
-                                    fontSize: 16.0))
-                      ],
-                    )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                    child: RichText(
-                        text: TextSpan(
-                      // Note: Styles for TextSpans must be explicitly defined.
-                      // Child text spans will inherit styles from parent
-                      style: const TextStyle(
-                          fontSize: 17.0,
-                          color: AppColors.apptheme,
-                          fontWeight: FontWeight.w500),
-                      children: <TextSpan>[
-                        TextSpan(text: 'Nakshatra: '),
-                        gujSelect
-                            ? TextSpan(
-                                text: nakshatar_title_Guj.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 67, 67, 67),
-                                    fontSize: 16.0))
-                            : TextSpan(
-                                text: nakshatra_title_eng.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 67, 67, 67),
-                                    fontSize: 16.0))
-                      ],
-                    )),
-                  ),
-                  calenderEvent!.isEmpty || calenderEvent!.length == 0
-                      ? SizedBox()
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                  //   child: RichText(
+                  //       text: TextSpan(
+                  //     // Note: Styles for TextSpans must be explicitly defined.
+                  //     // Child text spans will inherit styles from parent
+                  //     style: const TextStyle(
+                  //         fontSize: 17.0,
+                  //         color: AppColors.apptheme,
+                  //         fontWeight: FontWeight.w500),
+                  //     children: <TextSpan>[
+                  //       const TextSpan(text: 'Chandra: '),
+                  //       gujSelect
+                  //           ? TextSpan(
+                  //               text: chandra_title_Guj.toString(),
+                  //               style: const TextStyle(
+                  //                   fontWeight: FontWeight.w500,
+                  //                   color: Color.fromARGB(255, 67, 67, 67),
+                  //                   fontSize: 16.0))
+                  //           : TextSpan(
+                  //               text: chandra_title_eng.toString(),
+                  //               style: const TextStyle(
+                  //                   fontWeight: FontWeight.w500,
+                  //                   color: Color.fromARGB(255, 67, 67, 67),
+                  //                   fontSize: 16.0))
+                  //     ],
+                  //   )),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                  //   child: RichText(
+                  //       text: TextSpan(
+                  //     // Note: Styles for TextSpans must be explicitly defined.
+                  //     // Child text spans will inherit styles from parent
+                  //     style: const TextStyle(
+                  //         fontSize: 17.0,
+                  //         color: AppColors.apptheme,
+                  //         fontWeight: FontWeight.w500),
+                  //     children: <TextSpan>[
+                  //       TextSpan(text: 'Nakshatra: '),
+                  //       gujSelect
+                  //           ? TextSpan(
+                  //               text: nakshatar_title_Guj.toString(),
+                  //               style: const TextStyle(
+                  //                   fontWeight: FontWeight.w500,
+                  //                   color: Color.fromARGB(255, 67, 67, 67),
+                  //                   fontSize: 16.0))
+                  //           : TextSpan(
+                  //               text: nakshatra_title_eng.toString(),
+                  //               style: const TextStyle(
+                  //                   fontWeight: FontWeight.w500,
+                  //                   color: Color.fromARGB(255, 67, 67, 67),
+                  //                   fontSize: 16.0))
+                  //     ],
+                  //   )),
+                  // ),
+                  calenderEvent!.isEmpty || calenderEvent.length == 0
+                      ? SizedBox.shrink()
                       : Expanded(
                           child: ListView.builder(
-                          itemCount: calenderEvent!.length,
+                          itemCount: calenderEvent.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
                               padding: const EdgeInsets.only(left: 10.0),
