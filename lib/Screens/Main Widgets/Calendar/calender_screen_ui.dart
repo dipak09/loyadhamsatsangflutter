@@ -375,7 +375,8 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                           currentDateData.pakshaTitleGuj.toString(),
                           currentDateData.sunset.toString(),
                           currentDateData.sunrise.toString(),
-                          currentDateData.calenderEvent);
+                          currentDateData.calenderEvent,
+                          calendar);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -527,8 +528,8 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             ),
           if (calendar.list
               .where((monthData) =>
-          DateTime.parse(monthData.icDate!).year == month.year &&
-              DateTime.parse(monthData.icDate!).month == month.month)
+                  DateTime.parse(monthData.icDate!).year == month.year &&
+                  DateTime.parse(monthData.icDate!).month == month.month)
               .every((monthData) => monthData.calenderEvent!.isEmpty))
             Container(
               //height: 100,
@@ -564,7 +565,8 @@ Future<void> popupdialog(
     String paksha_title_guj,
     String sunset,
     String sunRise,
-    List<CalenderEvent>? calenderEvent) {
+    List<CalenderEvent>? calenderEvent,
+    CalanderController calendar) {
   var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
   return showDialog(
       context: context,
@@ -572,7 +574,7 @@ Future<void> popupdialog(
         return Dialog(
             backgroundColor: Colors.white,
             child: SizedBox(
-              height: screenHeight(context) / 1.5,
+              height: 350,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -709,80 +711,131 @@ Future<void> popupdialog(
                   // ),
                   calenderEvent!.isEmpty || calenderEvent.length == 0
                       ? SizedBox.shrink()
-                      : Expanded(
-                          child: ListView.builder(
-                          itemCount: calenderEvent.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                calenderEvent[index]
-                                    .vratUtsavNameEng
-                                    .toString(),
+                      : Container(
+                    padding: EdgeInsets.all(10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: calenderEvent.map((event) {
+                              return Text(
+                                event.vratUtsavNameEng.toString(),
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black),
-                              ),
-                            );
-                          },
-                        )),
-                  Spacer(),
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(30.0),
-                              bottomRight: Radius.circular(30.0)),
-                          child: Image.network(
-                            'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
-                            // height: 200.0,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Expanded(
+                    child: Container(
+                     // height: 180,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
                         children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                            child: RichText(
-                                text: TextSpan(
-                              // Note: Styles for TextSpans must be explicitly defined.
-                              // Child text spans will inherit styles from parent
-                              style: const TextStyle(
-                                  fontSize: 17.0,
-                                  color: AppColors.apptheme,
-                                  fontWeight: FontWeight.w500),
-                              children: <TextSpan>[
-                                TextSpan(text: sunRise),
-                              ],
-                            )),
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(30.0),
+                                bottomRight: Radius.circular(30.0)),
+                            child: Image.network(
+                              'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
+                              // height: 200.0,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                            child: RichText(
-                                text: TextSpan(
-                              // Note: Styles for TextSpans must be explicitly defined.
-                              // Child text spans will inherit styles from parent
-                              style: const TextStyle(
-                                  fontSize: 17.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                              children: <TextSpan>[
-                                TextSpan(text: sunset),
-                              ],
-                            )),
-                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: const TextStyle(
+                                    fontSize: 17.0,
+                                    color: AppColors.apptheme,
+                                    fontWeight: FontWeight.w500),
+                                children: <TextSpan>[
+                                  TextSpan(text: sunRise),
+                                ],
+                              )),
+                              RichText(
+                                  text: TextSpan(
+                                // Note: Styles for TextSpans must be explicitly defined.
+                                // Child text spans will inherit styles from parent
+                                style: const TextStyle(
+                                    fontSize: 17.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                                children: <TextSpan>[
+                                  TextSpan(text: sunset),
+                                ],
+                              )),
+                            ],
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   )
+                  // Stack(
+                  //   alignment: Alignment.bottomCenter,
+                  //   children: [
+                  //     Container(
+                  //      // height: 180,
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.only(top: 0.0),
+                  //         child: ClipRRect(
+                  //           borderRadius: BorderRadius.only(
+                  //               bottomLeft: Radius.circular(30.0),
+                  //               bottomRight: Radius.circular(30.0)),
+                  //           child: Image.network(
+                  //             'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
+                  //             // height: 200.0,
+                  //             width: double.infinity,
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //       children: [
+                  //         Padding(
+                  //           padding:
+                  //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                  //           child: RichText(
+                  //               text: TextSpan(
+                  //             // Note: Styles for TextSpans must be explicitly defined.
+                  //             // Child text spans will inherit styles from parent
+                  //             style: const TextStyle(
+                  //                 fontSize: 17.0,
+                  //                 color: AppColors.apptheme,
+                  //                 fontWeight: FontWeight.w500),
+                  //             children: <TextSpan>[
+                  //               TextSpan(text: sunRise),
+                  //             ],
+                  //           )),
+                  //         ),
+                  //         Padding(
+                  //           padding:
+                  //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                  //           child: RichText(
+                  //               text: TextSpan(
+                  //             // Note: Styles for TextSpans must be explicitly defined.
+                  //             // Child text spans will inherit styles from parent
+                  //             style: const TextStyle(
+                  //                 fontSize: 17.0,
+                  //                 color: Colors.white,
+                  //                 fontWeight: FontWeight.w500),
+                  //             children: <TextSpan>[
+                  //               TextSpan(text: sunset),
+                  //             ],
+                  //           )),
+                  //         ),
+                  //       ],
+                  //     )
+                  //   ],
+                  // )
+                  ///
                   // Padding(
                   //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
                   //   child: RichText(
