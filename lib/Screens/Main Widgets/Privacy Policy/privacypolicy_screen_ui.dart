@@ -24,7 +24,7 @@ class _PrivacyPolicyScreenUIState extends State<PrivacyPolicyScreenUI> {
         progressIndicator: Center(child: CircularProgressIndicator()),
         child: Scaffold(
           appBar: CustomAppBar(
-            title: "Term & Conditions",
+            title: "Privacy Policy",
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -246,7 +246,8 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                 height: 40,
                 fit: BoxFit.cover,
               )
-            : SizedBox(width: 40, height: 40), // Placeholder if icon is null
+            : Image.asset("assets/images/favicon.png",width: 40,height: 40,),
+        // Placeholder if icon is null
         title: Text(
           gujarati
               ? event.vratUtsavNameGuj.toString()
@@ -353,6 +354,8 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                         .isSameDate(date),
                     orElse: () => Calender(),
                   );
+                  bool hasEvents = currentDateData.calenderEvent != null &&
+                      currentDateData.calenderEvent!.isNotEmpty;
 
                   return InkWell(
                     onTap: () {
@@ -391,7 +394,11 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                               width: 1.0,
                               color: Colors.grey), // Example: bottom border
                         ),
-                        color: isCurrentDate ? AppColors.apptheme : null,
+                        color: isCurrentDate
+                            ? AppColors.apptheme
+                            : hasEvents
+                                ? Colors.grey.withOpacity(0.3)
+                                : null,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -507,6 +514,9 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                     itemCount: calendar.list.length,
                     itemBuilder: (context, index) {
                       Calender monthData = calendar.list[index];
+                      DateTime monthDate = DateTime.parse(monthData.icDate!);
+                      String formattedDate =
+                          DateFormat('dd-MMM-yyyy').format(monthDate);
                       if (DateTime.parse(monthData.icDate!).year ==
                               month.year &&
                           DateTime.parse(monthData.icDate!).month ==
@@ -515,7 +525,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: monthData.calenderEvent!
                               .map((event) =>
-                                  _buildEventItem(event, monthData.icDate!))
+                                  _buildEventItem(event, formattedDate))
                               .toList(),
                         );
                       } else {
@@ -547,6 +557,365 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
 }
 
 //! Popup UI---------------------->
+// Future<void> popupdialog(
+//     BuildContext context,
+//     String date,
+//     String year,
+//     int month,
+//     String monttitle,
+//     String pakshaTitle,
+//     String tithiTitle,
+//     String chandra_title_eng,
+//     String nakshatra_title_eng,
+//     String tithi_titl_eGuj,
+//     String chandra_title_Guj,
+//     String nakshatar_title_Guj,
+//     bool gujSelect,
+//     String month_title_guj,
+//     String paksha_title_guj,
+//     String sunset,
+//     String sunRise,
+//     List<CalenderEvent>? calenderEvent,
+//     CalanderController calendar) {
+//   var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
+//   return showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Dialog(
+//             backgroundColor: Colors.white,
+//             child: SizedBox(
+//               height: calenderEvent!.isEmpty ? 150 : 250,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Container(
+//                     height: 100.0,
+//                     width: double.infinity,
+//                     decoration: const BoxDecoration(
+//                         color: AppColors.apptheme,
+//                         borderRadius: BorderRadius.only(
+//                             topLeft: Radius.circular(20.0),
+//                             topRight: Radius.circular(20.0))),
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Row(
+//                           //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                           children: [
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 10.0),
+//                               child: Text(aplhaMonth.toString(),
+//                                   style: const TextStyle(
+//                                       color: Colors.white,
+//                                       fontSize: 20.0,
+//                                       fontWeight: FontWeight.w500)),
+//                             ),
+//                             Padding(
+//                               padding: const EdgeInsets.only(
+//                                   left: 10.0, right: 10.0),
+//                               child: Text(
+//                                 date,
+//                                 style: const TextStyle(
+//                                     color: Colors.white,
+//                                     fontSize: 20.0,
+//                                     fontWeight: FontWeight.w500),
+//                               ),
+//                             ),
+//                             Text(year,
+//                                 style: const TextStyle(
+//                                     color: Colors.white,
+//                                     fontSize: 20.0,
+//                                     fontWeight: FontWeight.w500))
+//                           ],
+//                         ),
+//                         Padding(
+//                           padding:
+//                               const EdgeInsets.only(left: 12.0, right: 10.0),
+//                           child: gujSelect
+//                               ? Text(
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   "${month_title_guj}"
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   " ${paksha_title_guj}"
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   " ${tithi_titl_eGuj}",
+//                                   textAlign: TextAlign.left,
+//                                   style: const TextStyle(
+//                                       fontSize: 20.0,
+//                                       fontWeight: FontWeight.w400,
+//                                       color: Colors.white),
+//                                 )
+//                               : Text(
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   "${monttitle}"
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   " ${pakshaTitle}"
+//                                   // ignore: unnecessary_brace_in_string_interps
+//                                   " ${tithiTitle}",
+//                                   textAlign: TextAlign.left,
+//                                   style: const TextStyle(
+//                                       fontSize: 20.0,
+//                                       fontWeight: FontWeight.w400,
+//                                       color: Colors.white),
+//                                 ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                   // Padding(
+//                   //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+//                   //   child: RichText(
+//                   //       text: TextSpan(
+//                   //     // Note: Styles for TextSpans must be explicitly defined.
+//                   //     // Child text spans will inherit styles from parent
+//                   //     style: const TextStyle(
+//                   //         fontSize: 17.0,
+//                   //         color: AppColors.apptheme,
+//                   //         fontWeight: FontWeight.w500),
+//                   //     children: <TextSpan>[
+//                   //       const TextSpan(text: 'Chandra: '),
+//                   //       gujSelect
+//                   //           ? TextSpan(
+//                   //               text: chandra_title_Guj.toString(),
+//                   //               style: const TextStyle(
+//                   //                   fontWeight: FontWeight.w500,
+//                   //                   color: Color.fromARGB(255, 67, 67, 67),
+//                   //                   fontSize: 16.0))
+//                   //           : TextSpan(
+//                   //               text: chandra_title_eng.toString(),
+//                   //               style: const TextStyle(
+//                   //                   fontWeight: FontWeight.w500,
+//                   //                   color: Color.fromARGB(255, 67, 67, 67),
+//                   //                   fontSize: 16.0))
+//                   //     ],
+//                   //   )),
+//                   // ),
+//                   // Padding(
+//                   //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+//                   //   child: RichText(
+//                   //       text: TextSpan(
+//                   //     // Note: Styles for TextSpans must be explicitly defined.
+//                   //     // Child text spans will inherit styles from parent
+//                   //     style: const TextStyle(
+//                   //         fontSize: 17.0,
+//                   //         color: AppColors.apptheme,
+//                   //         fontWeight: FontWeight.w500),
+//                   //     children: <TextSpan>[
+//                   //       TextSpan(text: 'Nakshatra: '),
+//                   //       gujSelect
+//                   //           ? TextSpan(
+//                   //               text: nakshatar_title_Guj.toString(),
+//                   //               style: const TextStyle(
+//                   //                   fontWeight: FontWeight.w500,
+//                   //                   color: Color.fromARGB(255, 67, 67, 67),
+//                   //                   fontSize: 16.0))
+//                   //           : TextSpan(
+//                   //               text: nakshatra_title_eng.toString(),
+//                   //               style: const TextStyle(
+//                   //                   fontWeight: FontWeight.w500,
+//                   //                   color: Color.fromARGB(255, 67, 67, 67),
+//                   //                   fontSize: 16.0))
+//                   //     ],
+//                   //   )),
+//                   // ),
+//                   calenderEvent.isEmpty || calenderEvent.length == 0
+//                       ? SizedBox.shrink()
+//                       : Expanded(
+//                           child: Container(
+//                             padding: EdgeInsets.all(10),
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: calenderEvent.map((event) {
+//                                 return Text(
+//                                   event.vratUtsavNameEng.toString(),
+//                                   style: TextStyle(
+//                                     fontWeight: FontWeight.w500,
+//                                     color: Colors.black,
+//                                   ),
+//                                 );
+//                               }).toList(),
+//                             ),
+//                           ),
+//                         ),
+//
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       ElevatedButton(
+//                           onPressed: () {
+//                             Navigator.pop(context);
+//                           },
+//                           child: Text("OK"))
+//                     ],
+//                   ),
+//                   // Expanded(
+//                   //   child: Container(
+//                   //    // height: 180,
+//                   //     child: Stack(
+//                   //       alignment: Alignment.bottomCenter,
+//                   //       children: [
+//                   //         ClipRRect(
+//                   //           borderRadius: BorderRadius.only(
+//                   //               bottomLeft: Radius.circular(30.0),
+//                   //               bottomRight: Radius.circular(30.0)),
+//                   //           child: Image.network(
+//                   //             'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
+//                   //             // height: 200.0,
+//                   //             width: double.infinity,
+//                   //             fit: BoxFit.cover,
+//                   //           ),
+//                   //         ),
+//                   //         Row(
+//                   //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                   //           children: [
+//                   //             RichText(
+//                   //                 text: TextSpan(
+//                   //               // Note: Styles for TextSpans must be explicitly defined.
+//                   //               // Child text spans will inherit styles from parent
+//                   //               style: const TextStyle(
+//                   //                   fontSize: 17.0,
+//                   //                   color: AppColors.apptheme,
+//                   //                   fontWeight: FontWeight.w500),
+//                   //               children: <TextSpan>[
+//                   //                 TextSpan(text: sunRise),
+//                   //               ],
+//                   //             )),
+//                   //             RichText(
+//                   //                 text: TextSpan(
+//                   //               // Note: Styles for TextSpans must be explicitly defined.
+//                   //               // Child text spans will inherit styles from parent
+//                   //               style: const TextStyle(
+//                   //                   fontSize: 17.0,
+//                   //                   color: Colors.white,
+//                   //                   fontWeight: FontWeight.w500),
+//                   //               children: <TextSpan>[
+//                   //                 TextSpan(text: sunset),
+//                   //               ],
+//                   //             )),
+//                   //           ],
+//                   //         )
+//                   //       ],
+//                   //     ),
+//                   //   ),
+//                   // )
+//                   ///
+//                   // Stack(
+//                   //   alignment: Alignment.bottomCenter,
+//                   //   children: [
+//                   //     Container(
+//                   //      // height: 180,
+//                   //       child: Padding(
+//                   //         padding: const EdgeInsets.only(top: 0.0),
+//                   //         child: ClipRRect(
+//                   //           borderRadius: BorderRadius.only(
+//                   //               bottomLeft: Radius.circular(30.0),
+//                   //               bottomRight: Radius.circular(30.0)),
+//                   //           child: Image.network(
+//                   //             'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
+//                   //             // height: 200.0,
+//                   //             width: double.infinity,
+//                   //             fit: BoxFit.cover,
+//                   //           ),
+//                   //         ),
+//                   //       ),
+//                   //     ),
+//                   //     Row(
+//                   //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                   //       children: [
+//                   //         Padding(
+//                   //           padding:
+//                   //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
+//                   //           child: RichText(
+//                   //               text: TextSpan(
+//                   //             // Note: Styles for TextSpans must be explicitly defined.
+//                   //             // Child text spans will inherit styles from parent
+//                   //             style: const TextStyle(
+//                   //                 fontSize: 17.0,
+//                   //                 color: AppColors.apptheme,
+//                   //                 fontWeight: FontWeight.w500),
+//                   //             children: <TextSpan>[
+//                   //               TextSpan(text: sunRise),
+//                   //             ],
+//                   //           )),
+//                   //         ),
+//                   //         Padding(
+//                   //           padding:
+//                   //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
+//                   //           child: RichText(
+//                   //               text: TextSpan(
+//                   //             // Note: Styles for TextSpans must be explicitly defined.
+//                   //             // Child text spans will inherit styles from parent
+//                   //             style: const TextStyle(
+//                   //                 fontSize: 17.0,
+//                   //                 color: Colors.white,
+//                   //                 fontWeight: FontWeight.w500),
+//                   //             children: <TextSpan>[
+//                   //               TextSpan(text: sunset),
+//                   //             ],
+//                   //           )),
+//                   //         ),
+//                   //       ],
+//                   //     )
+//                   //   ],
+//                   // )
+//                   ///
+//                   // Padding(
+//                   //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+//                   //   child: RichText(
+//                   //       text: TextSpan(
+//                   //     style: const TextStyle(
+//                   //         fontSize: 17.0,
+//                   //         color: AppColors.apptheme,
+//                   //         fontWeight: FontWeight.w500),
+//                   //     children: <TextSpan>[
+//                   //       TextSpan(text: 'SunSet: '),
+//                   //       TextSpan(
+//                   //           text: sunset.toString(),
+//                   //           style: const TextStyle(
+//                   //               fontWeight: FontWeight.w500,
+//                   //               color: Color.fromARGB(255, 67, 67, 67),
+//                   //               fontSize: 16.0))
+//                   //     ],
+//                   //   )),
+//                   // ),
+//                   // Padding(
+//                   //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+//                   //   child: RichText(
+//                   //       text: TextSpan(
+//                   //     style: const TextStyle(
+//                   //         fontSize: 17.0,
+//                   //         color: AppColors.apptheme,
+//                   //         fontWeight: FontWeight.w500),
+//                   //     children: <TextSpan>[
+//                   //       TextSpan(text: 'SunRise: '),
+//                   //       TextSpan(
+//                   //           text: sunRise.toString(),
+//                   //           style: const TextStyle(
+//                   //               fontWeight: FontWeight.w500,
+//                   //               color: Color.fromARGB(255, 67, 67, 67),
+//                   //               fontSize: 16.0))
+//                   //     ],
+//                   //   )),
+//                   // ),
+//
+//                   // const Padding(
+//                   //   padding: EdgeInsets.only(left: 10.0, top: 10.0),
+//                   //   // padding: const EdgeInsets.all(8.0),
+//                   //   child: Text(
+//                   //     "Events",
+//                   //     style: TextStyle(
+//                   //         color: AppColors.apptheme,
+//                   //         fontSize: 17.0,
+//                   //         fontWeight: FontWeight.w600),
+//                   //   ),
+//                   // ),
+//                 ],
+//               ),
+//             ));
+//       });
+// }
+
 Future<void> popupdialog(
     BuildContext context,
     String date,
@@ -566,331 +935,137 @@ Future<void> popupdialog(
     String sunset,
     String sunRise,
     List<CalenderEvent>? calenderEvent,
-    CalanderController calendar) {
+    CalanderController calendar,
+    ) async {
   var aplhaMonth = DateFormat.MMMM().format(DateTime(2000, month));
+
+  // Calculate the height needed for the events section
+  double eventsHeight = calenderEvent!.isEmpty ? 0.0 : calenderEvent.length * 20.0;
+  log("eventsHeight${eventsHeight}");
+
+  // Calculate the total height needed for the dialog
+  double totalHeight = calenderEvent.isEmpty?150.0:250.0 + eventsHeight; // 250.0 is the initial height
+
+  // Show the dialog
   return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-            backgroundColor: Colors.white,
-            child: SizedBox(
-              height: 350,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 100.0,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                        color: AppColors.apptheme,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0))),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.white,
+        child: SizedBox(
+          height: totalHeight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 100.0,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.apptheme,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(aplhaMonth.toString(),
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w500)),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            aplhaMonth.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: Text(
-                                date,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Text(year,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w500))
-                          ],
+                          ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(left: 12.0, right: 10.0),
-                          child: gujSelect
-                              ? Text(
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  "${month_title_guj}"
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  " ${paksha_title_guj}"
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  " ${tithi_titl_eGuj}",
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white),
-                                )
-                              : Text(
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  "${monttitle}"
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  " ${pakshaTitle}"
-                                  // ignore: unnecessary_brace_in_string_interps
-                                  " ${tithiTitle}",
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white),
-                                ),
+                          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Text(
+                            date,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          year,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  //   child: RichText(
-                  //       text: TextSpan(
-                  //     // Note: Styles for TextSpans must be explicitly defined.
-                  //     // Child text spans will inherit styles from parent
-                  //     style: const TextStyle(
-                  //         fontSize: 17.0,
-                  //         color: AppColors.apptheme,
-                  //         fontWeight: FontWeight.w500),
-                  //     children: <TextSpan>[
-                  //       const TextSpan(text: 'Chandra: '),
-                  //       gujSelect
-                  //           ? TextSpan(
-                  //               text: chandra_title_Guj.toString(),
-                  //               style: const TextStyle(
-                  //                   fontWeight: FontWeight.w500,
-                  //                   color: Color.fromARGB(255, 67, 67, 67),
-                  //                   fontSize: 16.0))
-                  //           : TextSpan(
-                  //               text: chandra_title_eng.toString(),
-                  //               style: const TextStyle(
-                  //                   fontWeight: FontWeight.w500,
-                  //                   color: Color.fromARGB(255, 67, 67, 67),
-                  //                   fontSize: 16.0))
-                  //     ],
-                  //   )),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  //   child: RichText(
-                  //       text: TextSpan(
-                  //     // Note: Styles for TextSpans must be explicitly defined.
-                  //     // Child text spans will inherit styles from parent
-                  //     style: const TextStyle(
-                  //         fontSize: 17.0,
-                  //         color: AppColors.apptheme,
-                  //         fontWeight: FontWeight.w500),
-                  //     children: <TextSpan>[
-                  //       TextSpan(text: 'Nakshatra: '),
-                  //       gujSelect
-                  //           ? TextSpan(
-                  //               text: nakshatar_title_Guj.toString(),
-                  //               style: const TextStyle(
-                  //                   fontWeight: FontWeight.w500,
-                  //                   color: Color.fromARGB(255, 67, 67, 67),
-                  //                   fontSize: 16.0))
-                  //           : TextSpan(
-                  //               text: nakshatra_title_eng.toString(),
-                  //               style: const TextStyle(
-                  //                   fontWeight: FontWeight.w500,
-                  //                   color: Color.fromARGB(255, 67, 67, 67),
-                  //                   fontSize: 16.0))
-                  //     ],
-                  //   )),
-                  // ),
-                  calenderEvent!.isEmpty || calenderEvent.length == 0
-                      ? SizedBox.shrink()
-                      : Container(
-                    padding: EdgeInsets.all(10),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: calenderEvent.map((event) {
-                              return Text(
-                                event.vratUtsavNameEng.toString(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                      ),
-                  Expanded(
-                    child: Container(
-                     // height: 180,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(30.0),
-                                bottomRight: Radius.circular(30.0)),
-                            child: Image.network(
-                              'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
-                              // height: 200.0,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                // Note: Styles for TextSpans must be explicitly defined.
-                                // Child text spans will inherit styles from parent
-                                style: const TextStyle(
-                                    fontSize: 17.0,
-                                    color: AppColors.apptheme,
-                                    fontWeight: FontWeight.w500),
-                                children: <TextSpan>[
-                                  TextSpan(text: sunRise),
-                                ],
-                              )),
-                              RichText(
-                                  text: TextSpan(
-                                // Note: Styles for TextSpans must be explicitly defined.
-                                // Child text spans will inherit styles from parent
-                                style: const TextStyle(
-                                    fontSize: 17.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                                children: <TextSpan>[
-                                  TextSpan(text: sunset),
-                                ],
-                              )),
-                            ],
-                          )
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 10.0),
+                      child: gujSelect
+                          ? Text(
+                        "${month_title_guj} ${paksha_title_guj} ${tithi_titl_eGuj}",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      )
+                          : Text(
+                        "${monttitle} ${pakshaTitle} ${tithiTitle}",
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  )
-                  // Stack(
-                  //   alignment: Alignment.bottomCenter,
-                  //   children: [
-                  //     Container(
-                  //      // height: 180,
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.only(top: 0.0),
-                  //         child: ClipRRect(
-                  //           borderRadius: BorderRadius.only(
-                  //               bottomLeft: Radius.circular(30.0),
-                  //               bottomRight: Radius.circular(30.0)),
-                  //           child: Image.network(
-                  //             'https://static.vecteezy.com/system/resources/previews/012/811/968/original/sun-weather-sunset-sunrise-summer-line-and-glyph-web-button-in-blue-color-vertical-banner-for-ui-and-ux-website-or-mobile-application-free-vector.jpg',
-                  //             // height: 200.0,
-                  //             width: double.infinity,
-                  //             fit: BoxFit.cover,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //       children: [
-                  //         Padding(
-                  //           padding:
-                  //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                  //           child: RichText(
-                  //               text: TextSpan(
-                  //             // Note: Styles for TextSpans must be explicitly defined.
-                  //             // Child text spans will inherit styles from parent
-                  //             style: const TextStyle(
-                  //                 fontSize: 17.0,
-                  //                 color: AppColors.apptheme,
-                  //                 fontWeight: FontWeight.w500),
-                  //             children: <TextSpan>[
-                  //               TextSpan(text: sunRise),
-                  //             ],
-                  //           )),
-                  //         ),
-                  //         Padding(
-                  //           padding:
-                  //               const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                  //           child: RichText(
-                  //               text: TextSpan(
-                  //             // Note: Styles for TextSpans must be explicitly defined.
-                  //             // Child text spans will inherit styles from parent
-                  //             style: const TextStyle(
-                  //                 fontSize: 17.0,
-                  //                 color: Colors.white,
-                  //                 fontWeight: FontWeight.w500),
-                  //             children: <TextSpan>[
-                  //               TextSpan(text: sunset),
-                  //             ],
-                  //           )),
-                  //         ),
-                  //       ],
-                  //     )
-                  //   ],
-                  // )
-                  ///
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  //   child: RichText(
-                  //       text: TextSpan(
-                  //     style: const TextStyle(
-                  //         fontSize: 17.0,
-                  //         color: AppColors.apptheme,
-                  //         fontWeight: FontWeight.w500),
-                  //     children: <TextSpan>[
-                  //       TextSpan(text: 'SunSet: '),
-                  //       TextSpan(
-                  //           text: sunset.toString(),
-                  //           style: const TextStyle(
-                  //               fontWeight: FontWeight.w500,
-                  //               color: Color.fromARGB(255, 67, 67, 67),
-                  //               fontSize: 16.0))
-                  //     ],
-                  //   )),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                  //   child: RichText(
-                  //       text: TextSpan(
-                  //     style: const TextStyle(
-                  //         fontSize: 17.0,
-                  //         color: AppColors.apptheme,
-                  //         fontWeight: FontWeight.w500),
-                  //     children: <TextSpan>[
-                  //       TextSpan(text: 'SunRise: '),
-                  //       TextSpan(
-                  //           text: sunRise.toString(),
-                  //           style: const TextStyle(
-                  //               fontWeight: FontWeight.w500,
-                  //               color: Color.fromARGB(255, 67, 67, 67),
-                  //               fontSize: 16.0))
-                  //     ],
-                  //   )),
-                  // ),
-
-                  // const Padding(
-                  //   padding: EdgeInsets.only(left: 10.0, top: 10.0),
-                  //   // padding: const EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     "Events",
-                  //     style: TextStyle(
-                  //         color: AppColors.apptheme,
-                  //         fontSize: 17.0,
-                  //         fontWeight: FontWeight.w600),
-                  //   ),
-                  // ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: calenderEvent.map((event) {
+                      return Text(
+                        event.vratUtsavNameEng.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("OK"),
+                  ),
                 ],
               ),
-            ));
-      });
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
+
 
 extension DateOnlyCompare on DateTime {
   bool isSameDate(DateTime other) {

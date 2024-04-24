@@ -81,16 +81,16 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                       onTap: () {
                         Get.to(() => AboutUsScreenUI());
                       }),
-                  cards(
-                      title: "Setting",
-                      onTap: () {
-                        Get.to(() => MainScreen());
-                      }),
-                  cards(
-                      title: "OFFLINE DOWNLOADS",
-                      onTap: () {
-                        Get.to(() => OfflineScreen());
-                      }),
+                  // cards(
+                  //     title: "Setting",
+                  //     onTap: () {
+                  //       Get.to(() => MainScreen());
+                  //     }),
+                  // cards(
+                  //     title: "OFFLINE DOWNLOADS",
+                  //     onTap: () {
+                  //       Get.to(() => OfflineScreen());
+                  //     }),
                 ])));
   }
 

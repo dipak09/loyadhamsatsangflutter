@@ -8,6 +8,7 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Branches/branches_screen_
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Contact_Us/contact_us_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Donation/donationUI.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Feedback%20Screen/feedback_screen_ui.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Offline%20Downloads/offlineDownloads_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Our%20Application/ourApplication.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Prashadi%20Vastu%20Sthan/prashadi_vastu_sthan_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Wellpaper/wallpaper_screen_ui.dart';
@@ -88,6 +89,12 @@ class DrawerData extends StatelessWidget {
                           Get.back();
                           Get.to(() => BranchesScreenUI());
                         }),
+                  _subMenuCard(
+                      title: "Offline Downloads",
+                      onTap: () {
+                        Get.back();
+                        Get.to(() => OfflineScreen());
+                      }),
                     SizedBox(height: 20),
                     Divider(),
                     SizedBox(height: 20),

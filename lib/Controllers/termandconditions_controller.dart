@@ -11,7 +11,7 @@ class TermAndConditonsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getData();
+   // getData();
   }
 
   Future<void> getData() async {

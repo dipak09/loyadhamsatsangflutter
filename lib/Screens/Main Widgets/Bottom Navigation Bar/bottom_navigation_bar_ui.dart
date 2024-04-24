@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
@@ -9,6 +11,8 @@ import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
 import 'package:loyadhamsatsang/Controllers/firebase_notification_controller.dart';
 import 'package:loyadhamsatsang/Controllers/liveStream_controller.dart';
+import 'package:loyadhamsatsang/Controllers/privacypolicy_controller.dart';
+import 'package:loyadhamsatsang/Controllers/termandconditions_controller.dart';
 import 'package:loyadhamsatsang/Controllers/video_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/Drawer.dart';
@@ -42,12 +46,16 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   // int currentIndex = 2;
   bool isBottomSheetOpen = false;
+  var TermAndConditons = Get.put(TermAndConditonsController());
+  var PrivacyPolicy = Get.put(PrivacyPolicyController());
 
   @override
   void initState() {
     widget.index;
     super.initState();
     //isBottomSheet = false;
+    TermAndConditons.getData();
+    PrivacyPolicy.getData();
     setState(() {});
   }
 
@@ -59,8 +67,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
   var DailyDarshan = Get.put(DashboardController());
   var Video = Get.put(VideoController());
   var LiveStream = Get.put(LiveStreamController());
+
   //var FeatureMedia = Get.put(FeaturedmediaController());
   var dailyDarshanPlaceController = Get.put(DarshanPlaceController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +192,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
               title: "More",
               imageName: AppImages.moreBottomBar,
               onTap: () {
+                TermAndConditons.getData();
+                PrivacyPolicy.getData();
                 setState(() {
                   widget.index = 4;
                   if (isBottomSheet == true) {
@@ -252,7 +264,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   Widget bottomSheet() {
     return Container(
-        height: screenHeight(context) * 0.35,
+        height: screenHeight(context) * 0.30,
         width: screenWidth(context),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -265,30 +277,44 @@ class _BottomNavigationState extends State<BottomNavigation> {
             CustomText("Loyadham Satsang", fontSize: 30),
             CustomText("Version 3.0", fontSize: 15, color: Colors.black)
           ]),
-          SizedBox(height: 20),
-          // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          //   InkWell(
-          //       onTap: () {
-          //         setState(() {
-          //           isBottomSheet = false;
-          //         });
-          //       //  Get.to(() => PrivacyPolicyScreenUI());
-          //       },
-          //       child: CustomText("Privacy Policy",
-          //           fontSize: 15, color: Colors.black)),
-          //   SizedBox(width: 5),
-          //   CustomText("|", fontSize: 15, color: Colors.black),
-          //   SizedBox(width: 5),
-          //   InkWell(
-          //       onTap: () {
-          //         setState(() {
-          //           isBottomSheet = false;
-          //         });
-          //       //  Get.to(() => TermAndConditonsScreenUI());
-          //       },
-          //       child: CustomText("Term & Conditions",
-          //           fontSize: 15, color: Colors.black))
-          // ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            PrivacyPolicy.description != null
+                ? Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isBottomSheet = false;
+                            });
+                            Get.to(() => PrivacyPolicyScreenUI());
+                          },
+                          child: CustomText("Privacy Policy",
+                              fontSize: 15, color: Colors.black)),
+                    ),
+                  )
+                : SizedBox.shrink(),
+            PrivacyPolicy.description != null ||
+                    TermAndConditons.description != null
+                ? CustomText("|", fontSize: 15, color: Colors.black)
+                : SizedBox.shrink(),
+            TermAndConditons.description != null
+                ? Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isBottomSheet = false;
+                            });
+                            Get.to(() => TermAndConditonsScreenUI());
+                          },
+                          child: CustomText("Term & Conditions",
+                              fontSize: 15, color: Colors.black)),
+                    ),
+                  )
+                : SizedBox.shrink()
+          ]),
           Container(
             alignment: Alignment.center,
             width: screenWidth(context),
