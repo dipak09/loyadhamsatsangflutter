@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
 import 'package:loyadhamsatsang/Controllers/liveStream_controller.dart';
@@ -77,13 +78,15 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText("Live Streaming",
-                          color: Colors.black, fontWeight: FontWeight.bold)
+                      CustomText("Live Stream",
+                          color: AppColors.apptheme,
+                          fontWeight: FontWeight.bold)
                     ])),
             Obx(() => Home.isLoading.value == true
                 ? _loader()
                 : Container(
-                    height: screenHeight(context) * 0.22,
+                    //height: screenHeight(context) * 0.22,
+                    height: 180,
                     color: Colors.transparent,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -101,7 +104,6 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                   title: item.title,
                                   publishedDate: "",
                                   timeAgo: "",
-
                                   view: "",
                                   type: "",
                                 ),
@@ -110,7 +112,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                             child: Container(
                               width: screenWidth(context, dividedBy: 1.2),
                               margin: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
+                                  horizontal: 5, vertical: 10),
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                                 border:
@@ -186,16 +188,17 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
     return Column(children: [
       Padding(
           padding: EdgeInsets.only(left: 25, right: 25),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText("Daily Darshan",
-                    color: Colors.black, fontWeight: FontWeight.bold)
-              ])),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            CustomText("Daily Darshan",
+                color: AppColors.apptheme, fontWeight: FontWeight.bold)
+          ])),
       Obx(() => Home.isLoading.value == true
           ? _loader()
-          : SizedBox(
-              height: screenHeight(context) * 0.2,
+          : Container(
+              color: Colors.transparent,
+              //height: screenHeight(context) * 0.22,
+              height: 200,
               child: ListView.builder(
                   itemCount: Home.dailyDarshanList.length,
                   scrollDirection: Axis.horizontal,
@@ -221,7 +224,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                             height: 125,
                             width: 250,
                             margin: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
+                                horizontal: 10, vertical: 10),
                             decoration: BoxDecoration(),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
@@ -245,14 +248,16 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     children: [
                       CustomText(
                         "Featured Media",
-                        color: Colors.black,
+                        color: AppColors.apptheme,
                         fontWeight: FontWeight.bold,
                       ),
                     ])),
             Obx(() => Home.isLoading.value == true
                 ? _loader()
-                : SizedBox(
-                    height: screenHeight(context) * 0.27,
+                : Container(
+                    //height: screenHeight(context) * 0.26,
+                    height: 220,
+                    color: Colors.transparent,
                     child: ListView.builder(
                         itemCount: Home.featureMediaList.length,
                         scrollDirection: Axis.horizontal,
@@ -276,12 +281,13 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                               },
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
                                         height: 140,
                                         width: 250,
                                         margin:
-                                            EdgeInsets.only(top: 10, left: 10),
+                                            EdgeInsets.only(left: 10),
                                         child: ClipRRect(
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(15),
@@ -461,167 +467,171 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText("Upcoming Events",
-                          color: Colors.black, fontWeight: FontWeight.bold)
+                          color: AppColors.apptheme,
+                          fontWeight: FontWeight.bold)
                     ])),
             Obx(() => Home.isLoading.value == true
-                ? _loader(): Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                // height: screenHeight(context) * 0.25,
-                color: Colors.white,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: Home.upcomingEventList.length,
-                    itemBuilder: (contex, index) {
-                      DateTime monthDate = DateTime.parse(Home.upcomingEventList[index].eventDate);
-                      String formattedDate = DateFormat('dd-MMM-yyyy').format(monthDate);
-                      return Card(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.black.withOpacity(0.2)),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: ListTile(
-                            onTap: () {
-                            },
-                            leading: Container(
-                              padding: EdgeInsets.all(5),
-                              height: 60,
-                              width: 60,
-                              color: Colors.white,
-                              child: Home.upcomingEventList[index]
-                                  .icon ==
-                                  null
-                                  ? Image.asset(
-                                "assets/images/favicon.png",
-                              )
-                                  : Image.network(
-                                Home.upcomingEventList[index].icon
-                                    .toString(),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: CustomText(
-                              Home.upcomingEventList[index].vratUtsavNameEng,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            subtitle: CustomText(
-                              formattedDate,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            trailing:
-                            Icon(Icons.arrow_forward_ios_outlined),
-                            textColor: Colors.black,
-                          ),
-                        ),
-                      );
-                      // return Column(
-                      //   children: [
-                      //     InkWell(
-                      //         onTap: () {
-                      //           Get.to(() => TodayBhajan(
-                      //                 description: Home
-                      //                     .todayBhajanEventList[index]
-                      //                     .description
-                      //                     .toString(),
-                      //                 title: Home
-                      //                     .todayBhajanEventList[index].title
-                      //                     .toString(),
-                      //               ));
-                      //         },
-                      //         child: Column(
-                      //             crossAxisAlignment:
-                      //                 CrossAxisAlignment.start,
-                      //             children: [
-                      //               Container(
-                      //                   height: 140,
-                      //                   width: 250,
-                      //                   margin: EdgeInsets.only(
-                      //                       top: 10, left: 10),
-                      //                   // color: Colors.green,
-                      //                   child: ClipRRect(
-                      //                       borderRadius: BorderRadius.only(
-                      //                           topLeft:
-                      //                               Radius.circular(15),
-                      //                           topRight:
-                      //                               Radius.circular(15)),
-                      //                       child: CachedImageWithShimmer(
-                      //                           fit: BoxFit.fitHeight,
-                      //                           imageUrl: Home
-                      //                                   .todayBhajanEventList[
-                      //                                       index]
-                      //                                   .icon ??
-                      //                               "https://cdn.crispedge.com/a7aeb4.png"))),
-                      //               Container(
-                      //                   margin: EdgeInsets.symmetric(
-                      //                       horizontal: 10),
-                      //                   width: 250,
-                      //                   padding: EdgeInsets.symmetric(
-                      //                       vertical: 5),
-                      //                   decoration: BoxDecoration(
-                      //                       color: Color.fromARGB(
-                      //                           179, 221, 218, 218),
-                      //                       borderRadius: BorderRadius.only(
-                      //                           bottomLeft:
-                      //                               Radius.circular(15),
-                      //                           bottomRight:
-                      //                               Radius.circular(15))),
-                      //                   child: Column(children: [
-                      //                     Container(
-                      //                         padding: EdgeInsets.symmetric(
-                      //                             horizontal: 10),
-                      //                         width: 250,
-                      //                         child: CustomText(
-                      //                             Home
-                      //                                 .todayBhajanEventList[
-                      //                                     index]
-                      //                                 .title
-                      //                                 .toString(),
-                      //                             fontSize: 9,
-                      //                             overflow: TextOverflow
-                      //                                 .ellipsis)),
-                      //                     Container(
-                      //                         padding: EdgeInsets.symmetric(
-                      //                             horizontal: 10),
-                      //                         width: 250,
-                      //                         child: CustomText(
-                      //                             Home
-                      //                                 .todayBhajanEventList[
-                      //                                     index]
-                      //                                 .date
-                      //                                 .toString(),
-                      //                             fontSize: 9,
-                      //                             overflow: TextOverflow
-                      //                                 .ellipsis)),
-                      //                     // Container(
-                      //                     //     width: 250,
-                      //                     //     padding: EdgeInsets.symmetric(
-                      //                     //         horizontal: 10),
-                      //                     //     child: Row(
-                      //                     //         mainAxisAlignment:
-                      //                     //             MainAxisAlignment
-                      //                     //                 .spaceBetween,
-                      //                     //         children: [
-                      //                     //           CustomText(
-                      //                     //               Home
-                      //                     //                       .upcomingEventList[
-                      //                     //                           index]
-                      //                     //                       .utsavTime
-                      //                     //                       .toString() ??
-                      //                     //                   "---",
-                      //                     //               fontSize: 9),
-                      //                     //           // CustomText(
-                      //                     //           //      Home.upcomingEventList[index].
-                      //                     //           //   .toString(),
-                      //                     //           //     fontSize: 9)
-                      //                     //         ]))
-                      //                   ]))
-                      //             ]))
-                      //   ],
-                      // );
-                    }))
+                    ? _loader()
+                    : Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                        // height: screenHeight(context) * 0.25,
+                        color: Colors.white,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: Home.upcomingEventList.length,
+                            itemBuilder: (contex, index) {
+                              DateTime monthDate = DateTime.parse(
+                                  Home.upcomingEventList[index].eventDate);
+                              String formattedDate =
+                                  DateFormat('dd-MMM-yyyy').format(monthDate);
+                              return Card(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black.withOpacity(0.2)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: ListTile(
+                                    onTap: () {},
+                                    leading: Container(
+                                      padding: EdgeInsets.all(4),
+                                      height: 60,
+                                      width: 60,
+                                      child: Home.upcomingEventList[index]
+                                                  .icon ==
+                                              null
+                                          ? Image.asset(
+                                              "assets/images/favicon.png",
+                                            )
+                                          : Image.network(
+                                              Home.upcomingEventList[index].icon
+                                                  .toString(),
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                    title: CustomText(
+                                      Home.upcomingEventList[index]
+                                          .vratUtsavNameEng,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    subtitle: CustomText(
+                                      formattedDate,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    trailing:
+                                        Icon(Icons.arrow_forward_ios_outlined),
+                                    textColor: Colors.black,
+                                  ),
+                                ),
+                              );
+                              // return Column(
+                              //   children: [
+                              //     InkWell(
+                              //         onTap: () {
+                              //           Get.to(() => TodayBhajan(
+                              //                 description: Home
+                              //                     .todayBhajanEventList[index]
+                              //                     .description
+                              //                     .toString(),
+                              //                 title: Home
+                              //                     .todayBhajanEventList[index].title
+                              //                     .toString(),
+                              //               ));
+                              //         },
+                              //         child: Column(
+                              //             crossAxisAlignment:
+                              //                 CrossAxisAlignment.start,
+                              //             children: [
+                              //               Container(
+                              //                   height: 140,
+                              //                   width: 250,
+                              //                   margin: EdgeInsets.only(
+                              //                       top: 10, left: 10),
+                              //                   // color: Colors.green,
+                              //                   child: ClipRRect(
+                              //                       borderRadius: BorderRadius.only(
+                              //                           topLeft:
+                              //                               Radius.circular(15),
+                              //                           topRight:
+                              //                               Radius.circular(15)),
+                              //                       child: CachedImageWithShimmer(
+                              //                           fit: BoxFit.fitHeight,
+                              //                           imageUrl: Home
+                              //                                   .todayBhajanEventList[
+                              //                                       index]
+                              //                                   .icon ??
+                              //                               "https://cdn.crispedge.com/a7aeb4.png"))),
+                              //               Container(
+                              //                   margin: EdgeInsets.symmetric(
+                              //                       horizontal: 10),
+                              //                   width: 250,
+                              //                   padding: EdgeInsets.symmetric(
+                              //                       vertical: 5),
+                              //                   decoration: BoxDecoration(
+                              //                       color: Color.fromARGB(
+                              //                           179, 221, 218, 218),
+                              //                       borderRadius: BorderRadius.only(
+                              //                           bottomLeft:
+                              //                               Radius.circular(15),
+                              //                           bottomRight:
+                              //                               Radius.circular(15))),
+                              //                   child: Column(children: [
+                              //                     Container(
+                              //                         padding: EdgeInsets.symmetric(
+                              //                             horizontal: 10),
+                              //                         width: 250,
+                              //                         child: CustomText(
+                              //                             Home
+                              //                                 .todayBhajanEventList[
+                              //                                     index]
+                              //                                 .title
+                              //                                 .toString(),
+                              //                             fontSize: 9,
+                              //                             overflow: TextOverflow
+                              //                                 .ellipsis)),
+                              //                     Container(
+                              //                         padding: EdgeInsets.symmetric(
+                              //                             horizontal: 10),
+                              //                         width: 250,
+                              //                         child: CustomText(
+                              //                             Home
+                              //                                 .todayBhajanEventList[
+                              //                                     index]
+                              //                                 .date
+                              //                                 .toString(),
+                              //                             fontSize: 9,
+                              //                             overflow: TextOverflow
+                              //                                 .ellipsis)),
+                              //                     // Container(
+                              //                     //     width: 250,
+                              //                     //     padding: EdgeInsets.symmetric(
+                              //                     //         horizontal: 10),
+                              //                     //     child: Row(
+                              //                     //         mainAxisAlignment:
+                              //                     //             MainAxisAlignment
+                              //                     //                 .spaceBetween,
+                              //                     //         children: [
+                              //                     //           CustomText(
+                              //                     //               Home
+                              //                     //                       .upcomingEventList[
+                              //                     //                           index]
+                              //                     //                       .utsavTime
+                              //                     //                       .toString() ??
+                              //                     //                   "---",
+                              //                     //               fontSize: 9),
+                              //                     //           // CustomText(
+                              //                     //           //      Home.upcomingEventList[index].
+                              //                     //           //   .toString(),
+                              //                     //           //     fontSize: 9)
+                              //                     //         ]))
+                              //                   ]))
+                              //             ]))
+                              //   ],
+                              // );
+                            }))
                 // : SizedBox(
                 //     height: screenHeight(context) * 0.25,
                 //     child: ListView.builder(
@@ -780,190 +790,203 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                 //             ),
                 //           );
                 //         }))
-            )
+                )
           ]);
   }
 
   Widget todayBhajaneventSection() {
     return Home.todayBhajanEventList.isEmpty
         ? SizedBox.shrink()
-        : Column(children: [
-            Padding(
-                padding: EdgeInsets.only(left: 25, right: 25),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText("Todays Bhajan",
-                          color: Colors.black, fontWeight: FontWeight.bold)
-                    ])),
-            Obx(() => Home.isLoading.value == true
-                ? _loader()
-                : Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                    // height: screenHeight(context) * 0.25,
-                    color: Colors.white,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: Home.todayBhajanEventList.length,
-                        itemBuilder: (contex, index) {
-                          return Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.black.withOpacity(0.2)),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: ListTile(
-                                onTap: () {
-                                  Get.to(() => TodayBhajan(
-                                        description: Home
-                                            .todayBhajanEventList[index]
-                                            .description
-                                            .toString(),
-                                        title: Home
-                                            .todayBhajanEventList[index].title
-                                            .toString(),
-                                      ));
-                                },
-                                leading: Container(
-                                  padding: EdgeInsets.all(5),
-                                  height: 60,
-                                  width: 60,
-                                  color: Colors.white,
-                                  child: Home.todayBhajanEventList[index]
-                                              .icon ==
-                                          null
-                                      ? Image.network(
-                                          "https://cdn.crispedge.com/a7aeb4.png",
-                                        )
-                                      : Image.network(
-                                          Home.todayBhajanEventList[index].icon
+        : Container(
+            color: Colors.transparent,
+            child: Column(children: [
+              Container(
+                // margin: EdgeInsets.only(top: 10),
+                child: Padding(
+                    padding: EdgeInsets.only(left: 25, right: 25),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomText("Today's Bhajan",
+                              color: AppColors.apptheme,
+                              fontWeight: FontWeight.bold)
+                        ])),
+              ),
+              Obx(() => Home.isLoading.value == true
+                  ? _loader()
+                  : Container(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                      // height: screenHeight(context) * 0.25,
+                      color: Colors.transparent,
+                      child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: Home.todayBhajanEventList.length,
+                          itemBuilder: (contex, index) {
+                            return Card(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black.withOpacity(0.2)),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: ListTile(
+                                  onTap: () {
+                                    Get.to(() => TodayBhajan(
+                                          description: Home
+                                              .todayBhajanEventList[index]
+                                              .description
                                               .toString(),
-                                          fit: BoxFit.cover,
-                                        ),
+                                          title: Home
+                                              .todayBhajanEventList[index].title
+                                              .toString(),
+                                        ));
+                                  },
+                                  leading: Container(
+                                    //padding: EdgeInsets.all(5),
+                                    height: 60,
+                                    width: 60,
+                                    color: Colors.transparent,
+                                    child: Home.todayBhajanEventList[index]
+                                                .icon ==
+                                            null
+                                        ? ClipOval(
+                                            child: Image.network(
+                                              "https://cdn.crispedge.com/a7aeb4.png",
+                                            ),
+                                          )
+                                        : ClipOval(
+                                            child: Image.network(
+                                              Home.todayBhajanEventList[index]
+                                                  .icon
+                                                  .toString(),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                  ),
+                                  title: CustomText(
+                                    Home.todayBhajanEventList[index].title,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  subtitle: CustomText(
+                                    Home.todayBhajanEventList[index].date,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  trailing:
+                                      Icon(Icons.arrow_forward_ios_outlined),
+                                  textColor: Colors.black,
                                 ),
-                                title: CustomText(
-                                  Home.todayBhajanEventList[index].title,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                subtitle: CustomText(
-                                  Home.todayBhajanEventList[index].date,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                trailing:
-                                    Icon(Icons.arrow_forward_ios_outlined),
-                                textColor: Colors.black,
                               ),
-                            ),
-                          );
-                          // return Column(
-                          //   children: [
-                          //     InkWell(
-                          //         onTap: () {
-                          //           Get.to(() => TodayBhajan(
-                          //                 description: Home
-                          //                     .todayBhajanEventList[index]
-                          //                     .description
-                          //                     .toString(),
-                          //                 title: Home
-                          //                     .todayBhajanEventList[index].title
-                          //                     .toString(),
-                          //               ));
-                          //         },
-                          //         child: Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: [
-                          //               Container(
-                          //                   height: 140,
-                          //                   width: 250,
-                          //                   margin: EdgeInsets.only(
-                          //                       top: 10, left: 10),
-                          //                   // color: Colors.green,
-                          //                   child: ClipRRect(
-                          //                       borderRadius: BorderRadius.only(
-                          //                           topLeft:
-                          //                               Radius.circular(15),
-                          //                           topRight:
-                          //                               Radius.circular(15)),
-                          //                       child: CachedImageWithShimmer(
-                          //                           fit: BoxFit.fitHeight,
-                          //                           imageUrl: Home
-                          //                                   .todayBhajanEventList[
-                          //                                       index]
-                          //                                   .icon ??
-                          //                               "https://cdn.crispedge.com/a7aeb4.png"))),
-                          //               Container(
-                          //                   margin: EdgeInsets.symmetric(
-                          //                       horizontal: 10),
-                          //                   width: 250,
-                          //                   padding: EdgeInsets.symmetric(
-                          //                       vertical: 5),
-                          //                   decoration: BoxDecoration(
-                          //                       color: Color.fromARGB(
-                          //                           179, 221, 218, 218),
-                          //                       borderRadius: BorderRadius.only(
-                          //                           bottomLeft:
-                          //                               Radius.circular(15),
-                          //                           bottomRight:
-                          //                               Radius.circular(15))),
-                          //                   child: Column(children: [
-                          //                     Container(
-                          //                         padding: EdgeInsets.symmetric(
-                          //                             horizontal: 10),
-                          //                         width: 250,
-                          //                         child: CustomText(
-                          //                             Home
-                          //                                 .todayBhajanEventList[
-                          //                                     index]
-                          //                                 .title
-                          //                                 .toString(),
-                          //                             fontSize: 9,
-                          //                             overflow: TextOverflow
-                          //                                 .ellipsis)),
-                          //                     Container(
-                          //                         padding: EdgeInsets.symmetric(
-                          //                             horizontal: 10),
-                          //                         width: 250,
-                          //                         child: CustomText(
-                          //                             Home
-                          //                                 .todayBhajanEventList[
-                          //                                     index]
-                          //                                 .date
-                          //                                 .toString(),
-                          //                             fontSize: 9,
-                          //                             overflow: TextOverflow
-                          //                                 .ellipsis)),
-                          //                     // Container(
-                          //                     //     width: 250,
-                          //                     //     padding: EdgeInsets.symmetric(
-                          //                     //         horizontal: 10),
-                          //                     //     child: Row(
-                          //                     //         mainAxisAlignment:
-                          //                     //             MainAxisAlignment
-                          //                     //                 .spaceBetween,
-                          //                     //         children: [
-                          //                     //           CustomText(
-                          //                     //               Home
-                          //                     //                       .upcomingEventList[
-                          //                     //                           index]
-                          //                     //                       .utsavTime
-                          //                     //                       .toString() ??
-                          //                     //                   "---",
-                          //                     //               fontSize: 9),
-                          //                     //           // CustomText(
-                          //                     //           //      Home.upcomingEventList[index].
-                          //                     //           //   .toString(),
-                          //                     //           //     fontSize: 9)
-                          //                     //         ]))
-                          //                   ]))
-                          //             ]))
-                          //   ],
-                          // );
-                        })))
-          ]);
+                            );
+                            // return Column(
+                            //   children: [
+                            //     InkWell(
+                            //         onTap: () {
+                            //           Get.to(() => TodayBhajan(
+                            //                 description: Home
+                            //                     .todayBhajanEventList[index]
+                            //                     .description
+                            //                     .toString(),
+                            //                 title: Home
+                            //                     .todayBhajanEventList[index].title
+                            //                     .toString(),
+                            //               ));
+                            //         },
+                            //         child: Column(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.start,
+                            //             children: [
+                            //               Container(
+                            //                   height: 140,
+                            //                   width: 250,
+                            //                   margin: EdgeInsets.only(
+                            //                       top: 10, left: 10),
+                            //                   // color: Colors.green,
+                            //                   child: ClipRRect(
+                            //                       borderRadius: BorderRadius.only(
+                            //                           topLeft:
+                            //                               Radius.circular(15),
+                            //                           topRight:
+                            //                               Radius.circular(15)),
+                            //                       child: CachedImageWithShimmer(
+                            //                           fit: BoxFit.fitHeight,
+                            //                           imageUrl: Home
+                            //                                   .todayBhajanEventList[
+                            //                                       index]
+                            //                                   .icon ??
+                            //                               "https://cdn.crispedge.com/a7aeb4.png"))),
+                            //               Container(
+                            //                   margin: EdgeInsets.symmetric(
+                            //                       horizontal: 10),
+                            //                   width: 250,
+                            //                   padding: EdgeInsets.symmetric(
+                            //                       vertical: 5),
+                            //                   decoration: BoxDecoration(
+                            //                       color: Color.fromARGB(
+                            //                           179, 221, 218, 218),
+                            //                       borderRadius: BorderRadius.only(
+                            //                           bottomLeft:
+                            //                               Radius.circular(15),
+                            //                           bottomRight:
+                            //                               Radius.circular(15))),
+                            //                   child: Column(children: [
+                            //                     Container(
+                            //                         padding: EdgeInsets.symmetric(
+                            //                             horizontal: 10),
+                            //                         width: 250,
+                            //                         child: CustomText(
+                            //                             Home
+                            //                                 .todayBhajanEventList[
+                            //                                     index]
+                            //                                 .title
+                            //                                 .toString(),
+                            //                             fontSize: 9,
+                            //                             overflow: TextOverflow
+                            //                                 .ellipsis)),
+                            //                     Container(
+                            //                         padding: EdgeInsets.symmetric(
+                            //                             horizontal: 10),
+                            //                         width: 250,
+                            //                         child: CustomText(
+                            //                             Home
+                            //                                 .todayBhajanEventList[
+                            //                                     index]
+                            //                                 .date
+                            //                                 .toString(),
+                            //                             fontSize: 9,
+                            //                             overflow: TextOverflow
+                            //                                 .ellipsis)),
+                            //                     // Container(
+                            //                     //     width: 250,
+                            //                     //     padding: EdgeInsets.symmetric(
+                            //                     //         horizontal: 10),
+                            //                     //     child: Row(
+                            //                     //         mainAxisAlignment:
+                            //                     //             MainAxisAlignment
+                            //                     //                 .spaceBetween,
+                            //                     //         children: [
+                            //                     //           CustomText(
+                            //                     //               Home
+                            //                     //                       .upcomingEventList[
+                            //                     //                           index]
+                            //                     //                       .utsavTime
+                            //                     //                       .toString() ??
+                            //                     //                   "---",
+                            //                     //               fontSize: 9),
+                            //                     //           // CustomText(
+                            //                     //           //      Home.upcomingEventList[index].
+                            //                     //           //   .toString(),
+                            //                     //           //     fontSize: 9)
+                            //                     //         ]))
+                            //                   ]))
+                            //             ]))
+                            //   ],
+                            // );
+                          })))
+            ]),
+          );
   }
 
   Widget _loaderSlider() {

@@ -37,16 +37,16 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Image.asset(AppImages.appBarNotificationPic,
                     height: 20, width: 20)),
           ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => SearchAppBar()));
-            },
-            child: Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Image.asset(AppImages.appBarSearchPic,
-                    height: 20, width: 20)),
-          )
+          // InkWell(
+          //   onTap: () {
+          //     Navigator.push(
+          //         context, MaterialPageRoute(builder: (_) => SearchAppBar()));
+          //   },
+          //   child: Padding(
+          //       padding: const EdgeInsets.only(right: 20),
+          //       child: Image.asset(AppImages.appBarSearchPic,
+          //           height: 20, width: 20)),
+          // )
         ],
         flexibleSpace: Container(color: AppColors.apptheme));
   }

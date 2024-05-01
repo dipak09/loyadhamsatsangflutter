@@ -42,38 +42,43 @@ class _DonationUIState extends State<DonationUI> {
       // Initialize the list of checkbox values for each sub-donation
       _subDonationCheckboxValues = List.generate(
         _getDonationController.donationList.length,
-        (index) => List.filled(
-          _getDonationController.donationList[index].subDonations.length,
-          false,
-        ),
+            (index) =>
+            List.filled(
+              _getDonationController.donationList[index].subDonations.length,
+              false,
+            ),
       );
       _amtTextEditingControllerList = List.generate(
         _getDonationController.donationList.length,
-        (index) => List.generate(
-          _getDonationController.donationList[index].subDonations.length,
-          (subIndex) => TextEditingController(),
-        ),
+            (index) =>
+            List.generate(
+              _getDonationController.donationList[index].subDonations.length,
+                  (subIndex) => TextEditingController(),
+            ),
       );
       _decTextEditingControllerList = List.generate(
         _getDonationController.donationList.length,
-            (index) => List.generate(
-          _getDonationController.donationList[index].subDonations.length,
-              (subIndex) => TextEditingController(),
-        ),
+            (index) =>
+            List.generate(
+              _getDonationController.donationList[index].subDonations.length,
+                  (subIndex) => TextEditingController(),
+            ),
       );
       _selectDropDownList = List.generate(
         _getDonationController.donationList.length,
-        (index) => List.filled(
-          _getDonationController.donationList[index].subDonations.length,
-          '', // Initialize with empty string or any default value
-        ),
+            (index) =>
+            List.filled(
+              _getDonationController.donationList[index].subDonations.length,
+              '', // Initialize with empty string or any default value
+            ),
       );
       _selectDate = List.generate(
         _getDonationController.donationList.length,
-            (index) => List.filled(
-          _getDonationController.donationList[index].subDonations.length,
-          '', // Initialize with empty string or any default value
-        ),
+            (index) =>
+            List.filled(
+              _getDonationController.donationList[index].subDonations.length,
+              '', // Initialize with empty string or any default value
+            ),
       );
       setState(() {
         _totalAmount = 0;
@@ -89,7 +94,7 @@ class _DonationUIState extends State<DonationUI> {
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
           double amount =
-              double.parse(donationType.subDonations[j].amount.toString());
+          double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
             if (_amtTextEditingControllerList[i][j].text.isNotEmpty) {
@@ -117,7 +122,7 @@ class _DonationUIState extends State<DonationUI> {
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
           double amount =
-              double.parse(donationType.subDonations[j].amount.toString());
+          double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
             String enteredText = _amtTextEditingControllerList[i][j].text;
@@ -139,8 +144,7 @@ class _DonationUIState extends State<DonationUI> {
       var donationType = _getDonationController.donationList[i];
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
-
-           userEnterAmount =
+          userEnterAmount =
               double.parse(donationType.subDonations[j].amount.toString());
           if (userEnterAmount == 0) {
             // If amount is zero, check if there's a value entered in the text field
@@ -150,14 +154,17 @@ class _DonationUIState extends State<DonationUI> {
             }
           }
           String subtype = donationType.subDonations[j].subType;
-          String? description = _decTextEditingControllerList[i][j].text.isNotEmpty
+          String? description = _decTextEditingControllerList[i][j].text
+              .isNotEmpty
               ? _decTextEditingControllerList[i][j].text
               : "";
-          String? selectedDate =_selectDate[i][j].isNotEmpty?_selectDate[i][j]:"";//ement selection of date if needed
+          String? selectedDate = _selectDate[i][j].isNotEmpty
+              ? _selectDate[i][j]
+              : ""; //ement selection of date if needed
           //String? selectedDropdownValue =_selectDropDownList[i][j].toString(); // Implement selection of dropdown value if needed
           String? selectedDropdownValue = _selectDropDownList[i][j].isNotEmpty
               ? _selectDropDownList[i][j].toString()
-              : "";// Implement selection of dropdown value if needed
+              : ""; // Implement selection of dropdown value if needed
 
           DonationData donationData = DonationData(
             subtype: subtype,
@@ -181,272 +188,327 @@ class _DonationUIState extends State<DonationUI> {
           title: "Donate to Loyadham Mandir",
         ),
         body: Obx(
-          () => _getDonationController.isLoading.value
+              () =>
+          _getDonationController.isLoading.value
               ? Center(child: CircularProgressIndicator())
               : Container(
-                  height: screenHeight(context),
-                  width: screenWidth(context),
-                  margin: EdgeInsets.symmetric( horizontal: 10),
-                  child: Stack(
+            height: screenHeight(context),
+            width: screenWidth(context),
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SingleChildScrollView(
+                      Container(
+                        margin: EdgeInsets.only(bottom: 70),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: 70),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _getDonationController
-                                        .donationList.length,
-                                    itemBuilder: (context, index) {
-                                      var donationType = _getDonationController
-                                          .donationList[index];
-                                      return ExpansionTileWithBorder(
-                                        title: CustomText(
-                                            donationType.type.toString()),
-                                        children: donationType.subDonations
-                                            .asMap()
-                                            .entries
-                                            .map((entry) => ExpansionTileChild(
-                                          selectedDate: _selectDate[index][entry.key].toString(),
-                                          selectDateOnPressed: () async {
-                                            String selectedDate = "";
-                                            // Show date picker dialog
-                                            final DateTime? pickedDate = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
-                                            );
-                                            if (pickedDate != null) {
-                                              // Set selected date
-                                              setState(() {
-                                                selectedDate = DateFormat('yyyy-MM-dd')
-                                                    .format(pickedDate)
-                                                    .toString();
-                                              });
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _getDonationController
+                                  .donationList.length,
+                              itemBuilder: (context, index) {
+                                var donationType = _getDonationController
+                                    .donationList[index];
+                                return ExpansionTileWithBorder(
+                                  title: CustomText(
+                                      donationType.type.toString()),
+                                  children: donationType.subDonations
+                                      .asMap()
+                                      .entries
+                                      .map((entry) =>
+                                      ExpansionTileChild(
+                                        selectedDate: _selectDate[index][entry
+                                            .key].toString(),
+                                        selectDateOnPressed: () async {
+                                          String selectedDate = "";
+                                          // Show date picker dialog
+                                          final DateTime? pickedDate = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100),
+                                          );
+                                          if (pickedDate != null) {
+                                            // Set selected date
+                                            setState(() {
+                                              selectedDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(pickedDate)
+                                                      .toString();
+                                            });
 
-                                              setState(() {
-                                                _selectDate[index][entry.key] = selectedDate;
-                                              });
-                                            }
-                                          },
+                                            setState(() {
+                                              _selectDate[index][entry.key] =
+                                                  selectedDate;
+                                            });
+                                          }
+                                        },
                                         //  selectValue: _selectDropDownList,
-                                          dropDownOnChanged: (p0) {
-                                              setState(() {
-                                                _selectDropDownList[index][entry.key] = p0.toString();
-                                              });
+                                        dropDownOnChanged: (p0) {
+                                          setState(() {
+                                            _selectDropDownList[index][entry
+                                                .key] = p0.toString();
+                                          });
+                                        },
+                                        decController: _decTextEditingControllerList[index][entry
+                                            .key],
+                                        zeroAmtController:
+                                        _amtTextEditingControllerList[
+                                        index][entry.key],
+                                        zeroAmtOnChanged: (p0) {
+                                          setState(() {
+                                            _updateTotalAmount();
+                                          });
+                                        },
+                                        title: entry.value.subType +
+                                            " \$${entry.value.amount}" ??
+                                            "",
+                                        isChecked:
+                                        _subDonationCheckboxValues[
+                                        index][entry.key],
+                                        descriptionRequired: entry
+                                            .value
+                                            .descriptionRequired
+                                            .toString() ==
+                                            "1",
+                                        descriptionMandatory: entry
+                                            .value
+                                            .descriptionMandatory
+                                            .toString() ==
+                                            "1",
+                                        onChanged: (isChecked) {
+                                          setState(() {
+                                            // Update the checkbox state for the corresponding sub-donation
+                                            _subDonationCheckboxValues[
+                                            index]
+                                            [entry.key] =
+                                            isChecked!;
 
-                                          },
-                                          decController: _decTextEditingControllerList[index][entry.key],
-                                                  zeroAmtController:
-                                                      _amtTextEditingControllerList[
-                                                          index][entry.key],
-                                                  zeroAmtOnChanged: (p0) {
-                                                    setState(() {
-                                                      _updateTotalAmount();
-                                                    });
-                                                  },
-                                                  title: entry.value.subType +
-                                                          " \$${entry.value.amount}" ??
-                                                      "",
-                                                  isChecked:
-                                                      _subDonationCheckboxValues[
-                                                          index][entry.key],
-                                                  descriptionRequired: entry
-                                                          .value
-                                                          .descriptionRequired
-                                                          .toString() ==
-                                                      "1",
-                                                  descriptionMandatory: entry
-                                                          .value
-                                                          .descriptionMandatory
-                                                          .toString() ==
-                                                      "1",
-                                                  onChanged: (isChecked) {
-                                                    setState(() {
-                                                      // Update the checkbox state for the corresponding sub-donation
-                                                      _subDonationCheckboxValues[
-                                                                  index]
-                                                              [entry.key] =
-                                                          isChecked!;
+                                            _updateTotalAmount();
+                                          });
+                                        },
+                                        dateMandatory: entry
+                                            .value.dateMandatory
+                                            .toString() ==
+                                            "1",
+                                        dateRequired: entry
+                                            .value.dateRequired
+                                            .toString() ==
+                                            "1",
+                                        description: entry
+                                            .value.description
+                                            .toString(),
+                                        dropdownMandatory: entry.value
+                                            .dropdownMandatory
+                                            .toString() ==
+                                            "1",
+                                        dropdownRequired: entry.value
+                                            .dropdownRequired
+                                            .toString() ==
+                                            "1",
+                                        dropdownLabel: entry
+                                            .value.dropdownLabel
+                                            .toString(),
+                                        dropdownName:
+                                        entry.value.dropdownName,
+                                        amount: entry.value.amount
+                                            .toString(),
+                                      ))
+                                      .toList(),
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  height: 50.0,
+                                  width: screenWidth(context),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black
+                                              .withOpacity(0.4)),
+                                      color: AppColors.apptheme
+                                    //borderRadius: BorderRadius.circular(10),
 
-                                                      _updateTotalAmount();
-                                                    });
-                                                  },
-                                                  dateMandatory: entry
-                                                          .value.dateMandatory
-                                                          .toString() ==
-                                                      "1",
-                                                  dateRequired: entry
-                                                          .value.dateRequired
-                                                          .toString() ==
-                                                      "1",
-                                                  description: entry
-                                                      .value.description
-                                                      .toString(),
-                                                  dropdownMandatory: entry.value
-                                                          .dropdownMandatory
-                                                          .toString() ==
-                                                      "1",
-                                                  dropdownRequired: entry.value
-                                                          .dropdownRequired
-                                                          .toString() ==
-                                                      "1",
-                                                  dropdownLabel: entry
-                                                      .value.dropdownLabel
-                                                      .toString(),
-                                                  dropdownName:
-                                                      entry.value.dropdownName,
-                                                  amount: entry.value.amount
-                                                      .toString(),
-                                                ))
-                                            .toList(),
+                                  ),
+                                  child: CustomText(
+                                    "Donation Summary",
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                _selectedDonations.isNotEmpty
+                                    ? Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black
+                                              .withOpacity(0.4))),
+                                  child: ListView.builder(
+                                    physics:
+                                    NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount:
+                                    _selectedDonations.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        tileColor: index.isEven
+                                            ? Colors.grey
+                                            .withOpacity(0.5)
+                                            : Colors.white,
+                                        // contentPadding: EdgeInsets.zero,
+                                        title: Text(
+                                            _selectedDonations[
+                                            index]
+                                            ['subtype'] ??
+                                                ""),
+                                        trailing: Text(
+                                            "\$${_selectedDonations[index]['amount']}"),
                                       );
                                     },
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        height: 50.0,
-                                        width: screenWidth(context),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.black
-                                                    .withOpacity(0.4)),
-                                            color: AppColors.apptheme
-                                            //borderRadius: BorderRadius.circular(10),
-
-                                            ),
-                                        child: CustomText(
-                                          "Donation Summary",
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      _selectedDonations.isNotEmpty
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.black
-                                                          .withOpacity(0.4))),
-                                              child: ListView.builder(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    _selectedDonations.length,
-                                                itemBuilder: (context, index) {
-                                                  return ListTile(
-                                                    tileColor: index.isEven
-                                                        ? Colors.grey
-                                                            .withOpacity(0.5)
-                                                        : Colors.white,
-                                                    // contentPadding: EdgeInsets.zero,
-                                                    title: Text(
-                                                        _selectedDonations[
-                                                                    index]
-                                                                ['subtype'] ??
-                                                            ""),
-                                                    trailing: Text(
-                                                        "\$${_selectedDonations[index]['amount']}"),
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                          : SizedBox(),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      height: 60.0,
-                                      width: screenWidth(context),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.black
-                                                  .withOpacity(0.4)),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CustomText("Total"),
-                                          CustomText("\$$_totalAmount"),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                )
+                                    : SizedBox(),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: 60.0,
+                                width: screenWidth(context),
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black
+                                            .withOpacity(0.4)),
+                                    borderRadius:
+                                    BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText("Total"),
+                                    CustomText("\$$_totalAmount"),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: 60.0,
-                          width: screenWidth(context),
-                          color: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 40.0,
-                                width: 300.0,
-                                color: Colors.transparent,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.apptheme),
-                                    onPressed: () {
-                                      String result = generateEnteredDataJSON();
-                                      log("finalResult${result}");
-                                      if (_totalAmount == 0) {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                "Amount should not be zero or Required filled should not be empty");
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) => PersonalInfoUI(
-                                                      totalamount: _totalAmount, donationData: result,
-                                                    )));
-                                      }
-                                    },
-                                    child: CustomText(
-                                      "Next",
-                                      color: Colors.white,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 60.0,
+                    width: screenWidth(context),
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 40.0,
+                          width: 300.0,
+                          color: Colors.transparent,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.apptheme),
+                              onPressed: () {
+                                String result = generateEnteredDataJSON();
+                                log("finalResult${result}");
+                                if (_totalAmount == 0) {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                      "Amount should not be zero or Required filled should not be empty");
+                                } else {
+                                  // Flag to indicate if all mandatory fields are filled
+                                  bool allMandatoryFieldsFilled = true;
+
+                                  // Iterate through each donation type and its sub-donations
+                                  for (int i = 0; i < _getDonationController.donationList.length; i++) {
+                                    var donationType = _getDonationController.donationList[i];
+                                    for (int j = 0; j < donationType.subDonations.length; j++) {
+                                      if (_subDonationCheckboxValues[i][j]) {
+                                        var subDonation = donationType.subDonations[j];
+
+                                        // Check if description is mandatory and not filled
+                                        if (subDonation.descriptionMandatory=="1" &&
+                                            _decTextEditingControllerList[i][j].text.isEmpty) {
+                                          allMandatoryFieldsFilled = false;
+                                          break; // Exit the loop if any mandatory field is empty
+                                        }
+
+                                        // Check if date is mandatory and not selected
+                                        if (subDonation.dateMandatory == "1"&& _selectDate[i][j].isEmpty) {
+                                          allMandatoryFieldsFilled = false;
+                                          break; // Exit the loop if any mandatory field is empty
+                                        }
+
+                                        // Check if dropdown selection is mandatory and not made
+                                        if (subDonation.dropdownMandatory == "1" &&
+                                            _selectDropDownList[i][j].isEmpty) {
+                                          allMandatoryFieldsFilled = false;
+                                          break; // Exit the loop if any mandatory field is empty
+                                        }
+                                      }
+                                    }
+                                    if (!allMandatoryFieldsFilled) {
+                                      break; // Exit the loop if any mandatory field is empty
+                                    }
+                                  }
+
+                                  // Proceed to the next screen if all mandatory fields are filled
+                                  if (allMandatoryFieldsFilled) {
+                                    String result = generateEnteredDataJSON();
+                                    log("finalResult${result}");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => PersonalInfoUI(
+                                          totalamount: _totalAmount,
+                                          donationData: result,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Show toast message if any mandatory field is empty
+                                    Fluttertoast.showToast(
+                                      msg: "Please fill out all required fields",
+                                    );
+                                  }
+                                }
+                              },
+                              child: CustomText(
+                                "Next",
+                                color: Colors.white,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ));
   }
 }
@@ -494,7 +556,8 @@ class ExpansionTileChild extends StatefulWidget {
   final bool dropdownMandatory;
   final String? description;
   final String? dropdownLabel;
- //  List<List<String>>? selectValue;
+
+  //  List<List<String>>? selectValue;
   final TextEditingController? zeroAmtController;
   final TextEditingController? decController;
   final List<dynamic>? dropdownName;
@@ -503,11 +566,11 @@ class ExpansionTileChild extends StatefulWidget {
 
   Function(String?)? dropDownOnChanged;
 
-   Function()? selectDateOnPressed;
+  Function()? selectDateOnPressed;
 
   String? selectedDate;
 
-   ExpansionTileChild({
+  ExpansionTileChild({
     Key? key,
     required this.title,
     required this.amount,
@@ -527,8 +590,8 @@ class ExpansionTileChild extends StatefulWidget {
     this.decController,
     this.dropDownOnChanged,
     this.selectDateOnPressed,
-     this.selectedDate
-     //this.selectValue
+    this.selectedDate
+    //this.selectValue
   }) : super(key: key);
 
   @override
@@ -538,6 +601,7 @@ class ExpansionTileChild extends StatefulWidget {
 class _ExpansionTileChildState extends State<ExpansionTileChild> {
 
   String? selectedDropdownValue;
+
   String? getSelectedDropdownValue() {
     return selectedDropdownValue;
   }
@@ -565,7 +629,8 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               controller: widget.zeroAmtController,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]+|\s")),
-              ], //
+              ],
+              //
               keyboardType: TextInputType.number,
               onChanged: widget.zeroAmtOnChanged,
               decoration: InputDecoration(
@@ -612,10 +677,10 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
                     //   }
                     // },
                     child: Text(widget.selectedDate.toString() == ""
-                        ? "Select Date":widget.selectedDate.toString()
-                        //: DateFormat('yyyy-MM-dd').format(widget.selectedDate!)),
+                        ? "Select Date" : widget.selectedDate.toString()
+                      //: DateFormat('yyyy-MM-dd').format(widget.selectedDate!)),
+                    ),
                   ),
-                ),
                 )
               ],
             ),
@@ -646,11 +711,12 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               // },
               items: widget.dropdownName!
                   .map<DropdownMenuItem<String>>(
-                    (value) => DropdownMenuItem<String>(
+                    (value) =>
+                    DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     ),
-                  )
+              )
                   .toList(),
             ),
           ),

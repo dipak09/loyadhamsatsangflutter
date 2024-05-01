@@ -71,6 +71,9 @@ dependencies:
 
   email_validator: ^2.1.17
   country_picker: ^2.0.25
+  geolocator: ^11.0.0
+  flutter_timezone: ^1.0.8
+  geocoding: ^3.0.0
   
 
 

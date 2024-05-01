@@ -30,7 +30,6 @@ class FeatureMediaRelatedController extends GetxController {
     videoId.value = videovideoId!;
     print("here");
   }
-
   Future<void> getData(String id) async {
     try {
       isLoading(true);

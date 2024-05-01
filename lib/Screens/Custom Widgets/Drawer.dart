@@ -82,7 +82,7 @@ class DrawerData extends StatelessWidget {
                         Get.back();
                           Get.to(() => OurApplication());
                     }),
-                    _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
+                    // _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
                     _subMenuCard(
                         title: "Our Branches",
                         onTap: () {

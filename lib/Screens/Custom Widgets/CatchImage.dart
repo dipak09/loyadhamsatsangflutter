@@ -18,13 +18,14 @@ class CachedImageWithShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
+      fit: BoxFit.cover,
       placeholder: (context, url) => Shimmer.fromColors(
         highlightColor: Colors.grey[300]!,
         baseColor: Colors.grey[200]!,
         child: Container(
           width: width,
           height: height,
-          color: Colors.white,
+          color: Colors.blue,
         ),
       ),
       errorWidget: (context, url, error) => Icon(Icons.error),

@@ -41,10 +41,14 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
                 },
                 child: Container(
                   height: screenHeight(context) * 0.22,
+                  decoration: BoxDecoration(
+                   // borderRadius: BorderRadius.circular(30),
+                  ),
                   width: screenWidth(context),
-                  margin: EdgeInsets.all(10),
+                 padding: EdgeInsets.all(10),
+                 // margin: EdgeInsets.all(10),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                   borderRadius: BorderRadius.circular(10),
                     child: CachedImageWithShimmer(imageUrl: item.image!),
                   ),
                 ),
@@ -53,6 +57,7 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
             .toList(),
         carouselController: carouselController,
         options: CarouselOptions(
+
           scrollPhysics: const BouncingScrollPhysics(),
           autoPlay: true,
           aspectRatio: 2,
