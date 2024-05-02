@@ -1,5 +1,4 @@
-// ignore_for_file: must_be_immutable
-
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -10,10 +9,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Models/KirtanKathAudio.dart';
-import 'package:loyadhamsatsang/Models/KirtanKatha.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioList_screen_ui.dart';
+import 'package:wakelock/wakelock.dart';
 import 'package:path_provider/path_provider.dart';
 
 class KirtanPlayerScreen extends StatefulWidget {
@@ -38,6 +36,66 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
   Get.put(KirtanKathaAudioController());
   bool isdownload = false;
   bool isPlayPause = true;
+  late Timer _stopTimer;
+  bool _isPhoneLocked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startWakeLock();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stopWakeLockAndAudio();
+    _stopTimer.cancel();
+  }
+
+  void startWakeLock() {
+    Wakelock.enable();
+  }
+
+  void stopWakeLockAndAudio() {
+    Wakelock.disable();
+    audioController.audioPlayer.stop();
+  }
+
+
+  void startTimer() {
+    _stopTimer = Timer(Duration(seconds: 10), stopWakeLockAndAudio);
+  }
+
+  Future<void> downloadAndSaveAudio(String audioUrl) async {
+    print("Audio is $audioUrl--------------------->");
+    Dio dio = Dio();
+
+    try {
+      var response = await dio.get(audioUrl,
+          options: Options(responseType: ResponseType.bytes));
+
+      Directory appDocumentsDirectory =
+      await getApplicationDocumentsDirectory();
+      String filePath =
+          '${appDocumentsDirectory.path}/${widget.audioname}.mp3';
+
+      File file = File(filePath);
+      await file.writeAsBytes(response.data);
+      // File is saved to local storage
+      print("Sucessfully Audio is Saved--------------------->");
+      print('Audio saved to: $filePath');
+      isdownload = true;
+      Fluttertoast.showToast(msg: "Song Download Sucessfully!!!");
+      setState(() {});
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: "Please wait for while. Try again later!!");
+      print("Error found while downloading------------------->");
+      print('Error downloading audio: $e');
+    }
+  }
+
   void playNextSong() {
     // Get the index of the current song
     int currentIndex = widget.index ?? 0;
@@ -48,7 +106,8 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
       int nextIndex = currentIndex + 1;
 
       // Retrieve the URL of the next song
-      String nextSongUrl = audioController.kirtankathaAudioList[nextIndex].uploadAudio!;
+      String nextSongUrl = audioController
+          .kirtankathaAudioList[nextIndex].uploadAudio!;
 
       // Play the next song
       audioController.audioPlayer.setUrl(nextSongUrl).then((_) {
@@ -63,6 +122,7 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
       });
     }
   }
+
   void playPreviousSong() {
     // Get the index of the current song
     int currentIndex = widget.index ?? 0;
@@ -73,7 +133,8 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
       int previousIndex = currentIndex - 1;
 
       // Retrieve the URL of the previous song
-      String previousSongUrl = audioController.kirtankathaAudioList[previousIndex].uploadAudio!;
+      String previousSongUrl = audioController
+          .kirtankathaAudioList[previousIndex].uploadAudio!;
 
       // Play the previous song
       audioController.audioPlayer.setUrl(previousSongUrl).then((_) {
@@ -88,53 +149,6 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
       });
     }
   }
-
-  Future<void> downloadAndSaveAudio(String audioUrl) async {
-    print("Audio is $audioUrl--------------------->");
-    Dio dio = Dio();
-
-    try {
-      var response = await dio.get(audioUrl,
-          options: Options(responseType: ResponseType.bytes));
-
-      Directory appDocumentsDirectory =
-      await getApplicationDocumentsDirectory();
-      String filePath = '${appDocumentsDirectory.path}/${widget.audioname}.mp3';
-
-      File file = File(filePath);
-      await file.writeAsBytes(response.data);
-      // File is saved to local storage
-      print("Sucessfully Audio is Saved--------------------->");
-      print('Audio saved to: $filePath');
-      isdownload = true;
-      Fluttertoast.showToast(msg: "Song Download Sucessfully!!!");
-      setState(() {});
-    } catch (e) {
-      Fluttertoast.showToast(msg: "Please wait for while. Try again later!!");
-      print("Error found while downloading------------------->");
-      print('Error downloading audio: $e');
-    }
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    audioController.audioPlayer.stop();
-  }
-  // void playPreviousAudio() {
-  //
-  //   // Check if there is a previous audio file
-  //   if (widget.index! > 0 || widget.index != null) {
-  //     widget.index == widget.index! - 1; // Move to the previous audio
-  //   } else {
-  //     // If the current audio is the first one in the list, loop back to the last audio
-  //     widget.index = audioController.kirtankathaAudioList.length - 1;
-  //   }
-  //
-  //   // Play the audio here, use your audio player logic
-  //   audioController.playAudio(
-  //       audioController.kirtankathaAudioList[widget.index!].uploadAudio!);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +178,9 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
                   child: IconButton(
                     onPressed: () {
                       print("Download is clicked--------------->");
-                      downloadAndSaveAudio(audioController.kirtankathaAudioList[widget.index!].uploadAudio.toString());
+                      downloadAndSaveAudio(audioController
+                          .kirtankathaAudioList[widget.index!].uploadAudio
+                          .toString());
                       // Implement download functionality here
                     },
                     icon: isdownload
@@ -183,7 +199,9 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
               ],
             ),
           ),
-          CustomText(audioController.kirtankathaAudioList[widget.index!].fileName.toString()),
+          CustomText(audioController.kirtankathaAudioList[widget.index!]
+              .fileName
+              .toString()),
           StreamBuilder<Duration?>(
             stream: audioController.audioPlayer.durationStream,
             builder: (context, snapshot) {

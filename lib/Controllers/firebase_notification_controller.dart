@@ -23,7 +23,7 @@ class FirebaseNotificationController extends GetxController {
       log("Firebase Notification Fcm Token#### -->$deviceToken");
       isLoading(true);
       update();
-      String apiUrl = 'https://loyadham.in/api/webservice/getDeviceToken?token=$deviceToken&timezone=Asia/Kolkata';
+      String apiUrl = 'https://loyadham.in/api/webservice/getDeviceToken?token=$deviceToken&timezone=$timeZone';
       log(apiUrl.toString());
       final response = await dio.get(apiUrl);
       final data = response.data["result"];

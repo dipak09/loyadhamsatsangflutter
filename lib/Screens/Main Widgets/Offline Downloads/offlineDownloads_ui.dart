@@ -19,10 +19,12 @@ class _OfflineScreenState extends State<OfflineScreen> {
   // var KirtanKatha = Get.put(KirtanKathaAudioController());
   bool playallclick = false;
   var currentindex;
+
   @override
   void dispose() {
     super.dispose();
     playallclick = false;
+    _audioPlayer.stop();
     // KirtanKatha.audioPlayer.stop();
   }
 
@@ -53,10 +55,25 @@ class _OfflineScreenState extends State<OfflineScreen> {
 
   Future<void> _loadAudioFiles() async {
     _appDirectory = await getApplicationDocumentsDirectory();
+    List<Directory> audioDirectories = _getAudioDirectories(_appDirectory);
+
+    List<File> files = [];
+    for (var directory in audioDirectories) {
+      files.addAll(_getAudioFiles(directory));
+    }
+
     setState(() {
-      log("--------------------->" + _appDirectory.toString());
-      _audioFiles = _getAudioFiles(_appDirectory);
+      _audioFiles = files;
     });
+  }
+  List<Directory> _getAudioDirectories(Directory dir) {
+    List<Directory> directories = [];
+    dir.listSync(recursive: false, followLinks: false).forEach((FileSystemEntity entity) {
+      if (entity is Directory) {
+        directories.add(entity);
+      }
+    });
+    return directories;
   }
 
   void play() {
@@ -99,7 +116,9 @@ class _OfflineScreenState extends State<OfflineScreen> {
         body: Column(
           children: [
             _audioFiles.isEmpty
-                ? Center(child: CustomText("Please Download the Audio!!"))
+                ? Expanded(
+                    child: Center(
+                        child: CustomText("Please Download the Audio!!")))
                 : Expanded(
                     child: ListView.builder(
                       itemCount: _audioFiles.length,

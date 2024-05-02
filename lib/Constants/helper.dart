@@ -3,3 +3,4 @@
 String? deviceToken;
 
 
+String? timeZone;

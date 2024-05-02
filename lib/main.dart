@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
+import 'package:loyadhamsatsang/Constants/helper.dart';
 import 'package:loyadhamsatsang/Controllers/splashScreen_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/SplashScreen/splash_screen_ui.dart';
 import 'package:loyadhamsatsang/Utilites/device.dart';
@@ -43,36 +42,36 @@ final _messagingService = MessagingService();
 
 class _MyAppState extends State<MyApp> {
   String location = 'Unknown';
-  String timeZone = 'Unknown';
+// String timeZone = 'Unknown';
   DateTime dateTimeInTimeZone = DateTime.now();
   List<String> _availableTimezones = <String>[];
-
-  Future<Position> _determinePosition() async {
-    // Check if location services are enabled
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled return an error message
-      return Future.error('Location services are disabled.');
-    }
-
-    // Check location permissions
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // If permissions are granted, return the current location
-    return await Geolocator.getCurrentPosition();
-  }
-
+  // String _timezone = 'Unknown';
+  // Future<Position> _determinePosition() async {
+  //   // Check if location services are enabled
+  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     // Location services are not enabled return an error message
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //
+  //   // Check location permissions
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //
+  //   // If permissions are granted, return the current location
+  //   return await Geolocator.getCurrentPosition();
+  // }
+  //
   // Future<void> getPosition() async {
   //   try {
   //     // Call _determinePosition to get the user's current position
@@ -81,55 +80,58 @@ class _MyAppState extends State<MyApp> {
   //     // Extract latitude and longitude from the position object
   //     double latitude = position.latitude;
   //     double longitude = position.longitude;
+  //     DateTime dateTime = position.timestamp;
   //
   //     // Print the latitude and longitude
-  //     //print('Latitude: $latitude, Longitude: $longitude');
-  //    // tz.Location timezone = await getTimeZone(latitude, longitude);
+  //     print('Latitude: $latitude, Longitude: $longitude, dateTime: $dateTime');
+  //    tz.Location timezone = await getTimezoneFromCoordinates(latitude, longitude);
   //     print('Timezone: ${timezone.name}');
   //   } catch (e) {
   //     print('Error: $e');
   //   }
   // }
-
-  Future<tz.Location> getTimezoneFromCoordinates(
-      double latitude, double longitude) async {
-    // Reverse geocode the coordinates to get the address
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
-
-    print('placemarks: ${placemarks}');
-
-    // Extract the timezone identifier from the placemark
-    Placemark placemark = placemarks.first;
-    String timezoneName = placemark.isoCountryCode!;
-
-    // Find the timezone by name
-    tz.Location? location = tz.getLocation(timezoneName);
-    print('location: ${location}');
-    return location;
-  }
-
-  // Future<void> _initData() async {
-  //   try {
-  //     _timezone = await FlutterTimezone.getLocalTimezone();
-  //   } catch (e) {
-  //     print('Could not get the local timezone');
-  //   }
-  //   try {
-  //     _availableTimezones = await FlutterTimezone.getAvailableTimezones();
-  //     _availableTimezones.sort();
-  //   } catch (e) {
-  //     print('Could not get available timezones');
-  //   }
-  //   if (mounted) {
-  //     setState(() {});
-  //   }
-  //   DateTime dateTime = DateTime.now();
-  //   print("timeZoneName${dateTime.timeZoneName}");
-  //   log("###_availableTimezones${_availableTimezones}###");
+  //
+  // Future<tz.Location> getTimezoneFromCoordinates(
+  //     double latitude, double longitude) async {
+  //   // Reverse geocode the coordinates to get the address
+  //   List<Placemark> placemarks =
+  //       await placemarkFromCoordinates(latitude, longitude);
+  //
+  //   print('placemarks: ${placemarks}');
+  //
+  //   // Extract the timezone identifier from the placemark
+  //   Placemark placemark = placemarks.first;
+  //   String timezoneName = placemark.isoCountryCode!;
+  //
+  //   // Find the timezone by name
+  //   tz.Location? location = tz.getLocation("Asia/Kolkata");
+  //   print('location: ${location}');
+  //   return location;
   // }
+
+  Future<void> _initData() async {
+    try {
+      timeZone = await FlutterTimezone.getLocalTimezone();
+    } catch (e) {
+      print('Could not get the local timezone');
+    }
+    try {
+      _availableTimezones = await FlutterTimezone.getAvailableTimezones();
+      _availableTimezones.sort();
+    } catch (e) {
+      print('Could not get available timezones');
+    }
+    if (mounted) {
+      setState(() {});
+    }
+    DateTime dateTime = DateTime.now();
+    print("timeZoneName${dateTime.timeZoneName}");
+    log("###_availableTimezones${_availableTimezones}###");
+    log("@@@finalTimezone${timeZone}@@@");
+  }
   // Future<String> getTimezoneFromCoordinates(double latitude, double longitude) async {
   //   // Get the location details based on latitude and longitude
+  //   tz.Location location = tz.getLocation(latitude, longitude);
   //   tz.Location location = tz.getLocation(latitude, longitude);
   //
   //   // Get the timezone identifier
@@ -141,9 +143,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // _initData();
-    _determinePosition();
-    //getPosition();
+     _initData();
+   // _determinePosition();
+   // getPosition();
     DeviceConfig.rotationLock();
     _messagingService.init(context);
   }

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/fetured_mediaRelated_controller.dart';
 import 'package:loyadhamsatsang/Controllers/videoID_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
@@ -39,6 +40,8 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
 
   // var VideoIDWises = Get.put(VideoIDWiseController());
   Duration? _savedPosition;
+
+  int selectedIndex = -1;
 
   void playNewVideo(String videoId) {
     // VideoIDWises.videoList.removeWhere((video) => video.initialId == videoId);
@@ -215,122 +218,135 @@ class _FeaturedMediaVideoIDState extends State<FeaturedMediaVideoID> {
                                                       videovideoId: VideoIDWises
                                                           .videoList[index]
                                                           .initialId);
-                                                  VideoIDWises.getData(
-                                                      VideoIDWises
-                                                          .videoList[index]
-                                                          .initialId!);
+                                                  setState(() {
+                                                    selectedIndex = index;
+                                                  });
+                                                  // VideoIDWises.getData(
+                                                  //     VideoIDWises
+                                                  //         .videoList[index]
+                                                  //         .initialId!);
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 5),
+                                                  // margin: EdgeInsets.symmetric(
+                                                  //     horizontal: 20),
+
                                                   child: Column(
                                                     children: [
-                                                      ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          15),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          15)),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl:
-                                                                VideoIDWises
-                                                                    .videoList[
-                                                                        index]
-                                                                    .thumbnail!,
-                                                            placeholder: (context,
-                                                                    url) =>
-                                                                Shimmer
-                                                                    .fromColors(
-                                                              highlightColor:
-                                                                  Colors.grey[
-                                                                      300]!,
-                                                              baseColor: Colors
-                                                                  .grey[200]!,
-                                                              child: Container(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                            errorWidget:
-                                                                (context, url,
-                                                                        error) =>
-                                                                    Icon(Icons
-                                                                        .error),
-                                                            fit: BoxFit.fill,
-                                                            height: screenHeight(
-                                                                    context) *
-                                                                0.18,
-                                                            width: screenWidth(
-                                                                context),
-                                                          )),
                                                       Container(
-                                                          width: screenWidth(
-                                                              context),
-                                                          padding:
-                                                              EdgeInsets.symmetric(
-                                                                  vertical: 5,
-                                                                  horizontal:
-                                                                      10),
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Color.fromARGB(
-                                                                      179,
-                                                                      221,
-                                                                      218,
-                                                                      218),
-                                                              borderRadius: BorderRadius.only(
-                                                                  bottomLeft:
-                                                                      Radius.circular(
-                                                                          15),
-                                                                  bottomRight:
-                                                                      Radius.circular(
-                                                                          15))),
-                                                          child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                CustomText(
-                                                                    VideoIDWises
-                                                                        .videoList[
-                                                                            index]
-                                                                        .title!,
-                                                                    fontSize: 9,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis),
-                                                                CustomText(
-                                                                    VideoIDWises
-                                                                        .videoList[
-                                                                            index]
-                                                                        .publishedDate!
-                                                                        .toString(),
-                                                                    fontSize: 9,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis),
-                                                                Container(
-                                                                    width: screenWidth(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 20),
+                                                        color: selectedIndex ==
+                                                                index
+                                                            ? AppColors.apptheme
+                                                                .withOpacity(
+                                                                    0.4)
+                                                            : Colors
+                                                                .transparent,
+                                                        child: Column(
+                                                          children: [
+                                                            ClipRRect(
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15)),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl: VideoIDWises
+                                                                      .videoList[
+                                                                          index]
+                                                                      .thumbnail!,
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      Shimmer
+                                                                          .fromColors(
+                                                                    highlightColor:
+                                                                        Colors.grey[
+                                                                            300]!,
+                                                                    baseColor:
+                                                                        Colors.grey[
+                                                                            200]!,
+                                                                    child:
+                                                                        Container(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      Icon(Icons
+                                                                          .error),
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  height: screenHeight(
+                                                                          context) *
+                                                                      0.18,
+                                                                  width: screenWidth(
+                                                                      context),
+                                                                )),
+                                                            Container(
+                                                                width:
+                                                                    screenWidth(
                                                                         context),
-                                                                    child: Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          CustomText(
-                                                                              VideoIDWises.videoList[index].timeAgo!,
-                                                                              fontSize: 9),
-                                                                          CustomText(
-                                                                              VideoIDWises.videoList[index].viewCount!,
-                                                                              fontSize: 9)
-                                                                        ]))
-                                                              ])),
+                                                                padding: EdgeInsets.symmetric(
+                                                                    vertical: 5,
+                                                                    horizontal:
+                                                                        10),
+                                                                decoration: BoxDecoration(
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            179,
+                                                                            221,
+                                                                            218,
+                                                                            218),
+                                                                    borderRadius: BorderRadius.only(
+                                                                        bottomLeft: Radius.circular(
+                                                                            15),
+                                                                        bottomRight:
+                                                                            Radius.circular(
+                                                                                15))),
+                                                                child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      CustomText(
+                                                                          VideoIDWises
+                                                                              .videoList[
+                                                                                  index]
+                                                                              .title!,
+                                                                          fontSize:
+                                                                              9,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis),
+                                                                      CustomText(
+                                                                          VideoIDWises
+                                                                              .videoList[
+                                                                                  index]
+                                                                              .publishedDate!
+                                                                              .toString(),
+                                                                          fontSize:
+                                                                              9,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis),
+                                                                      Container(
+                                                                          width: screenWidth(
+                                                                              context),
+                                                                          child: Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                CustomText(VideoIDWises.videoList[index].timeAgo!, fontSize: 9),
+                                                                                CustomText(VideoIDWises.videoList[index].viewCount!, fontSize: 9)
+                                                                              ]))
+                                                                    ])),
+                                                          ],
+                                                        ),
+                                                      ),
                                                       SizedBox(height: 10),
                                                       Divider(),
                                                     ],

@@ -220,35 +220,41 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
     );
   }
 
-  Future<void> downloadAndSaveAudio(
-      List<TrackList> audioUrls, String audioname) async {
+  Future<void> downloadAndSaveAudio(List<TrackList> audioUrls, String audioname) async {
+    print("audioName: $audioname");
     Dio dio = Dio();
 
-    for (var audioUrl in audioUrls) {
-      try {
-        var response = await dio.get(audioUrl.uploadAudio.toString(),
-            options: Options(responseType: ResponseType.bytes));
-
-        Directory appDocumentsDirectory =
-            await getApplicationDocumentsDirectory();
-        String filename = extractFilename(audioUrl.uploadAudio.toString());
-        String filePath =
-            '${appDocumentsDirectory.path}/${filename}_${DateTime.now().millisecondsSinceEpoch}.mp3';
-
-        File file = File(filePath);
-        await file.writeAsBytes(response.data);
-
-        // File is saved to local storage
-        print("Successfully Audio is Saved--------------------->");
-        print('Audio saved to: $filePath');
-        Fluttertoast.showToast(msg: "Song Download Successfully!!!");
-      } catch (e) {
-        Fluttertoast.showToast(
-            msg: "Please wait for a while. Try again later!!");
-        print("Error found while downloading------------------->" +
-            audioUrl.toString());
-        print('Error downloading audio: $e');
+    try {
+      Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+      String directoryPath = '${appDocumentsDirectory.path}/$audioname'; // Directory path based on audioname
+      Directory directory = Directory(directoryPath);
+      if (!directory.existsSync()) {
+        directory.createSync(recursive: true); // Create directory if it doesn't exist
       }
+
+      for (var audioUrl in audioUrls) {
+        try {
+          var response = await dio.get(audioUrl.uploadAudio.toString(), options: Options(responseType: ResponseType.bytes));
+
+          String filename = '${audioname}_${DateTime.now().millisecondsSinceEpoch}.mp3'; // Customize filename here
+          print('Audio saved to filename: $filename');
+          String filePath = '$directoryPath/$filename';
+
+          File file = File(filePath);
+          await file.writeAsBytes(response.data);
+
+          // File is saved to local storage
+          print("Successfully Audio is Saved--------------------->");
+          print('Audio saved to: $filePath');
+          Fluttertoast.showToast(msg: "Song Download Successfully!!!");
+        } catch (e) {
+          Fluttertoast.showToast(msg: "Please wait for a while. Try again later!!");
+          print("Error found while downloading------------------->" + audioUrl.toString());
+          print('Error downloading audio: $e');
+        }
+      }
+    } catch (e) {
+      print('Error creating directory: $e');
     }
   }
 
