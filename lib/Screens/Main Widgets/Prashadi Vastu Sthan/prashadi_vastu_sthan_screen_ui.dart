@@ -56,8 +56,8 @@ class _PrashadiVastuSthanScreenUIState extends State<PrashadiVastuSthanScreenUI>
                   unselectedLabelStyle: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w700),
                   tabs: [
-                    Tab(text: '    Vastu    '),
-                    Tab(text: '    Sthan    ')
+                    Tab(text: '    Sthan    '),
+                    Tab(text: '    Vastu    ')
                   ])),
           Expanded(
               child: TabBarView(

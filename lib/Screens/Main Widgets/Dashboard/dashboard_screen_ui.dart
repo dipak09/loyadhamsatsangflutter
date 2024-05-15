@@ -824,58 +824,82 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                             shrinkWrap: true,
                             itemCount: Home.todayBhajanEventList.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(right: 10),
-                                width: 100,
-                                color: Colors.transparent,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    // Home.todayBhajanEventList[index]
-                                    //                               .icon ==
-                                    //                           null
-                                    //                       ? ClipOval(
-                                    //                           child: Image.network(
-                                    //                             "https://cdn.crispedge.com/a7aeb4.png",
-                                    //                           ),
-                                    //                         )
-                                    //                       : ClipOval(
-                                    //                           child: Image.network(
-                                    //                             Home.todayBhajanEventList[index]
-                                    //                                 .icon
-                                    //                                 .toString(),
-                                    //                             fit: BoxFit.cover,
-                                    //                           ),
-                                    //                         ),
-                                    //                 ),
-                                    ClipOval(
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        height: 100,
-                                        width: 100,
-                                        child: Home.todayBhajanEventList[index]
-                                                    .icon ==
-                                                null
-                                            ? Image.network(
-                                                "https://cdn.crispedge.com/a7aeb4.png",
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                Home.todayBhajanEventList[index]
-                                                    .icon
-                                                    .toString(),
-                                                fit: BoxFit.cover,
-                                              ),
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(() => TodayBhajan(
+                                        description: Home
+                                            .todayBhajanEventList[index]
+                                            .description
+                                            .toString(),
+                                        title: Home
+                                            .todayBhajanEventList[index].title
+                                            .toString(),
+                                    date: Home
+                                        .todayBhajanEventList[index].date
+                                        .toString(),
+                                      ));
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 10),
+                                  width: 100,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      // Home.todayBhajanEventList[index]
+                                      //                               .icon ==
+                                      //                           null
+                                      //                       ? ClipOval(
+                                      //                           child: Image.network(
+                                      //                             "https://cdn.crispedge.com/a7aeb4.png",
+                                      //                           ),
+                                      //                         )
+                                      //                       : ClipOval(
+                                      //                           child: Image.network(
+                                      //                             Home.todayBhajanEventList[index]
+                                      //                                 .icon
+                                      //                                 .toString(),
+                                      //                             fit: BoxFit.cover,
+                                      //                           ),
+                                      //                         ),
+                                      //                 ),
+                                      ClipOval(
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          height: 100,
+                                          width: 100,
+                                          child:
+                                              Home.todayBhajanEventList[index]
+                                                          .icon ==
+                                                      null
+                                                  ? Image.network(
+                                                      "https://cdn.crispedge.com/a7aeb4.png",
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.network(
+                                                      Home
+                                                          .todayBhajanEventList[
+                                                              index]
+                                                          .icon
+                                                          .toString(),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    CustomText(
-                                        Home.todayBhajanEventList[index].title.toString(),maxLines: 1,fontSize: 12,)
-                                  ],
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      CustomText(
+                                        Home.todayBhajanEventList[index].title
+                                            .toString(),
+                                        maxLines: 1,
+                                        fontSize: 12,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               );
                             },

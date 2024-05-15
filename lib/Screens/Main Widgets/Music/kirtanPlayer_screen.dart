@@ -11,7 +11,6 @@ import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Models/KirtanKathAudio.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:wakelock/wakelock.dart';
 import 'package:path_provider/path_provider.dart';
 
 class KirtanPlayerScreen extends StatefulWidget {
@@ -36,36 +35,18 @@ class _KirtanPlayerScreenState extends State<KirtanPlayerScreen> {
   Get.put(KirtanKathaAudioController());
   bool isdownload = false;
   bool isPlayPause = true;
-  late Timer _stopTimer;
-  bool _isPhoneLocked = false;
 
   @override
   void initState() {
     super.initState();
-    startWakeLock();
-    startTimer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    stopWakeLockAndAudio();
-    _stopTimer.cancel();
-  }
-
-  void startWakeLock() {
-    Wakelock.enable();
-  }
-
-  void stopWakeLockAndAudio() {
-    Wakelock.disable();
     audioController.audioPlayer.stop();
   }
 
-
-  void startTimer() {
-    _stopTimer = Timer(Duration(seconds: 10), stopWakeLockAndAudio);
-  }
 
   Future<void> downloadAndSaveAudio(String audioUrl) async {
     print("Audio is $audioUrl--------------------->");

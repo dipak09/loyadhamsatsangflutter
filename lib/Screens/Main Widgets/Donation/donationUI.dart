@@ -180,6 +180,7 @@ class _DonationUIState extends State<DonationUI> {
 
     return jsonEncode(enteredDataJson);
   }
+  String missingFields = ""; // Declare missingFields list here
 
   @override
   Widget build(BuildContext context) {
@@ -256,6 +257,10 @@ class _DonationUIState extends State<DonationUI> {
                                                 .key] = p0.toString();
                                           });
                                         },
+                                        //dropDownErrorText: _selectDropDownList[index][entry.key],
+                                        dropDownErrorText: _selectDropDownList[index][entry.key].isEmpty
+                                            ? 'This field is required'
+                                            : null,
                                         decController: _decTextEditingControllerList[index][entry
                                             .key],
                                         zeroAmtController:
@@ -433,15 +438,18 @@ class _DonationUIState extends State<DonationUI> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.apptheme),
                               onPressed: () {
+                                bool allMandatoryFieldsFilled = true;
                                 String result = generateEnteredDataJSON();
                                 log("finalResult${result}");
+                                log("_totalAmount${_totalAmount}");
                                 if (_totalAmount == 0) {
+                                  allMandatoryFieldsFilled = false;
                                   Fluttertoast.showToast(
                                       msg:
                                       "Amount should not be zero or Required filled should not be empty");
                                 } else {
                                   // Flag to indicate if all mandatory fields are filled
-                                  bool allMandatoryFieldsFilled = true;
+                                 // bool allMandatoryFieldsFilled = true;
 
                                   // Iterate through each donation type and its sub-donations
                                   for (int i = 0; i < _getDonationController.donationList.length; i++) {
@@ -454,12 +462,14 @@ class _DonationUIState extends State<DonationUI> {
                                         if (subDonation.descriptionMandatory=="1" &&
                                             _decTextEditingControllerList[i][j].text.isEmpty) {
                                           allMandatoryFieldsFilled = false;
+                                          missingFields = subDonation.subType;
                                           break; // Exit the loop if any mandatory field is empty
                                         }
 
                                         // Check if date is mandatory and not selected
                                         if (subDonation.dateMandatory == "1"&& _selectDate[i][j].isEmpty) {
                                           allMandatoryFieldsFilled = false;
+                                          missingFields = subDonation.subType;
                                           break; // Exit the loop if any mandatory field is empty
                                         }
 
@@ -467,6 +477,7 @@ class _DonationUIState extends State<DonationUI> {
                                         if (subDonation.dropdownMandatory == "1" &&
                                             _selectDropDownList[i][j].isEmpty) {
                                           allMandatoryFieldsFilled = false;
+                                          missingFields = subDonation.subType;
                                           break; // Exit the loop if any mandatory field is empty
                                         }
                                       }
@@ -492,7 +503,7 @@ class _DonationUIState extends State<DonationUI> {
                                   } else {
                                     // Show toast message if any mandatory field is empty
                                     Fluttertoast.showToast(
-                                      msg: "Please fill out all required fields",
+                                     msg:"Please fill out all required fields: ${missingFields}",
                                     );
                                   }
                                 }
@@ -569,6 +580,7 @@ class ExpansionTileChild extends StatefulWidget {
   Function()? selectDateOnPressed;
 
   String? selectedDate;
+  String? dropDownErrorText;
 
   ExpansionTileChild({
     Key? key,
@@ -590,7 +602,8 @@ class ExpansionTileChild extends StatefulWidget {
     this.decController,
     this.dropDownOnChanged,
     this.selectDateOnPressed,
-    this.selectedDate
+    this.selectedDate,
+    this.dropDownErrorText
     //this.selectValue
   }) : super(key: key);
 
@@ -602,9 +615,6 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
 
   String? selectedDropdownValue;
 
-  String? getSelectedDropdownValue() {
-    return selectedDropdownValue;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -643,16 +653,29 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
             widget.descriptionMandatory)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-            child: TextField(
+            child: TextFormField(
               controller: widget.decController,
               decoration: InputDecoration(
-                labelText: widget.description ?? 'Name and Purpose',
+                //labelText: widget.description ?? 'Name and Purpose',
+                labelText: '${widget.description }${widget.descriptionRequired == true? '*' : ''}',
+                  //errorText: widget.dropDownErrorText
+                errorText: widget.descriptionRequired == true && widget.decController!.text.isEmpty
+                    ? 'This field is required'
+                    : null,
               ),
+              validator: (value) {
+                if (widget.descriptionRequired == true && value!.isEmpty) {
+                  return 'This field is required';
+                }
+                return null;
+              },
+              // Set error style to red if validation fails
+             // style: TextStyle(color: widget.descriptionRequired == true? Colors.red : null),
             ),
           ),
         if (widget.isChecked && widget.dateRequired && widget.dateMandatory)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding:  EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
                 Expanded(
@@ -677,8 +700,11 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
                     //   }
                     // },
                     child: Text(widget.selectedDate.toString() == ""
-                        ? "Select Date" : widget.selectedDate.toString()
+                        ? "Select Date*" : widget.selectedDate.toString(),style: TextStyle(
+                      color: widget.selectedDate.toString() == ""?Colors.red:null
+                    ),
                       //: DateFormat('yyyy-MM-dd').format(widget.selectedDate!)),
+
                     ),
                   ),
                 )
@@ -693,7 +719,12 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
             child: DropdownButtonFormField<String>(
 
               decoration: InputDecoration(
-                labelText: widget.dropdownLabel,
+                // labelText: widget.dropdownLabel,
+                labelText: '${widget.dropdownLabel }${widget.descriptionRequired == true? '*' : ''}',
+                errorText: widget.dropDownErrorText
+                // errorText: widget.dropdownMandatory && widget.dropDownErrorText == null
+                //     ? 'This field is required'
+                //     : null,
               ),
               value: selectedDropdownValue,
               onChanged: widget.dropDownOnChanged,

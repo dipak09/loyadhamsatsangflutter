@@ -31,7 +31,13 @@ class _OfflineScreenState extends State<OfflineScreen> {
   @override
   void initState() {
     super.initState();
+
     _loadAudioFiles();
+    _audioPlayer.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        _playNextSong();
+      }
+    });
     // KirtanKatha.getAudio(widget.type!, widget.kathaMasterId!, widget.singerId!);
   }
 
@@ -107,6 +113,29 @@ class _OfflineScreenState extends State<OfflineScreen> {
       }
     });
     return files;
+  }
+
+  void _playNextSong() {
+    int nextIndex = currentindex + 1;
+    if (nextIndex >= 0 && nextIndex < _audioFiles.length) {
+      _audioPlayer.setUrl(_audioFiles[nextIndex].path);
+      _audioPlayer.play();
+      setState(() {
+        currentindex = nextIndex;
+        isPlayPause = true;
+      });
+    }
+  }
+  void _playPreviousSong() {
+    int previousIndex = currentindex - 1;
+    if (previousIndex >= 0 && previousIndex < _audioFiles.length) {
+      _audioPlayer.setUrl(_audioFiles[previousIndex].path);
+      _audioPlayer.play();
+      setState(() {
+        currentindex = previousIndex;
+        isPlayPause = true;
+      });
+    }
   }
 
   @override
@@ -221,8 +250,9 @@ class _OfflineScreenState extends State<OfflineScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          _audioPlayer.seek(
-                              _audioPlayer.position - Duration(seconds: 10));
+                          _playPreviousSong();
+                          // _audioPlayer.seek(
+                          //     _audioPlayer.position - Duration(seconds: 10));
                         },
                         child: Icon(Icons.skip_previous),
                       ),
@@ -239,7 +269,9 @@ class _OfflineScreenState extends State<OfflineScreen> {
                           // KirtanKatha.audioPlayer.seek(
                           //     KirtanKatha.audioPlayer.position +
                           //         Duration(seconds: 10));
-                          stop();
+                          //stop();
+                         _playNextSong();
+
                         },
                         child: Icon(Icons.skip_next),
                       ),

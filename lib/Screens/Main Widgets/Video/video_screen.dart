@@ -3,9 +3,11 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/videoID_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
@@ -15,17 +17,17 @@ import 'package:shimmer/shimmer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoScreen extends StatefulWidget {
-  String? url, videoId, title, view, publishedDate, timeAgo,type;
+  String? url, videoId, title, view, publishedDate, timeAgo, type;
 
   VideoScreen(
       {Key? key,
-        this.url,
-        this.videoId,
-        this.title,
-        this.view,
-        this.publishedDate,
-        this.type,
-        this.timeAgo})
+      this.url,
+      this.videoId,
+      this.title,
+      this.view,
+      this.publishedDate,
+      this.type,
+      this.timeAgo})
       : super(key: key);
 
   @override
@@ -61,12 +63,10 @@ class _VideoScreenState extends State<VideoScreen> {
         prefs.setInt('video_position', position.inMilliseconds);
       }
     });
-    setState(() {
-
-    });
+    setState(() {});
     if (_savedPosition != null && _savedPosition != Duration.zero) {
       log("Call video_position seekTo${_savedPosition}");
-      _controller.seekTo(_savedPosition!,allowSeekAhead: true);
+      _controller.seekTo(_savedPosition!, allowSeekAhead: true);
     }
   }
 
@@ -83,7 +83,7 @@ class _VideoScreenState extends State<VideoScreen> {
         videourl: widget.url,
         videovideoId: widget.videoId);
 
-    VideoIDWise.getData(widget.videoId!,widget.type!);
+    VideoIDWise.getData(widget.videoId!, widget.type!);
 
     _controller = YoutubePlayerController(
       initialVideoId: VideoIDWise.videoId.value,
@@ -92,7 +92,7 @@ class _VideoScreenState extends State<VideoScreen> {
 
     _initializePlayer();
   }
-
+  int selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -153,7 +153,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                     Container(
                                       width: screenWidth(context),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           CustomText(
                                             VideoIDWise.timeAgo.value,
@@ -170,103 +171,193 @@ class _VideoScreenState extends State<VideoScreen> {
                                 ),
                               ),
                               Expanded(
-                                child: Obx(() => VideoIDWise.isLoading.value
-                                    ? Center(child: CircularProgressIndicator())
-                                    : VideoIDWise.videoList.isNotEmpty &&
-                                    VideoIDWise.videoList != null
-                                    ? ListView.builder(
-                                  itemCount: VideoIDWise.videoList.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        playNewVideo(
-                                            VideoIDWise.videoList[index].initialId!);
-                                        VideoIDWise.assignData(
-                                            agoTime: VideoIDWise.videoList[index].timeAgo,
-                                            videoTitle: VideoIDWise.videoList[index].title,
-                                            videoView: VideoIDWise.videoList[index].viewCount,
-                                            videopublishedDate: VideoIDWise.videoList[index].publishedDate,
-                                            videourl: VideoIDWise.videoList[index].youtubeLink,
-                                            videovideoId: VideoIDWise.videoList[index].initialId);
-                                        VideoIDWise.getData(
-                                            VideoIDWise.videoList[index].initialId!,widget.type!);
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 20),
-                                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                        child: Column(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15),
-                                                topRight: Radius.circular(15),
-                                              ),
-                                              child: CachedNetworkImage(
-                                                imageUrl: VideoIDWise.videoList[index].thumbnail!,
-                                                placeholder: (context, url) => Shimmer.fromColors(
-                                                  highlightColor: Colors.grey[300]!,
-                                                  baseColor: Colors.grey[200]!,
-                                                  child: Container(color: Colors.white),
-                                                ),
-                                                errorWidget: (context, url, error) => Icon(Icons.error),
-                                                fit: BoxFit.fill,
-                                                height: screenHeight(context) * 0.18,
-                                                width: screenWidth(context),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: screenWidth(context),
-                                              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                color: Color.fromARGB(179, 221, 218, 218),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(15),
-                                                  bottomRight: Radius.circular(15),
-                                                ),
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  CustomText(
-                                                    VideoIDWise.videoList[index].title!,
-                                                    fontSize: 9,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  CustomText(
-                                                    VideoIDWise.videoList[index].publishedDate!.toString(),
-                                                    fontSize: 9,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  Container(
-                                                    width: screenWidth(context),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        CustomText(
-                                                          VideoIDWise.videoList[index].timeAgo!,
-                                                          fontSize: 9,
+                                child: GetBuilder<VideoIDWiseController>(
+                                  builder: (controller) {
+                                    return VideoIDWise.videoList.isNotEmpty &&
+                                            VideoIDWise.videoList != null
+                                        ? ListView.builder(
+                                            itemCount:
+                                                VideoIDWise.videoList.length,
+                                            itemBuilder: (context, index) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  playNewVideo(VideoIDWise
+                                                      .videoList[index]
+                                                      .initialId!);
+                                                  VideoIDWise.assignData(
+                                                      agoTime: VideoIDWise
+                                                          .videoList[index]
+                                                          .timeAgo,
+                                                      videoTitle: VideoIDWise
+                                                          .videoList[index]
+                                                          .title,
+                                                      videoView: VideoIDWise
+                                                          .videoList[index]
+                                                          .viewCount,
+                                                      videopublishedDate:
+                                                          VideoIDWise
+                                                              .videoList[index]
+                                                              .publishedDate,
+                                                      videourl: VideoIDWise
+                                                          .videoList[index]
+                                                          .youtubeLink,
+                                                      videovideoId: VideoIDWise
+                                                          .videoList[index]
+                                                          .initialId);
+                                                  setState(() {
+                                                    selectedIndex = index;
+                                                  });
+                                                  // VideoIDWise.getData(
+                                                  //     VideoIDWise
+                                                  //         .videoList[index]
+                                                  //         .initialId!,
+                                                  //     widget.type!);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 20),
+                                                  color: selectedIndex ==
+                                                      index
+                                                      ? AppColors.apptheme
+                                                      .withOpacity(
+                                                      0.4)
+                                                      : Colors
+                                                      .transparent,
+                                                  child: Column(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  15),
                                                         ),
-                                                        CustomText(
-                                                          VideoIDWise.videoList[index].viewCount!,
-                                                          fontSize: 9,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: VideoIDWise
+                                                              .videoList[index]
+                                                              .thumbnail!,
+                                                          placeholder: (context,
+                                                                  url) =>
+                                                              Shimmer
+                                                                  .fromColors(
+                                                            highlightColor:
+                                                                Colors
+                                                                    .grey[300]!,
+                                                            baseColor: Colors
+                                                                .grey[200]!,
+                                                            child: Container(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Icon(Icons.error),
+                                                          fit: BoxFit.fill,
+                                                          height: screenHeight(
+                                                                  context) *
+                                                              0.18,
+                                                          width: screenWidth(
+                                                              context),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      Container(
+                                                        width: screenWidth(
+                                                            context),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 5,
+                                                                horizontal: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Color.fromARGB(
+                                                              179,
+                                                              221,
+                                                              218,
+                                                              218),
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                        ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            CustomText(
+                                                              VideoIDWise
+                                                                  .videoList[
+                                                                      index]
+                                                                  .title!,
+                                                              fontSize: 9,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            CustomText(
+                                                              VideoIDWise
+                                                                  .videoList[
+                                                                      index]
+                                                                  .publishedDate!
+                                                                  .toString(),
+                                                              fontSize: 9,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            Container(
+                                                              width:
+                                                                  screenWidth(
+                                                                      context),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  CustomText(
+                                                                    VideoIDWise
+                                                                        .videoList[
+                                                                            index]
+                                                                        .timeAgo!,
+                                                                    fontSize: 9,
+                                                                  ),
+                                                                  CustomText(
+                                                                    VideoIDWise
+                                                                        .videoList[
+                                                                            index]
+                                                                        .viewCount!,
+                                                                    fontSize: 9,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Divider(height: 0,),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(height: 10),
-                                            Divider(),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Center(
+                                            child: CustomText("No Video Found"),
+                                          );
                                   },
-                                )
-                                    : Center(
-                                  child: CustomText("No Video Found"),
-                                )),
+                                ),
                               ),
                             ],
                           ),
@@ -293,7 +384,8 @@ class FullScreenButton extends StatelessWidget {
   final bool isFullScreen;
   final VoidCallback onFullScreenToggle;
 
-  FullScreenButton({required this.isFullScreen, required this.onFullScreenToggle});
+  FullScreenButton(
+      {required this.isFullScreen, required this.onFullScreenToggle});
 
   @override
   Widget build(BuildContext context) {
