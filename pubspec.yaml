@@ -72,6 +72,8 @@ dependencies:
   email_validator: ^2.1.17
   country_picker: ^2.0.25
   flutter_timezone: ^1.0.8
+  flutter_downloader: ^1.11.7
+  youtube_explode_dart: ^1.12.4
 
 
   
