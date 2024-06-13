@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/prashadi_vastu_sthan_controller.dart';
+import 'package:loyadhamsatsang/Controllers/prashdi_sthan_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Prashadi%20Vastu%20Sthan/prashadi_vastu_sthan_detali_screen.dart';
@@ -16,13 +17,8 @@ class PrashadiSthanScreen extends StatefulWidget {
 }
 
 class _PrashadiSthanScreenState extends State<PrashadiSthanScreen> {
-  var Prashadi = Get.put(PrashadiVastuSthanController());
-  void initState() {
-    super.initState();
-    setState(() {
-      Prashadi.getData("item");
-    });
-  }
+  var Prashadi = Get.put(PrashadiSthanController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +63,8 @@ class _PrashadiSthanScreenState extends State<PrashadiSthanScreen> {
                               ));
                         }),
                   )
-                : Center(child: CustomText("No Images Found"))),
+                : Expanded(
+                    child: Center(child: CustomText("No Images Found")))),
       ],
     );
   }

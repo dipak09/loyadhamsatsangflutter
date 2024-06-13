@@ -45,7 +45,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-final _messagingService = MessagingService();
+
 
 class _MyAppState extends State<MyApp> {
   String location = 'Unknown';
@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
   //   print('location: ${location}');
   //   return location;
   // }
-
+  final _messagingService = MessagingService();
   Future<void> _initData() async {
     try {
       timeZone = await FlutterTimezone.getLocalTimezone();
@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
    // _determinePosition();
    // getPosition();
     DeviceConfig.rotationLock();
-    _messagingService.init(context);
+
   }
 
   var Splash = Get.put(SplashScreenController());

@@ -43,7 +43,7 @@ class BottomSheetUI extends StatelessWidget {
                 title: "Calendar",
                 imageName: AppImages.calenderBottomSheet,
                 onTap: () {
-                  Get.to(() => CalenderScreenUI());
+                  Get.to(() => CalenderScreenUI(currentMonth: DateTime.now(),));
                 }),
             card(
                 title: "Books",

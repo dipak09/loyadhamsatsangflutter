@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Models/Prashadi.dart';
 
-class PrashadiVastuController extends GetxController {
+class PrashadiSthanController extends GetxController {
   Dio dio = Dio();
   List<Prashadi> prashadiList = [];
 
@@ -13,7 +13,7 @@ class PrashadiVastuController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-     get();
+    get();
   }
 
   // void get(int? i) {
@@ -28,7 +28,7 @@ class PrashadiVastuController extends GetxController {
     if (prashadiList.isEmpty)  {
       // If data hasn't been loaded, fetch the data
       prashadiList.clear();
-      getData("item");
+      getData("place");
     }
   }
 

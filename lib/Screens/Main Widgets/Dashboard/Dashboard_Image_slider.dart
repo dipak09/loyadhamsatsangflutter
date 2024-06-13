@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CatchImage.dart';
 import 'package:loyadhamsatsang/globals.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DashBoardImageSlider extends StatefulWidget {
@@ -27,49 +28,68 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
   var Home = Get.put(DashboardController());
+
+  Widget _loaderSlider() {
+    return Container(
+        height: screenHeight(context) * 0.18,
+        width: screenWidth(context),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Shimmer.fromColors(
+                highlightColor: Colors.grey[300]!,
+                baseColor: Colors.grey[200]!,
+                child:
+                    Container(width: 200, height: 200, color: Colors.white))));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: screenHeight(context) * 0.22,
-      width: screenWidth(context),
-      child: CarouselSlider(
-        items: Home.sliderList
-            .map(
-              (item) => InkWell(
-                onTap: () {
-                  _launchURL(item.routename!);
-                },
-                child: Container(
-                  height: screenHeight(context) * 0.22,
-                  decoration: BoxDecoration(
-                   // borderRadius: BorderRadius.circular(30),
-                  ),
-                  width: screenWidth(context),
-                 padding: EdgeInsets.all(10),
-                 // margin: EdgeInsets.all(10),
-                  child: ClipRRect(
-                   borderRadius: BorderRadius.circular(10),
-                    child: CachedImageWithShimmer(imageUrl: item.image!),
+    return Home.isLoading.value
+        ? _loaderSlider()
+        : Home.livestreamingList.length == 0 && Home.livestreamingList.isEmpty
+            ? SizedBox.shrink()
+            : SizedBox(
+                height: screenHeight(context) * 0.22,
+                width: screenWidth(context),
+                child: CarouselSlider(
+                  items: Home.sliderList
+                      .map(
+                        (item) => InkWell(
+                          onTap: () {
+                            _launchURL(item.routename!);
+                          },
+                          child: Container(
+                            height: screenHeight(context) * 0.22,
+                            decoration: BoxDecoration(
+                                // borderRadius: BorderRadius.circular(30),
+                                ),
+                            width: screenWidth(context),
+                            padding: EdgeInsets.all(10),
+                            // margin: EdgeInsets.all(10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child:
+                                  CachedImageWithShimmer(imageUrl: item.image!),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  carouselController: carouselController,
+                  options: CarouselOptions(
+                    scrollPhysics: const BouncingScrollPhysics(),
+                    autoPlay: true,
+                    aspectRatio: 2,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        currentIndex = index;
+                      });
+                    },
                   ),
                 ),
-              ),
-            )
-            .toList(),
-        carouselController: carouselController,
-        options: CarouselOptions(
-
-          scrollPhysics: const BouncingScrollPhysics(),
-          autoPlay: true,
-          aspectRatio: 2,
-          viewportFraction: 1,
-          onPageChanged: (index, reason) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-        ),
-      ),
-    );
+              );
   }
 
   List<Widget> _buildIndicators() {

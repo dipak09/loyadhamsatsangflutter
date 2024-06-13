@@ -20,7 +20,7 @@ class DashboardController extends GetxController {
   List<Dashboardata> sliderList = [];
   List<Channel1> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
-  List<UpcomingEvent> upcomingEventList = [];
+  //List<UpcomingEvent> upcomingEventList = [];
   List<TodaysBhajan> todayBhajanEventList = [];
 
   List<FeaturedMediaDetail> featureMediaList = [];
@@ -98,15 +98,15 @@ class DashboardController extends GetxController {
         });
 
       }
-      final upcomingEventData = data['upcoming_event'];
-      if (upcomingEventData == null || upcomingEventData == []) {
-        upcomingEventList = [];
-      } else {
-        upcomingEventData.forEach((el) {
-          UpcomingEvent upcomingEvent = UpcomingEvent.fromJson(el);
-          upcomingEventList.add(upcomingEvent);
-        });
-      }
+      // final upcomingEventData = data['upcoming_event'];
+      // if (upcomingEventData == null || upcomingEventData == []) {
+      //   upcomingEventList = [];
+      // } else {
+      //   upcomingEventData.forEach((el) {
+      //     UpcomingEvent upcomingEvent = UpcomingEvent.fromJson(el);
+      //     upcomingEventList.add(upcomingEvent);
+      //   });
+      // }
 
       log("liveStreamData!!!${livestreamingList.length}");
 

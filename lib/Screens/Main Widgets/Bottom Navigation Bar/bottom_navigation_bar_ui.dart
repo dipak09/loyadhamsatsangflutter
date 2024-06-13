@@ -1,11 +1,14 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
+import 'package:loyadhamsatsang/Constants/helper.dart';
 import 'package:loyadhamsatsang/Controllers/dashan_place_controller.dart';
 import 'package:loyadhamsatsang/Controllers/dashboard_controller.dart';
 import 'package:loyadhamsatsang/Controllers/featuremedia_Controller.dart';
@@ -28,6 +31,7 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Sant%20Mandal/sant_mandal
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Term%20&%20Conditions/termandconditons_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen_ui.dart';
+import 'package:loyadhamsatsang/Utilites/messaging_service.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 import 'package:intl/intl.dart';
@@ -48,19 +52,32 @@ class _BottomNavigationState extends State<BottomNavigation> {
   bool isBottomSheetOpen = false;
   var TermAndConditons = Get.put(TermAndConditonsController());
   var PrivacyPolicy = Get.put(PrivacyPolicyController());
-
+  final _messagingService = MessagingService();
   @override
   void initState() {
     widget.index;
     super.initState();
     //isBottomSheet = false;
+    _messagingService.init(context);
+    _messagingService.setupInteractiveMessage(context);
+    getToken();
     TermAndConditons.getData();
     PrivacyPolicy.getData();
     setState(() {});
   }
-
-  var firebaseNotificationController =
+  getToken() async {
+    final token= await _messagingService.getToken();
+    log("final Token${token}");
+    setState(() {
+      deviceToken =token!;
+    });
+    log("final deviceToken${deviceToken}");
+    if(deviceToken != null){
+      var firebaseNotificationController =
       Get.put(FirebaseNotificationController());
+    }
+  }
+
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   GlobalKey<ScaffoldState> _bottomSheetKey = GlobalKey();
 
@@ -329,7 +346,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                         setState(() {
                           isBottomSheet = false;
                         });
-                        Get.to(() => CalenderScreenUI());
+                        Get.to(() => CalenderScreenUI(currentMonth: DateTime.now(),));
                       }),
                   cardBottomSheet(
                       title: "Books",

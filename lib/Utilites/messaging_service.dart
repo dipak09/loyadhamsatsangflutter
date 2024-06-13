@@ -1,38 +1,50 @@
 import 'dart:math';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/helper.dart';
-import 'package:loyadhamsatsang/main.dart';
+import 'package:loyadhamsatsang/Screens/Main%20Widgets/Calendar/calender_screen_ui.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:loyadhamsatsang/main.dart';
 
 class MessagingService {
+  static String? fcmToken; // Variable to store the FCM token
 
+  static final MessagingService _instance = MessagingService._internal();
+
+  factory MessagingService() => _instance;
+
+  MessagingService._internal();
+
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> showNotification({required RemoteMessage message}) async {
     print("firebase start");
     AndroidNotificationChannel channel = AndroidNotificationChannel(
-        Random.secure().nextInt(1000000).toString(),
-        'High Importance Notification',
-        // 'myfxbay',
-        importance: Importance.max);
+      Random.secure().nextInt(1000000).toString(),
+      'High Importance Notification',
+      importance: Importance.max,
+    );
 
     AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
       channel.id.toString(),
       channel.name.toString(),
-      // channel.description.toString(),
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'ticker',
       icon: '@mipmap/ic_launcher',
       channelShowBadge: true,
     );
+
     DarwinNotificationDetails darwinNotificationDetails =
     DarwinNotificationDetails(
         presentAlert: true, presentBadge: true, presentSound: true);
+
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
+
     Future.delayed(
       Duration.zero,
           () {
@@ -43,13 +55,13 @@ class MessagingService {
             notificationDetails);
       },
     );
+
     print("channnelID${channel.id.toString()}");
     print("channnelName${channel.name}");
-    print("channnelName${channel.description}");
   }
 
   Future<void> initialLocalNotification(
-      {required RemoteMessage message,required BuildContext context}) async {
+      {required RemoteMessage message, required BuildContext context}) async {
     var androidInitializationSettings =
     AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosInitializationSettings = DarwinInitializationSettings();
@@ -58,19 +70,13 @@ class MessagingService {
         android: androidInitializationSettings, iOS: iosInitializationSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (payload) {
-
+          _handleNotificationClick(context, message);
         });
   }
 
-  static String? fcmToken; // Variable to store the FCM token
-
-  static final MessagingService _instance = MessagingService._internal();
-
-  factory MessagingService() => _instance;
-
-  MessagingService._internal();
-
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  Future<String?> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
 
   Future<void> init(BuildContext context) async {
     print("firebase start");
@@ -89,7 +95,7 @@ class MessagingService {
       debugPrint("User granted notifications permission");
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      debugPrint("User granted  provisional notifications permission");
+      debugPrint("User granted provisional notifications permission");
     } else {
       debugPrint("User denied notifications permission");
     }
@@ -105,12 +111,8 @@ class MessagingService {
       deviceToken = fcmToken!;
     } else {
       print('Failed to retrieve FCM Token');
-      // Handle the case where the FCM token is null
     }
 
-// Save FCM token
-   // FcmTokenService.saveDeviceToken(fcmToken.toString());
-    // Handling background messages using the specified handler
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     // Listening for incoming messages while the app is in the foreground
@@ -122,16 +124,13 @@ class MessagingService {
       if (message.notification != null) {
         if (message.notification!.title != null &&
             message.notification!.body != null) {
-          final notificationData = message.data;
-          initialLocalNotification(message: message,context: context);
+          initialLocalNotification(message: message, context: context);
           showNotification(message: message);
         }
       }
     });
 
     // Handling the initial message received when the app is launched from dead (killed state)
-    // When the app is killed and a new notification arrives when user clicks on it
-    // It gets the data to which screen to open
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
         _handleNotificationClick(context, message);
@@ -146,13 +145,30 @@ class MessagingService {
     });
   }
 
+  void setupInteractiveMessage(BuildContext context) {
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        _handleNotificationClick(context, message);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint(
+          'onMessageOpenedApp: ${message.notification!.title.toString()}');
+      _handleNotificationClick(context, message);
+    });
+  }
+
   // Handling a notification click event by navigating to the specified screen
   void _handleNotificationClick(BuildContext context, RemoteMessage message) {
     final notificationData = message.data;
-
-    if (notificationData.containsKey('screen')) {
-      final screen = notificationData['screen'];
-      Navigator.of(context).pushNamed(screen);
+    print("dateString$notificationData");
+    if (notificationData.containsKey('redirect_date')) {
+      String dateString = notificationData['redirect_date'];
+      print("dateString$dateString");
+      Get.to(() => CalenderScreenUI(
+        currentMonth: DateTime.parse(dateString),
+      ));
     }
   }
 }
@@ -160,47 +176,6 @@ class MessagingService {
 // Handler for background messages
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // Future<void> showNotification({required RemoteMessage message}) async {
-  //
-  //   AndroidNotificationChannel channel = AndroidNotificationChannel(
-  //       Random.secure().nextInt(1000000).toString(),
-  //       'High Importance Notification',
-  //       // 'myfxbay',
-  //       importance: Importance.max
-  //   );
-  //   AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-  //     channel.id.toString(),
-  //     channel.name.toString(),
-  //     // channel.description.toString(),
-  //     importance: Importance.high,
-  //     priority: Priority.high,
-  //     ticker: 'ticker',
-  //     icon: '@mipmap/ic_launcher',
-  //     channelShowBadge: true,
-  //   );
-  //   DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(
-  //       presentAlert: true,
-  //       presentBadge: true,
-  //       presentSound: true
-  //   );
-  //   NotificationDetails notificationDetails = NotificationDetails(
-  //       android: androidNotificationDetails,
-  //       iOS: darwinNotificationDetails
-  //   );
-  //   Future.delayed(Duration.zero,
-  //         () {
-  //       flutterLocalNotificationsPlugin.show(
-  //           0,
-  //           message.notification!.title.toString(),
-  //           message.notification!.body.toString(),
-  //           notificationDetails);
-  //     },
-  //   );
-  // }
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-  //   showNotification(message: message);
-  // });
-  debugPrint('Handling a background message: ${message.notification!.title}');
+  await Firebase.initializeApp();
+  print('Handling a background message: ${message.notification!.title}');
 }

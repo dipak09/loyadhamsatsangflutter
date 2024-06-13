@@ -271,7 +271,8 @@ class _DonationUIState extends State<DonationUI> {
                                             _updateTotalAmount();
                                           });
                                         },
-                                        title: entry.value.subType +
+                                        title: entry.value.amount == '0'?entry.value.subType +
+                                            " \$${_amtTextEditingControllerList[index][entry.key].text}":entry.value.subType +
                                             " \$${entry.value.amount}" ??
                                             "",
                                         isChecked:
@@ -618,7 +619,6 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
 
   @override
   Widget build(BuildContext context) {
-    log("descriptionMandatory@@@${widget.descriptionMandatory}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -634,18 +634,30 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
         ),
         if (widget.isChecked && widget.amount == "0")
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-            child: TextField(
-              controller: widget.zeroAmtController,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]+|\s")),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, ),
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                TextField(
+                  controller: widget.zeroAmtController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]+|\s")),
+                  ],
+                  keyboardType: TextInputType.number,
+                  onChanged: widget.zeroAmtOnChanged,
+                  decoration: InputDecoration(
+                    hintText: "",
+                    contentPadding: const EdgeInsets.only(left: 20.0), // Add padding to the left
+                  ),
+                ),
+                const Positioned(
+                  left: 0,
+                  child: Text(
+                    '\$',
+                    style: TextStyle(fontSize: 16, color: Colors.black), // Customize the style as needed
+                  ),
+                ),
               ],
-              //
-              keyboardType: TextInputType.number,
-              onChanged: widget.zeroAmtOnChanged,
-              decoration: InputDecoration(
-                labelText: "\$",
-              ),
             ),
           ),
         if (widget.isChecked &&

@@ -17,11 +17,8 @@ class PrashadiVastuScreen extends StatefulWidget {
 }
 
 class _PrashadiVastuScreenState extends State<PrashadiVastuScreen> {
-  var Prashadi = Get.put(PrashadiVastuSthanController());
-  void initState() {
-    super.initState();
-    Prashadi.getData("place");
-  }
+  var Prashadi = Get.put(PrashadiVastuController());
+
 
   @override
   void dispose() {
@@ -72,7 +69,7 @@ class _PrashadiVastuScreenState extends State<PrashadiVastuScreen> {
                               ));
                         }),
                   )
-                : Center(child: CustomText("No Images Found"))),
+                : Expanded(child: Center(child: CustomText("No Images Found")))),
       ],
     );
   }

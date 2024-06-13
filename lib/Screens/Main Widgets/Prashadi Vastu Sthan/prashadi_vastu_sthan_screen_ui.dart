@@ -18,7 +18,7 @@ class PrashadiVastuSthanScreenUI extends StatefulWidget {
 class _PrashadiVastuSthanScreenUIState extends State<PrashadiVastuSthanScreenUI>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  var Prashadi = Get.put(PrashadiVastuSthanController());
+
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -52,18 +52,18 @@ class _PrashadiVastuSthanScreenUIState extends State<PrashadiVastuSthanScreenUI>
                   unselectedLabelColor: Colors.black,
                   labelStyle: GoogleFonts.poppins(
                       fontWeight: FontWeight.w700, fontSize: 14),
-                  onTap: Prashadi.get,
+                  //onTap: Prashadi.get,
                   unselectedLabelStyle: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w700),
                   tabs: [
-                    Tab(text: '    Sthan    '),
-                    Tab(text: '    Vastu    ')
+                    Tab(text: '    Vastu    '),
+                    Tab(text: '    Sthan    ')
                   ])),
           Expanded(
               child: TabBarView(
                   physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
-                  children: [PrashadiVastuScreen(), PrashadiSthanScreen()]))
+                  children: const [PrashadiVastuScreen(), PrashadiSthanScreen()]))
         ]));
   }
 }

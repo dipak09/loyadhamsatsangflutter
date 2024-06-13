@@ -15,7 +15,9 @@ import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 class CalenderScreenUI extends StatefulWidget {
-  const CalenderScreenUI({Key? key}) : super(key: key);
+
+  DateTime currentMonth;
+   CalenderScreenUI({Key? key,required this.currentMonth}) : super(key: key);
 
   @override
   State<CalenderScreenUI> createState() => _CalenderScreenUIState();
@@ -24,19 +26,26 @@ class CalenderScreenUI extends StatefulWidget {
 class _CalenderScreenUIState extends State<CalenderScreenUI> {
   late PageController _pageController;
   late CalanderController calanderController;
-  DateTime _currentMonth = DateTime.now();
+
+  //DateTime widget.currentMonth = DateTime.now();
   bool english = true;
   bool gujarati = false;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: DateTime.now().month - 1);
+    //_pageController = PageController(initialPage: DateTime.now().month - 1);
+    //_pageController = PageController(initialPage: DateTime.now().month);
+    _pageController = PageController(
+      initialPage: widget.currentMonth.month - 1 + (12 * (widget.currentMonth.year - DateTime.now().year)),
+    );
     calanderController = Get.put(CalanderController());
     calanderController.startdate = null;
     calanderController.enddate = null;
     english = true;
     gujarati = false;
+    log("currentDate${DateFormat('MMMM').format(widget.currentMonth)}");
+
   }
 
   @override
@@ -126,15 +135,14 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                       controller: _pageController,
                       onPageChanged: (index) {
                         setState(() {
-                          _currentMonth =
-                              DateTime(_currentMonth.year, index + 1, 1);
+                          widget.currentMonth =
+                              DateTime(widget.currentMonth.year, (index%12)+1, 1);
                         });
                       },
                       itemCount: 12, // Show 10 years
                       itemBuilder: (context, pageIndex) {
-                        DateTime month = DateTime(
-                            _currentMonth.year, (pageIndex % 12) + 1, 1);
-                        return _buildCalendar(month, calanderController);
+                        //DateTime month = DateTime(widget.currentMonth.year, (pageIndex % 12) + 1, 1);
+                        return _buildCalendar(widget.currentMonth, calanderController);
                       },
                     ),
                   ),
@@ -146,7 +154,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
 
   // Build the header with month and year selection
   Widget _buildHeader() {
-    bool isLastMonthOfYear = _currentMonth.month == 12;
+    bool isLastMonthOfYear = widget.currentMonth.month == 12;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -165,21 +173,31 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             },
           ),
           Text(
-            DateFormat('MMMM').format(_currentMonth),
+            DateFormat('MMMM').format(widget.currentMonth),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           DropdownButton<int>(
-            value: _currentMonth.year,
+            value: widget.currentMonth.year,
             onChanged: (int? year) {
               if (year != null) {
+                // setState(() {
+                //   widget.currentMonth = DateTime(year, widget.currentMonth.month, 1);
+                //     calanderController.enddate = "${widget.currentMonth.year}-12-31";
+                //     calanderController.startdate = "${widget.currentMonth.year}-01-01";
+                //     calanderController.getData("${widget.currentMonth.year}-01-01", "${widget.currentMonth.year}-12-31");
+                //   _pageController.jumpToPage((widget.currentMonth.month - 1) + (12 * (year - DateTime.now().year)));
+                // });
+                // log("year1${widget.currentMonth.month}");
+                // log("year1${(widget.currentMonth.month - 1) + (12 * (year - DateTime.now().year))}");
                 setState(() {
-                  _currentMonth = DateTime(year, 1, 1);
+                  widget.currentMonth = DateTime(year, 1, 1);
                   calanderController.enddate = "$year-12-31";
                   calanderController.startdate = "$year-01-01";
                   calanderController.getData("$year-01-01", "$year-12-31");
 
                   int yearDiff = DateTime.now().year - year;
-                  int monthIndex = 12 * yearDiff + _currentMonth.month - 1;
+                  int monthIndex = 12 * yearDiff + widget.currentMonth.month - 1;
+                  log("monthIndex${monthIndex}");
                   _pageController.jumpToPage(monthIndex);
                 });
               }

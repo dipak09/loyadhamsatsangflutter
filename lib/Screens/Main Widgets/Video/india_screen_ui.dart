@@ -89,21 +89,6 @@ class _IndiaScreenState extends State<IndiaScreen> {
     }
   }
 
-  // void _loadData() {
-  //   if (!moreloading) {
-  //     // Load data only if it hasn't been loaded yet
-  //     videoController.get(widget.type == 'US' ? 0 : 1);
-  //     moreloading = true; // Set loaded to true after data is loaded for this tab
-  //   }
-  // }
-  //
-  // void _loadMore() async {
-  //   if (_controller.position.maxScrollExtent == _controller.position.pixels &&
-  //       !videoController.isLoading.value) {
-  //     videoController.pageno.value++;
-  //     await videoController.getData(widget.type, apitoken ?? "", videoController.pageno.value.toString());
-  //   }
-  // }
   @override
   void initState() {
     _controller = ScrollController()..addListener(loadmore);
