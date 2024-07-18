@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:loyadhamsatsang/Constants/helper.dart';
 import 'package:loyadhamsatsang/Models/DailyDarshan.dart';
 import 'package:loyadhamsatsang/Models/ImagesData.dart';
 import 'package:loyadhamsatsang/Models/Video.dart';
@@ -35,8 +36,7 @@ class DashboardController extends GetxController {
     try {
       isLoading(true);
       update();
-
-      String apiUrl = 'https://loyadham.in/api/webservice/home';
+      String apiUrl = 'https://loyadham.in/api/webservice/home?token=$deviceToken';
 
       final response = await dio.get(
         apiUrl,

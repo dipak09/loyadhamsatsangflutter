@@ -5,6 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,7 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
 
   // var totalamount = 0;
   bool donationvalue = false;
-  String countryCode = "91";
+  String countryCode = "1";
 
   @override
   void initState() {
@@ -131,7 +132,7 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                                 width: 70,
                                 child: Row(
                                   children: [
-                                    Text("+${countryCode}"),
+                                    Text("+$countryCode"),
                                     SizedBox(
                                       width: 5,
                                     ),
@@ -142,6 +143,9 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                             ),
                             controller: Donation.phonecontroller,
                             keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              MaskedInputFormatter('###-###-####'),
+                            ],
                           ),
                           // Row(
                           //   children: [
@@ -200,7 +204,7 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                           ),
                           child: ListTile(
                             title: CustomText("Total:- "),
-                            trailing: CustomText("\$${widget.totalamount}"),
+                            trailing: CustomText("\$${NumberFormat('###,###,###').format(num.parse(widget.totalamount.toString()))}"),
                           )),
 
                       // Spacer(),

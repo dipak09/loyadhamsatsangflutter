@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 
 class CustomTextFieldWithPrefixIcon extends StatefulWidget {
@@ -9,7 +10,8 @@ class CustomTextFieldWithPrefixIcon extends StatefulWidget {
   bool? readOnly;
   Widget? prefixIcon;
   Function(String)? onChanged;
-  CustomTextFieldWithPrefixIcon({
+  List<TextInputFormatter>? inputFormatters;
+CustomTextFieldWithPrefixIcon({
     Key? key,
     required this.hintname,
     this.controller,
@@ -17,6 +19,7 @@ class CustomTextFieldWithPrefixIcon extends StatefulWidget {
     this.readOnly,
     this.prefixIcon,
     this.keyboardType,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -33,11 +36,11 @@ class _CustomTextFieldWithPrefixIconState extends State<CustomTextFieldWithPrefi
           border: Border.all(color: AppColors.apptheme),
           borderRadius: BorderRadius.circular(10.0)),
       child: TextFormField(
-
         readOnly: widget.readOnly??false,
         onChanged: widget.onChanged,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon??SizedBox.shrink(),
           //contentPadding:  EdgeInsets.only(left: 13, top: 18, bottom: 18),

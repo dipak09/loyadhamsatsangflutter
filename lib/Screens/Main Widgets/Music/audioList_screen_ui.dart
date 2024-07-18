@@ -1,7 +1,6 @@
-// ignore_for_file: non_constant_identifier_names, must_be_immutable, unnecessary_null_comparison, prefer_const_constructors
 
+import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -9,8 +8,8 @@ import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Controllers/kirtan&kathaAudio_controller.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
-import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/audioPlayer_screen.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Music/kirtanPlayer_screen.dart';
+
 
 class AudioListScreenUI extends StatefulWidget {
   String? title, imgUrl, kathaMasterId, singerId, type;
@@ -27,12 +26,14 @@ class AudioListScreenUI extends StatefulWidget {
   State<AudioListScreenUI> createState() => _AudioListScreenUIState();
 }
 
-class _AudioListScreenUIState extends State<AudioListScreenUI> {
-  var KirtanKatha = Get.put(KirtanKathaAudioController());
-
+class _AudioListScreenUIState extends State<AudioListScreenUI> with WidgetsBindingObserver {
+  //final KirtanKatha = Get.put(KirtanKathaAudioController());
+  final KirtanKathaAudioController KirtanKatha =
+  Get.put(KirtanKathaAudioController());
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     playallclick = false;
     KirtanKatha.audioPlayer.stop();
     KirtanKatha.audioPlayer.positionStream.listen((event) {
@@ -49,10 +50,21 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    //_initScreenStateListener();
     playallclick = false;
     KirtanKatha.getAudio(widget.type!, widget.kathaMasterId!, widget.singerId!);
   }
 
+  void _startStopAudioTimer() async {
+    _stopAudioTimer?.cancel();
+    _stopAudioTimer = Timer(const Duration(minutes: 3), () async {
+      KirtanKatha.audioPlayer.pause();
+      setState(() {
+        isPlayPause = false;
+      });
+    });
+  }
   String formatDuration(Duration duration) {
     // Function to format a duration as "mm:ss".
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -64,9 +76,49 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   // Define a global index to keep track of the currently playing audio
   int currentAudioIndex = 0;
   bool isPlayPause = true;
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  //final AudioPlayer _audioPlayer = AudioPlayer();
   bool playallclick = false;
 
+  Timer? _stopAudioTimer;
+  // ScreenStateEvent? _previousEvent;
+  // Screen _screen = Screen();
+  // StreamSubscription<ScreenStateEvent>? _screenStateSubscription;
+
+  // void _initScreenStateListener() {
+  //   _screenStateSubscription = _screen.screenStateStream?.listen((event) {
+  //     log("event$event");
+  //     log("ScreenStateEvent${ScreenStateEvent.SCREEN_OFF}");
+  //     if (event == ScreenStateEvent.SCREEN_OFF) {
+  //       _startStopAudioTimer();
+  //     } else if (event == ScreenStateEvent.SCREEN_ON) {
+  //       _stopAudioTimer?.cancel();
+  //     }
+  //     _previousEvent = event;
+  //   });
+  // }
+
+  // void _startStopAudioTimer() {
+  //   _stopAudioTimer?.cancel();
+  //   _stopAudioTimer = Timer(Duration(minutes: 3), () {
+  //     if (_previousEvent == ScreenStateEvent.SCREEN_OFF) {
+  //       KirtanKatha.audioPlayer.pause();
+  //       setState(() {
+  //         isPlayPause = false;
+  //       });
+  //     }
+  //   });
+  // }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive) {
+     // _startStopAudioTimer();
+      print('app inactive, is lock screen:');
+    } else if (state == AppLifecycleState.resumed) {
+      print('app resumed');
+    }
+  }
   void playAllAudios() {
     // Start playing the first audio
     if (!playallclick) {
@@ -117,6 +169,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   void buttonplayNextAudio() {
     setState(() {
       playallclick = true;
+      isPlayPause = true;
     });
 
     // Check if there are more audio files in the list
@@ -139,6 +192,7 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
   void playPreviousAudio() {
     setState(() {
       playallclick = true;
+      isPlayPause = true;
     });
 
     // Check if there is a previous audio file
@@ -366,7 +420,15 @@ class _AudioListScreenUIState extends State<AudioListScreenUI> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              isPlayPause ? pause() : play();
+                              setState(() {
+                                if(isPlayPause){
+                                  pause();
+                                  isPlayPause = false;
+                                }else{
+                                  play();
+                                  isPlayPause = true;
+                                }
+                              });
                             },
                             child: isPlayPause
                                 ? Icon(Icons.pause)

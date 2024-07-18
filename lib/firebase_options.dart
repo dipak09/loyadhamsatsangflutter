@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '376155576813',
     projectId: 'loyadham-satasang',
     storageBucket: 'loyadham-satasang.appspot.com',
-    iosBundleId: 'com.example.loyadhamsatsang',
+    iosBundleId: 'com.Phoenix.LoyadhamSatsangTest',
   );
 }

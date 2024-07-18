@@ -42,43 +42,38 @@ class _DonationUIState extends State<DonationUI> {
       // Initialize the list of checkbox values for each sub-donation
       _subDonationCheckboxValues = List.generate(
         _getDonationController.donationList.length,
-            (index) =>
-            List.filled(
-              _getDonationController.donationList[index].subDonations.length,
-              false,
-            ),
+        (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          false,
+        ),
       );
       _amtTextEditingControllerList = List.generate(
         _getDonationController.donationList.length,
-            (index) =>
-            List.generate(
-              _getDonationController.donationList[index].subDonations.length,
-                  (subIndex) => TextEditingController(),
-            ),
+        (index) => List.generate(
+          _getDonationController.donationList[index].subDonations.length,
+          (subIndex) => TextEditingController(),
+        ),
       );
       _decTextEditingControllerList = List.generate(
         _getDonationController.donationList.length,
-            (index) =>
-            List.generate(
-              _getDonationController.donationList[index].subDonations.length,
-                  (subIndex) => TextEditingController(),
-            ),
+        (index) => List.generate(
+          _getDonationController.donationList[index].subDonations.length,
+          (subIndex) => TextEditingController(),
+        ),
       );
       _selectDropDownList = List.generate(
         _getDonationController.donationList.length,
-            (index) =>
-            List.filled(
-              _getDonationController.donationList[index].subDonations.length,
-              '', // Initialize with empty string or any default value
-            ),
+        (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          '', // Initialize with empty string or any default value
+        ),
       );
       _selectDate = List.generate(
         _getDonationController.donationList.length,
-            (index) =>
-            List.filled(
-              _getDonationController.donationList[index].subDonations.length,
-              '', // Initialize with empty string or any default value
-            ),
+        (index) => List.filled(
+          _getDonationController.donationList[index].subDonations.length,
+          '', // Initialize with empty string or any default value
+        ),
       );
       setState(() {
         _totalAmount = 0;
@@ -94,7 +89,7 @@ class _DonationUIState extends State<DonationUI> {
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
           double amount =
-          double.parse(donationType.subDonations[j].amount.toString());
+              double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
             if (_amtTextEditingControllerList[i][j].text.isNotEmpty) {
@@ -122,7 +117,7 @@ class _DonationUIState extends State<DonationUI> {
       for (int j = 0; j < donationType.subDonations.length; j++) {
         if (_subDonationCheckboxValues[i][j]) {
           double amount =
-          double.parse(donationType.subDonations[j].amount.toString());
+              double.parse(donationType.subDonations[j].amount.toString());
           if (amount == 0) {
             // If amount is zero, check if there's a value entered in the text field
             String enteredText = _amtTextEditingControllerList[i][j].text;
@@ -154,10 +149,10 @@ class _DonationUIState extends State<DonationUI> {
             }
           }
           String subtype = donationType.subDonations[j].subType;
-          String? description = _decTextEditingControllerList[i][j].text
-              .isNotEmpty
-              ? _decTextEditingControllerList[i][j].text
-              : "";
+          String? description =
+              _decTextEditingControllerList[i][j].text.isNotEmpty
+                  ? _decTextEditingControllerList[i][j].text
+                  : "";
           String? selectedDate = _selectDate[i][j].isNotEmpty
               ? _selectDate[i][j]
               : ""; //ement selection of date if needed
@@ -180,6 +175,7 @@ class _DonationUIState extends State<DonationUI> {
 
     return jsonEncode(enteredDataJson);
   }
+
   String missingFields = ""; // Declare missingFields list here
 
   @override
@@ -189,338 +185,385 @@ class _DonationUIState extends State<DonationUI> {
           title: "Donate to Loyadham Mandir",
         ),
         body: Obx(
-              () =>
-          _getDonationController.isLoading.value
+          () => _getDonationController.isLoading.value
               ? Center(child: CircularProgressIndicator())
               : Container(
-            height: screenHeight(context),
-            width: screenWidth(context),
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  height: screenHeight(context),
+                  width: screenWidth(context),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Stack(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 70),
+                      SingleChildScrollView(
                         child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: _getDonationController
-                                  .donationList.length,
-                              itemBuilder: (context, index) {
-                                var donationType = _getDonationController
-                                    .donationList[index];
-                                return ExpansionTileWithBorder(
-                                  title: CustomText(
-                                      donationType.type.toString()),
-                                  children: donationType.subDonations
-                                      .asMap()
-                                      .entries
-                                      .map((entry) =>
-                                      ExpansionTileChild(
-                                        selectedDate: _selectDate[index][entry
-                                            .key].toString(),
-                                        selectDateOnPressed: () async {
-                                          String selectedDate = "";
-                                          // Show date picker dialog
-                                          final DateTime? pickedDate = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100),
-                                          );
-                                          if (pickedDate != null) {
-                                            // Set selected date
-                                            setState(() {
-                                              selectedDate =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .format(pickedDate)
-                                                      .toString();
-                                            });
-
-                                            setState(() {
-                                              _selectDate[index][entry.key] =
-                                                  selectedDate;
-                                            });
-                                          }
-                                        },
-                                        //  selectValue: _selectDropDownList,
-                                        dropDownOnChanged: (p0) {
-                                          setState(() {
-                                            _selectDropDownList[index][entry
-                                                .key] = p0.toString();
-                                          });
-                                        },
-                                        //dropDownErrorText: _selectDropDownList[index][entry.key],
-                                        dropDownErrorText: _selectDropDownList[index][entry.key].isEmpty
-                                            ? 'This field is required'
-                                            : null,
-                                        decController: _decTextEditingControllerList[index][entry
-                                            .key],
-                                        zeroAmtController:
-                                        _amtTextEditingControllerList[
-                                        index][entry.key],
-                                        zeroAmtOnChanged: (p0) {
-                                          setState(() {
-                                            _updateTotalAmount();
-                                          });
-                                        },
-                                        title: entry.value.amount == '0'?entry.value.subType +
-                                            " \$${_amtTextEditingControllerList[index][entry.key].text}":entry.value.subType +
-                                            " \$${entry.value.amount}" ??
-                                            "",
-                                        isChecked:
-                                        _subDonationCheckboxValues[
-                                        index][entry.key],
-                                        descriptionRequired: entry
-                                            .value
-                                            .descriptionRequired
-                                            .toString() ==
-                                            "1",
-                                        descriptionMandatory: entry
-                                            .value
-                                            .descriptionMandatory
-                                            .toString() ==
-                                            "1",
-                                        onChanged: (isChecked) {
-                                          setState(() {
-                                            // Update the checkbox state for the corresponding sub-donation
-                                            _subDonationCheckboxValues[
-                                            index]
-                                            [entry.key] =
-                                            isChecked!;
-
-                                            _updateTotalAmount();
-                                          });
-                                        },
-                                        dateMandatory: entry
-                                            .value.dateMandatory
-                                            .toString() ==
-                                            "1",
-                                        dateRequired: entry
-                                            .value.dateRequired
-                                            .toString() ==
-                                            "1",
-                                        description: entry
-                                            .value.description
-                                            .toString(),
-                                        dropdownMandatory: entry.value
-                                            .dropdownMandatory
-                                            .toString() ==
-                                            "1",
-                                        dropdownRequired: entry.value
-                                            .dropdownRequired
-                                            .toString() ==
-                                            "1",
-                                        dropdownLabel: entry
-                                            .value.dropdownLabel
-                                            .toString(),
-                                        dropdownName:
-                                        entry.value.dropdownName,
-                                        amount: entry.value.amount
-                                            .toString(),
-                                      ))
-                                      .toList(),
-                                );
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  height: 50.0,
-                                  width: screenWidth(context),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.black
-                                              .withOpacity(0.4)),
-                                      color: AppColors.apptheme
-                                    //borderRadius: BorderRadius.circular(10),
-
-                                  ),
-                                  child: CustomText(
-                                    "Donation Summary",
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                _selectedDonations.isNotEmpty
-                                    ? Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.black
-                                              .withOpacity(0.4))),
-                                  child: ListView.builder(
-                                    physics:
-                                    NeverScrollableScrollPhysics(),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 70),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount:
-                                    _selectedDonations.length,
+                                    itemCount: _getDonationController
+                                        .donationList.length,
                                     itemBuilder: (context, index) {
-                                      return ListTile(
-                                        tileColor: index.isEven
-                                            ? Colors.grey
-                                            .withOpacity(0.5)
-                                            : Colors.white,
-                                        // contentPadding: EdgeInsets.zero,
-                                        title: Text(
-                                            _selectedDonations[
-                                            index]
-                                            ['subtype'] ??
-                                                ""),
-                                        trailing: Text(
-                                            "\$${_selectedDonations[index]['amount']}"),
+                                      var donationType = _getDonationController
+                                          .donationList[index];
+                                      return ExpansionTileWithBorder(
+                                        title: CustomText(
+                                            donationType.type.toString()),
+                                        children: donationType.subDonations
+                                            .asMap()
+                                            .entries
+                                            .map((entry) => ExpansionTileChild(
+                                                  selectedDate:
+                                                      _selectDate[index]
+                                                              [entry.key]
+                                                          .toString(),
+                                                  selectDateOnPressed:
+                                                      () async {
+                                                    String selectedDate = "";
+                                                    // Show date picker dialog
+                                                    final DateTime? pickedDate =
+                                                        await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      lastDate: DateTime(2100),
+                                                    );
+                                                    if (pickedDate != null) {
+                                                      // Set selected date
+                                                      setState(() {
+                                                        selectedDate =
+                                                            DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .format(
+                                                                    pickedDate)
+                                                                .toString();
+                                                      });
+
+                                                      setState(() {
+                                                        _selectDate[index]
+                                                                [entry.key] =
+                                                            selectedDate;
+                                                      });
+                                                    }
+                                                  },
+                                                  //  selectValue: _selectDropDownList,
+                                                  dropDownOnChanged: (p0) {
+                                                    setState(() {
+                                                      _selectDropDownList[index]
+                                                              [entry.key] =
+                                                          p0.toString();
+                                                    });
+                                                  },
+                                                  //dropDownErrorText: _selectDropDownList[index][entry.key],
+                                                  dropDownErrorText:
+                                                      _selectDropDownList[index]
+                                                                  [entry.key]
+                                                              .isEmpty
+                                                          ? 'This field is required'
+                                                          : null,
+                                                  decController:
+                                                      _decTextEditingControllerList[
+                                                          index][entry.key],
+                                                  zeroAmtController:
+                                                      _amtTextEditingControllerList[
+                                                          index][entry.key],
+                                                  zeroAmtOnChanged: (p0) {
+                                                    setState(() {
+                                                      _updateTotalAmount();
+                                                    });
+                                                  },
+                                                  //\$${NumberFormat('##,##,###').format(num.parse(_totalAmount.toString()))}
+                                                  title: entry.value.amount ==
+                                                          '0'
+                                                      ? entry.value.subType +
+                                                          " \$${NumberFormat('###,###,###').format(num.parse(_amtTextEditingControllerList[index][entry.key].text.isEmpty ? "0" : _amtTextEditingControllerList[index][entry.key].text.toString()))}"
+                                                      : entry.value.subType +
+                                                              " \$${NumberFormat('###,###,###').format(num.parse(entry.value.amount.toString()!= "0"?entry.value.amount.toString():"0"))}" ??
+                                                          "",
+                                                  isChecked:
+                                                      _subDonationCheckboxValues[
+                                                          index][entry.key],
+                                                  descriptionRequired: entry
+                                                          .value
+                                                          .descriptionRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  descriptionMandatory: entry
+                                                          .value
+                                                          .descriptionMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  onChanged: (isChecked) {
+                                                    setState(() {
+                                                      // Update the checkbox state for the corresponding sub-donation
+                                                      _subDonationCheckboxValues[
+                                                                  index]
+                                                              [entry.key] =
+                                                          isChecked!;
+
+                                                      _updateTotalAmount();
+                                                    });
+                                                  },
+                                                  dateMandatory: entry
+                                                          .value.dateMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  dateRequired: entry
+                                                          .value.dateRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  description: entry
+                                                      .value.description
+                                                      .toString(),
+                                                  dropdownMandatory: entry.value
+                                                          .dropdownMandatory
+                                                          .toString() ==
+                                                      "1",
+                                                  dropdownRequired: entry.value
+                                                          .dropdownRequired
+                                                          .toString() ==
+                                                      "1",
+                                                  dropdownLabel: entry
+                                                      .value.dropdownLabel
+                                                      .toString(),
+                                                  dropdownName:
+                                                      entry.value.dropdownName,
+                                                  amount: entry.value.amount
+                                                      .toString(),
+                                                ))
+                                            .toList(),
                                       );
                                     },
                                   ),
-                                )
-                                    : SizedBox(),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                height: 60.0,
-                                width: screenWidth(context),
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black
-                                            .withOpacity(0.4)),
-                                    borderRadius:
-                                    BorderRadius.circular(10)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CustomText("Total"),
-                                    CustomText("\$$_totalAmount"),
-                                  ],
-                                ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 50.0,
+                                        width: screenWidth(context),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black
+                                                    .withOpacity(0.4)),
+                                            color: AppColors.apptheme
+                                            //borderRadius: BorderRadius.circular(10),
+
+                                            ),
+                                        child: CustomText(
+                                          "Donation Summary",
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      _selectedDonations.isNotEmpty
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black
+                                                          .withOpacity(0.4))),
+                                              child: ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    _selectedDonations.length,
+                                                itemBuilder: (context, index) {
+                                                  return ListTile(
+                                                    tileColor: index.isEven
+                                                        ? Colors.grey
+                                                            .withOpacity(0.5)
+                                                        : Colors.white,
+                                                    // contentPadding: EdgeInsets.zero,
+                                                    title: Text(
+                                                        _selectedDonations[
+                                                                    index]
+                                                                ['subtype'] ??
+                                                            ""),
+                                                    //_selectedDonations[index]['amount']
+                                                    trailing: Text(
+                                                        "\$${NumberFormat('###,###,###').format(num.parse(_selectedDonations[index]['amount'].toString()))}"),
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      height: 60.0,
+                                      width: screenWidth(context),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black
+                                                  .withOpacity(0.4)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          CustomText("Total"),
+                                          CustomText(
+                                              "\$${NumberFormat('###,###,###').format(num.parse(_totalAmount.toString()))}"),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 60.0,
+                          width: screenWidth(context),
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 40.0,
+                                width: 300.0,
+                                color: Colors.transparent,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.apptheme),
+                                    onPressed: () {
+                                      bool allMandatoryFieldsFilled = true;
+                                      String result = generateEnteredDataJSON();
+                                      log("finalResult${result}");
+                                      log("_totalAmount${_totalAmount}");
+                                      if (_totalAmount == 0) {
+                                        allMandatoryFieldsFilled = false;
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Amount should not be zero or Required filled should not be empty");
+                                      } else {
+                                        // Flag to indicate if all mandatory fields are filled
+                                        // bool allMandatoryFieldsFilled = true;
+
+                                        // Iterate through each donation type and its sub-donations
+                                        for (int i = 0;
+                                            i <
+                                                _getDonationController
+                                                    .donationList.length;
+                                            i++) {
+                                          var donationType =
+                                              _getDonationController
+                                                  .donationList[i];
+                                          for (int j = 0;
+                                              j <
+                                                  donationType
+                                                      .subDonations.length;
+                                              j++) {
+                                            if (_subDonationCheckboxValues[i]
+                                                [j]) {
+                                              var subDonation =
+                                                  donationType.subDonations[j];
+
+                                              // Check if description is mandatory and not filled
+                                              if (subDonation
+                                                          .descriptionMandatory ==
+                                                      "1" &&
+                                                  _decTextEditingControllerList[
+                                                          i][j]
+                                                      .text
+                                                      .isEmpty) {
+                                                allMandatoryFieldsFilled =
+                                                    false;
+                                                missingFields =
+                                                    subDonation.subType;
+                                                break; // Exit the loop if any mandatory field is empty
+                                              }
+
+                                              // Check if date is mandatory and not selected
+                                              if (subDonation.dateMandatory ==
+                                                      "1" &&
+                                                  _selectDate[i][j].isEmpty) {
+                                                allMandatoryFieldsFilled =
+                                                    false;
+                                                missingFields =
+                                                    subDonation.subType;
+                                                break; // Exit the loop if any mandatory field is empty
+                                              }
+
+                                              // Check if dropdown selection is mandatory and not made
+                                              if (subDonation
+                                                          .dropdownMandatory ==
+                                                      "1" &&
+                                                  _selectDropDownList[i][j]
+                                                      .isEmpty) {
+                                                allMandatoryFieldsFilled =
+                                                    false;
+                                                missingFields =
+                                                    subDonation.subType;
+                                                break; // Exit the loop if any mandatory field is empty
+                                              }
+                                            }
+                                          }
+                                          if (!allMandatoryFieldsFilled) {
+                                            break; // Exit the loop if any mandatory field is empty
+                                          }
+                                        }
+
+                                        // Proceed to the next screen if all mandatory fields are filled
+                                        if (allMandatoryFieldsFilled) {
+                                          String result =
+                                              generateEnteredDataJSON();
+                                          log("finalResult${result}");
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => PersonalInfoUI(
+                                                totalamount: _totalAmount,
+                                                donationData: result,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          // Show toast message if any mandatory field is empty
+                                          Fluttertoast.showToast(
+                                            msg:
+                                                "Please fill out all required fields: ${missingFields}",
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: CustomText(
+                                      "Next",
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: 60.0,
-                    width: screenWidth(context),
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40.0,
-                          width: 300.0,
-                          color: Colors.transparent,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.apptheme),
-                              onPressed: () {
-                                bool allMandatoryFieldsFilled = true;
-                                String result = generateEnteredDataJSON();
-                                log("finalResult${result}");
-                                log("_totalAmount${_totalAmount}");
-                                if (_totalAmount == 0) {
-                                  allMandatoryFieldsFilled = false;
-                                  Fluttertoast.showToast(
-                                      msg:
-                                      "Amount should not be zero or Required filled should not be empty");
-                                } else {
-                                  // Flag to indicate if all mandatory fields are filled
-                                 // bool allMandatoryFieldsFilled = true;
-
-                                  // Iterate through each donation type and its sub-donations
-                                  for (int i = 0; i < _getDonationController.donationList.length; i++) {
-                                    var donationType = _getDonationController.donationList[i];
-                                    for (int j = 0; j < donationType.subDonations.length; j++) {
-                                      if (_subDonationCheckboxValues[i][j]) {
-                                        var subDonation = donationType.subDonations[j];
-
-                                        // Check if description is mandatory and not filled
-                                        if (subDonation.descriptionMandatory=="1" &&
-                                            _decTextEditingControllerList[i][j].text.isEmpty) {
-                                          allMandatoryFieldsFilled = false;
-                                          missingFields = subDonation.subType;
-                                          break; // Exit the loop if any mandatory field is empty
-                                        }
-
-                                        // Check if date is mandatory and not selected
-                                        if (subDonation.dateMandatory == "1"&& _selectDate[i][j].isEmpty) {
-                                          allMandatoryFieldsFilled = false;
-                                          missingFields = subDonation.subType;
-                                          break; // Exit the loop if any mandatory field is empty
-                                        }
-
-                                        // Check if dropdown selection is mandatory and not made
-                                        if (subDonation.dropdownMandatory == "1" &&
-                                            _selectDropDownList[i][j].isEmpty) {
-                                          allMandatoryFieldsFilled = false;
-                                          missingFields = subDonation.subType;
-                                          break; // Exit the loop if any mandatory field is empty
-                                        }
-                                      }
-                                    }
-                                    if (!allMandatoryFieldsFilled) {
-                                      break; // Exit the loop if any mandatory field is empty
-                                    }
-                                  }
-
-                                  // Proceed to the next screen if all mandatory fields are filled
-                                  if (allMandatoryFieldsFilled) {
-                                    String result = generateEnteredDataJSON();
-                                    log("finalResult${result}");
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => PersonalInfoUI(
-                                          totalamount: _totalAmount,
-                                          donationData: result,
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    // Show toast message if any mandatory field is empty
-                                    Fluttertoast.showToast(
-                                     msg:"Please fill out all required fields: ${missingFields}",
-                                    );
-                                  }
-                                }
-                              },
-                              child: CustomText(
-                                "Next",
-                                color: Colors.white,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ));
   }
 }
@@ -583,39 +626,38 @@ class ExpansionTileChild extends StatefulWidget {
   String? selectedDate;
   String? dropDownErrorText;
 
-  ExpansionTileChild({
-    Key? key,
-    required this.title,
-    required this.amount,
-    required this.isChecked,
-    required this.onChanged,
-    required this.descriptionMandatory,
-    required this.descriptionRequired,
-    required this.dateMandatory,
-    required this.dateRequired,
-    required this.description,
-    required this.dropdownMandatory,
-    required this.dropdownRequired,
-    required this.dropdownLabel,
-    required this.dropdownName,
-    this.zeroAmtController,
-    this.zeroAmtOnChanged,
-    this.decController,
-    this.dropDownOnChanged,
-    this.selectDateOnPressed,
-    this.selectedDate,
-    this.dropDownErrorText
-    //this.selectValue
-  }) : super(key: key);
+  ExpansionTileChild(
+      {Key? key,
+      required this.title,
+      required this.amount,
+      required this.isChecked,
+      required this.onChanged,
+      required this.descriptionMandatory,
+      required this.descriptionRequired,
+      required this.dateMandatory,
+      required this.dateRequired,
+      required this.description,
+      required this.dropdownMandatory,
+      required this.dropdownRequired,
+      required this.dropdownLabel,
+      required this.dropdownName,
+      this.zeroAmtController,
+      this.zeroAmtOnChanged,
+      this.decController,
+      this.dropDownOnChanged,
+      this.selectDateOnPressed,
+      this.selectedDate,
+      this.dropDownErrorText
+      //this.selectValue
+      })
+      : super(key: key);
 
   @override
   State<ExpansionTileChild> createState() => _ExpansionTileChildState();
 }
 
 class _ExpansionTileChildState extends State<ExpansionTileChild> {
-
   String? selectedDropdownValue;
-
 
   @override
   Widget build(BuildContext context) {
@@ -634,27 +676,33 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
         ),
         if (widget.isChecked && widget.amount == "0")
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ),
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
                 TextField(
                   controller: widget.zeroAmtController,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]+|\s")),
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r"[a-zA-Z0-9]+|\s")),
                   ],
                   keyboardType: TextInputType.number,
                   onChanged: widget.zeroAmtOnChanged,
                   decoration: InputDecoration(
                     hintText: "",
-                    contentPadding: const EdgeInsets.only(left: 20.0), // Add padding to the left
+                    contentPadding: const EdgeInsets.only(
+                        left: 20.0), // Add padding to the left
                   ),
                 ),
                 const Positioned(
                   left: 0,
                   child: Text(
                     '\$',
-                    style: TextStyle(fontSize: 16, color: Colors.black), // Customize the style as needed
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black), // Customize the style as needed
                   ),
                 ),
               ],
@@ -669,9 +717,11 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               controller: widget.decController,
               decoration: InputDecoration(
                 //labelText: widget.description ?? 'Name and Purpose',
-                labelText: '${widget.description }${widget.descriptionRequired == true? '*' : ''}',
-                  //errorText: widget.dropDownErrorText
-                errorText: widget.descriptionRequired == true && widget.decController!.text.isEmpty
+                labelText:
+                    '${widget.description}${widget.descriptionRequired == true ? '*' : ''}',
+                //errorText: widget.dropDownErrorText
+                errorText: widget.descriptionRequired == true &&
+                        widget.decController!.text.isEmpty
                     ? 'This field is required'
                     : null,
               ),
@@ -682,12 +732,12 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
                 return null;
               },
               // Set error style to red if validation fails
-             // style: TextStyle(color: widget.descriptionRequired == true? Colors.red : null),
+              // style: TextStyle(color: widget.descriptionRequired == true? Colors.red : null),
             ),
           ),
         if (widget.isChecked && widget.dateRequired && widget.dateMandatory)
           Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
                 Expanded(
@@ -711,12 +761,15 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
                     //     });
                     //   }
                     // },
-                    child: Text(widget.selectedDate.toString() == ""
-                        ? "Select Date*" : widget.selectedDate.toString(),style: TextStyle(
-                      color: widget.selectedDate.toString() == ""?Colors.red:null
-                    ),
+                    child: Text(
+                      widget.selectedDate.toString() == ""
+                          ? "Select Date*"
+                          : widget.selectedDate.toString(),
+                      style: TextStyle(
+                          color: widget.selectedDate.toString() == ""
+                              ? Colors.red
+                              : null),
                       //: DateFormat('yyyy-MM-dd').format(widget.selectedDate!)),
-
                     ),
                   ),
                 )
@@ -729,15 +782,15 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: DropdownButtonFormField<String>(
-
               decoration: InputDecoration(
-                // labelText: widget.dropdownLabel,
-                labelText: '${widget.dropdownLabel }${widget.descriptionRequired == true? '*' : ''}',
-                errorText: widget.dropDownErrorText
-                // errorText: widget.dropdownMandatory && widget.dropDownErrorText == null
-                //     ? 'This field is required'
-                //     : null,
-              ),
+                  // labelText: widget.dropdownLabel,
+                  labelText:
+                      '${widget.dropdownLabel}${widget.descriptionRequired == true ? '*' : ''}',
+                  errorText: widget.dropDownErrorText
+                  // errorText: widget.dropdownMandatory && widget.dropDownErrorText == null
+                  //     ? 'This field is required'
+                  //     : null,
+                  ),
               value: selectedDropdownValue,
               onChanged: widget.dropDownOnChanged,
               // onChanged: (newValue) {
@@ -754,12 +807,11 @@ class _ExpansionTileChildState extends State<ExpansionTileChild> {
               // },
               items: widget.dropdownName!
                   .map<DropdownMenuItem<String>>(
-                    (value) =>
-                    DropdownMenuItem<String>(
+                    (value) => DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     ),
-              )
+                  )
                   .toList(),
             ),
           ),

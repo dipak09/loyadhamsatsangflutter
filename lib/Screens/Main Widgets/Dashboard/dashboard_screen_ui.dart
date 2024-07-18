@@ -89,6 +89,10 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   }
 
   Widget dashBordSlider() {
+    double heightInLogicalPixels = 160;
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    double heightInPhysicalPixels = heightInLogicalPixels * pixelRatio;
+    // log("heightInPhysicalPixels$heightInPhysicalPixels");
     return Home.isLoading.value
         ? _loader(
             height: screenHeight(context) * 0.22,
@@ -96,47 +100,53 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
           )
         : Home.sliderList.isEmpty
             ? SizedBox.shrink()
-            : SizedBox(
-                height: screenHeight(context) * 0.22,
-                width: screenWidth(context),
-                child: CarouselSlider(
-                  items: Home.sliderList
-                      .map(
-                        (item) => InkWell(
-                          onTap: () {
-                            _launchURL(item.routename!);
-                          },
-                          child: Container(
-                            height: screenHeight(context) * 0.22,
-                            decoration: BoxDecoration(
-                                // borderRadius: BorderRadius.circular(30),
-                                ),
-                            width: screenWidth(context),
-                            padding: EdgeInsets.all(10),
-                            // margin: EdgeInsets.all(10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child:
-                                  CachedImageWithShimmer(imageUrl: item.image!),
+            : ClipRRect(
+               borderRadius: BorderRadius.circular(15),
+              child: Container(
+                  color: Colors.transparent,
+                  height:170,
+                  width: screenWidth(context),
+                  child: CarouselSlider(
+                    items: Home.sliderList
+                        .map(
+                          (item) => InkWell(
+                            onTap: () {
+                              _launchURL(item.routename!);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                   //borderRadius: BorderRadius.circular(30),
+                                  ),
+                              width: screenWidth(context),
+                              //padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                               margin: EdgeInsets.all(10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child:
+                                    CachedImageWithShimmer(
+                                        imageUrl: item.image!,
+                                            fit: BoxFit.fill,
+                                    ),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                  carouselController: carouselController,
-                  options: CarouselOptions(
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    autoPlay: true,
-                    aspectRatio: 2,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        currentIndex = index;
-                      });
-                    },
+                        )
+                        .toList(),
+                    carouselController: carouselController,
+                    options: CarouselOptions(
+                      scrollPhysics: const BouncingScrollPhysics(),
+                      autoPlay: true,
+                      aspectRatio: 2,
+                      viewportFraction: 1,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              );
+            );
   }
 
   Widget liveStreamSection() {
@@ -185,7 +195,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                           child: Container(
                             width: screenWidth(context, dividedBy: 1.2),
                             margin: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
+                                horizontal: 5, vertical: 5),
                             decoration: BoxDecoration(
                               color: Colors.grey,
                               border: Border.all(color: Colors.white, width: 3),
@@ -276,7 +286,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                 Container(
                     color: Colors.transparent,
                     //height: screenHeight(context) * 0.22,
-                    height: 200,
+                    height: 160,
                     child: ListView.builder(
                         itemCount: Home.dailyDarshanList.length,
                         scrollDirection: Axis.horizontal,
@@ -308,7 +318,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(15),
                                       child: CachedImageWithShimmer(
-                                          fit: BoxFit.fitHeight,
+                                          fit: BoxFit.contain,
                                           imageUrl: Home.dailyDarshanList[index]
                                               .source))));
                         }))
@@ -382,7 +392,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
                                             horizontal: 10),
                                         width: 250,
                                         padding:
-                                            EdgeInsets.symmetric(vertical: 5),
+                                            EdgeInsets.symmetric(vertical: 10),
                                         decoration: BoxDecoration(
                                             color: Color.fromARGB(
                                                 179, 221, 218, 218),

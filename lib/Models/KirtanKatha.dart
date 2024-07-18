@@ -43,8 +43,8 @@ class KirtanKatha {
     data['upload_file'] = this.uploadFile;
     data['katha_master_id'] = this.kathaMasterId;
     data['total_track'] = this.totalTrack;
-    if (this.trackList != null) {
-      data['track_list'] = this.trackList!.map((v) => v.toJson()).toList();
+    if (trackList != null) {
+      data['track_list'] = trackList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -52,16 +52,19 @@ class KirtanKatha {
 
 class TrackList {
   String? uploadAudio;
+  String? file_name;
 
-  TrackList({this.uploadAudio});
+  TrackList({this.uploadAudio,this.file_name});
 
   TrackList.fromJson(Map<String, dynamic> json) {
     uploadAudio = json['upload_audio'];
+    file_name = json['file_name'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['upload_audio'] = this.uploadAudio;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['upload_audio'] = uploadAudio;
+    data['file_name'] = file_name;
     return data;
   }
 }

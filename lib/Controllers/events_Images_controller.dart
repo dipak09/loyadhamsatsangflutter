@@ -60,13 +60,12 @@ class EventsImagesController extends GetxController {
 
   void permission() async {
     print("object");
-    var status = platform.Platform.isAndroid
-        ? await Permission.storage.status
-        : await Permission.manageExternalStorage.status;
+    var status = await Permission.storage.status;
+        // : await Permission.manageExternalStorage.status;
 
     if (!status.isGranted) {
       await Permission.storage.request();
-      await Permission.manageExternalStorage.request();
+      // await Permission.c.request();
     }
   }
 

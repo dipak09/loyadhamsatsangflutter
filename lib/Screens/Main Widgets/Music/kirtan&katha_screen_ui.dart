@@ -236,7 +236,8 @@ class _KirtanKathaScreenUIState extends State<KirtanKathaScreenUI> {
         try {
           var response = await dio.get(audioUrl.uploadAudio.toString(), options: Options(responseType: ResponseType.bytes));
 
-          String filename = '${audioname}_${DateTime.now().millisecondsSinceEpoch}.mp3'; // Customize filename here
+          //String filename = '${audioname}_${DateTime.now().millisecondsSinceEpoch}.mp3'; // Customize filename here
+          String filename = '${audioUrl.file_name}.mp3'; // Customize filename here
           print('Audio saved to filename: $filename');
           String filePath = '$directoryPath/$filename';
 

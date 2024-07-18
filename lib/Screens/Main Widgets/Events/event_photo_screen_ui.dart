@@ -74,12 +74,11 @@ class _EventsPhotosScreenUIState extends State<EventsPhotosScreenUI> {
   Future<void> downloadImage(String imageUrl) async {
     Dio dio = Dio();
     try {
-      var status = platform.Platform.isAndroid
-          ? await Permission.storage.status
-          : await Permission.manageExternalStorage.status;
+      var status =  await Permission.storage.status;
+          //: await Permission.manageExternalStorage.status;
       if (!status.isGranted) {
         await Permission.storage.request();
-        await Permission.manageExternalStorage.request();
+        //await Permission.manageExternalStorage.request();
       }
 
       // Send an HTTP GET request to the API to fetch the image.

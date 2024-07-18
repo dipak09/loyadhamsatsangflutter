@@ -32,9 +32,11 @@ import 'package:loyadhamsatsang/Screens/Main%20Widgets/Settings/settings_screen_
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Term%20&%20Conditions/termandconditons_screen_ui.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/Video/video_screen_ui.dart';
 import 'package:loyadhamsatsang/Utilites/messaging_service.dart';
+import 'package:loyadhamsatsang/Utilites/shared_preferences.dart';
 import 'package:loyadhamsatsang/globals.dart';
 
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool? isBottomSheet = false;
 
@@ -53,6 +55,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   var TermAndConditons = Get.put(TermAndConditonsController());
   var PrivacyPolicy = Get.put(PrivacyPolicyController());
   final _messagingService = MessagingService();
+  String? fcmToken;
+
   @override
   void initState() {
     widget.index;
@@ -63,13 +67,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
     getToken();
     TermAndConditons.getData();
     PrivacyPolicy.getData();
-    setState(() {});
   }
   getToken() async {
     final token= await _messagingService.getToken();
     log("final Token${token}");
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("fcmToken", token ?? "");
     setState(() {
-      deviceToken =token!;
+      deviceToken = prefs.getString("fcmToken") ?? "";
     });
     log("final deviceToken${deviceToken}");
     if(deviceToken != null){

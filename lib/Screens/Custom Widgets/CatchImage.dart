@@ -6,19 +6,19 @@ class CachedImageWithShimmer extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
-  final BoxFit fit;
+  final BoxFit? fit;
 
   CachedImageWithShimmer(
       {required this.imageUrl,
       this.width = 200,
-      this.height = 200,
-      this.fit = BoxFit.fill});
+      this.height = 300,
+      this.fit });
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
-      fit: BoxFit.cover,
+      fit: fit??BoxFit.cover,
       placeholder: (context, url) => Shimmer.fromColors(
         highlightColor: Colors.grey[300]!,
         baseColor: Colors.grey[200]!,
@@ -31,7 +31,6 @@ class CachedImageWithShimmer extends StatelessWidget {
       errorWidget: (context, url, error) => Icon(Icons.error),
       width: width,
       height: height,
-     // fit: fit,
     );
   }
 }

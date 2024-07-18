@@ -172,7 +172,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Loyadham Satsang',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.apptheme),
+        //colorScheme: ColorScheme.fromSeed(seedColor: AppColors.apptheme),
         useMaterial3: true,
         textSelectionTheme: TextSelectionThemeData(
             selectionColor: Colors.red, selectionHandleColor: Colors.blue),
