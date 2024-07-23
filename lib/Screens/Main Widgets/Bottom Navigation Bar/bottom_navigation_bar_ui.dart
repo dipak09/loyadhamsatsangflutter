@@ -54,7 +54,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   bool isBottomSheetOpen = false;
   var TermAndConditons = Get.put(TermAndConditonsController());
   var PrivacyPolicy = Get.put(PrivacyPolicyController());
-  final _messagingService = MessagingService();
+  // final _messagingService = MessagingService();
   String? fcmToken;
 
   @override
@@ -62,25 +62,25 @@ class _BottomNavigationState extends State<BottomNavigation> {
     widget.index;
     super.initState();
     //isBottomSheet = false;
-    _messagingService.init(context);
-    _messagingService.setupInteractiveMessage(context);
-    getToken();
+    // _messagingService.init(context);
+    // _messagingService.setupInteractiveMessage(context);
+    // getToken();
     TermAndConditons.getData();
     PrivacyPolicy.getData();
   }
   getToken() async {
-    final token= await _messagingService.getToken();
-    log("final Token${token}");
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("fcmToken", token ?? "");
-    setState(() {
-      deviceToken = prefs.getString("fcmToken") ?? "";
-    });
-    log("final deviceToken${deviceToken}");
-    if(deviceToken != null){
-      var firebaseNotificationController =
-      Get.put(FirebaseNotificationController());
-    }
+    // final token= await _messagingService.getToken();
+    // log("final Token${token}");
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setString("fcmToken", token ?? "");
+    // setState(() {
+    //   deviceToken = prefs.getString("fcmToken") ?? "";
+    // });
+    // log("final deviceToken${deviceToken}");
+    // if(deviceToken != null){
+    //   var firebaseNotificationController =
+    //   Get.put(FirebaseNotificationController());
+    // }
   }
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();

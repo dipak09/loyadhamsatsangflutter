@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/app_images.dart';
@@ -61,13 +61,13 @@ class _DashboardAppBarState extends State<DashboardAppBar> {
       await fileStream.close();
 
       // Enqueuing the downloaded file for FlutterDownloader
-      await FlutterDownloader.enqueue(
-        url: 'file://${file.path}',
-        savedDir: directory.path,
-        fileName: '${videoId.value}.mp3',
-        showNotification: true,
-        openFileFromNotification: true,
-      );
+      // await FlutterDownloader.enqueue(
+      //   url: 'file://${file.path}',
+      //   savedDir: directory.path,
+      //   fileName: '${videoId.value}.mp3',
+      //   showNotification: true,
+      //   openFileFromNotification: true,
+      // );
 
       yt.close();
     } catch (e) {
