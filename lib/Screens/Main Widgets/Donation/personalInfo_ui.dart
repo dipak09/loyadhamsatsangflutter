@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -274,16 +274,16 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (BuildContext dialogContext) =>
-                                                  UsePaypal(
+                                                  PaypalCheckoutView(
                                                       sandboxMode: true,
                                                       clientId:
                                                           "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
                                                       secretKey:
                                                           "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
-                                                      returnURL:
-                                                          "https://samplesite.com/return",
-                                                      cancelURL:
-                                                          "https://samplesite.com/cancel",
+                                                      // returnURL:
+                                                      //     "https://samplesite.com/return",
+                                                      // cancelURL:
+                                                      //     "https://samplesite.com/cancel",
                                                       transactions: [
                                                         {
                                                           "amount": {
@@ -437,11 +437,11 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                                                           duration: Duration(
                                                               seconds: 2),
                                                         );
-                                                        //Navigator.pop(context);
+                                                        Navigator.pop(context);
                                                       },
                                                       onCancel: (params) {
                                                         log('cancelled: $params');
-                                                        // Navigator.pop(context);
+                                                        Navigator.pop(context);
                                                       }),
                                             ),
                                             //(Route<dynamic> route) => false,

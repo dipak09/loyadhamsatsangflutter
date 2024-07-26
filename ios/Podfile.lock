@@ -6,11 +6,11 @@ PODS:
   - esys_flutter_share_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_inappwebview_ios (0.0.1):
+  - flutter_inappwebview (0.0.1):
     - Flutter
-    - flutter_inappwebview_ios/Core (= 0.0.1)
+    - flutter_inappwebview/Core (= 0.0.1)
     - OrderedSet (~> 5.0)
-  - flutter_inappwebview_ios/Core (0.0.1):
+  - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
   - flutter_timezone (0.0.1):
@@ -95,7 +95,7 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - esys_flutter_share_plus (from `.symlinks/plugins/esys_flutter_share_plus/ios`)
   - Flutter (from `Flutter`)
-  - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - GoogleUtilities
@@ -128,8 +128,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/esys_flutter_share_plus/ios"
   Flutter:
     :path: Flutter
-  flutter_inappwebview_ios:
-    :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_timezone:
     :path: ".symlinks/plugins/flutter_timezone/ios"
   fluttertoast:
@@ -166,7 +166,7 @@ SPEC CHECKSUMS:
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   esys_flutter_share_plus: 302b73471e2686a9ce282898d1df5d6f4382edba
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_inappwebview_ios: 97215cf7d4677db55df76782dbd2930c5e1c1ea0
+  flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   GoogleUtilities: 7831653f2e95842f52d920c5bf2ede6316370129

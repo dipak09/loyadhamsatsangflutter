@@ -56,14 +56,13 @@ android {
     }
     signingConfigs {
         debug {
-
-            storeFile file("D:/JKS/Loyadham Satsang/Loyadham_Keystore")
+            storeFile file("/Users/chirag/Documents/Loyadham_Keystore")
             storePassword 'section010101'
             keyAlias 'loyadham'
             keyPassword 'section010101'
         }
         release {
-            storeFile file("D:/JKS/Loyadham Satsang/Loyadham_Keystore")
+            storeFile file("/Users/chirag/Documents/Loyadham_Keystore")
             storePassword 'section010101'
             keyAlias 'loyadham'
             keyPassword 'section010101'

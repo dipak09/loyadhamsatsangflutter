@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -56,10 +58,18 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                   cards(
                       title: "RATE APPLICATION",
                       onTap: () {
-                        StoreRedirect.redirect(
-                            androidAppId: "com.phoenix.loyadhamsatsang",
-                            iOSAppId:
-                                "https://apps.apple.com/in/app/loyadham-satsang/id1026670160");
+                        if (Platform.isAndroid) {
+                          StoreRedirect.redirect(
+                              androidAppId: "com.phoenix.loyadhamsatsang",
+                              iOSAppId:
+                                  "https://apps.apple.com/in/app/loyadham-satsang/id1026670160");
+                        } else {
+                          launchUrl(
+                            Uri.parse(
+                                "https://apps.apple.com/in/app/loyadham-satsang/id1026670160"),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
                       }),
                   cards(
                       title: "VISIT OUR WEBSITE",
