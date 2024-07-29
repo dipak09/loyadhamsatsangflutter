@@ -1,3 +1,4 @@
+
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
@@ -55,77 +56,80 @@ class DrawerData extends StatelessWidget {
                               fit: BoxFit.fill))),
                 ),
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    _subMenuCard(
-                        title: "Loyadham",
-                        onTap: () {
+              SizedBox(
+                height: screenHeight(context,dividedBy: 1.7),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      _subMenuCard(
+                          title: "Loyadham",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => PrashadiVastuSthanScreenUI());
+                          }),
+                      _subMenuCard(
+                          title: "Wallpapers",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => WallpaperScreenUI());
+                          }),
+                      _subMenuCard(
+                          title: "Donations",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => DonationUI());
+                          }),
+                      _subMenuCard(title: "Publications", onTap: () {
                           Get.back();
-                          Get.to(() => PrashadiVastuSthanScreenUI());
-                        }),
-                    _subMenuCard(
-                        title: "Wallpapers",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => WallpaperScreenUI());
-                        }),
-                    _subMenuCard(
-                        title: "Donations",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => DonationUI());
-                        }),
-                    _subMenuCard(title: "Publications", onTap: () {
-                        Get.back();
-                          Get.to(() => OurApplication());
-                    }),
-                    // _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
-                    _subMenuCard(
-                        title: "Our Branches",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => BranchesScreenUI());
-                        }),
-                  _subMenuCard(
-                      title: "Offline Downloads",
-                      onTap: () {
-                        Get.back();
-                        Get.to(() => OfflineScreen());
+                            Get.to(() => OurApplication());
                       }),
-                    SizedBox(height: 20),
-                    Divider(),
-                    SizedBox(height: 20),
+                      // _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
+                      _subMenuCard(
+                          title: "Our Branches",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => BranchesScreenUI());
+                          }),
                     _subMenuCard(
-                        title: "Share this app",
-                        onTap: () async {
-                          await Share.share(
-                            "Here is your App link : https://play.google.com/store/apps/details?id=com.phoenix.loyadhamsatsang&pcampaignid=web_share",
-                            subject: "Share App",
-                            // sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size
-                          );
-                        }),
-                    // _subMenuCard(
-                    //     title: "Feedback",
-                    //     onTap: () {
-                    //       Get.back();
-                    //       Get.to(() => FeedBackScreenUI());
-                    //     }),
-                    _subMenuCard(
-                        title: "Contact us",
+                        title: "Offline Downloads",
                         onTap: () {
                           Get.back();
-                          Get.to(() => ContactUSScreenUI());
+                          Get.to(() => OfflineScreen());
                         }),
-                    _subMenuCard(
-                        title: "About US",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => AboutUsScreenUI());
-                        })
-                  ],
+                      SizedBox(height: 20),
+                      Divider(),
+                      SizedBox(height: 20),
+                      _subMenuCard(
+                          title: "Share this app",
+                          onTap: () async {
+                            await Share.share(
+                              "Here is your App link : https://play.google.com/store/apps/details?id=com.phoenix.loyadhamsatsang&pcampaignid=web_share",
+                              subject: "Share App",
+                              // sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size
+                            );
+                          }),
+                      // _subMenuCard(
+                      //     title: "Feedback",
+                      //     onTap: () {
+                      //       Get.back();
+                      //       Get.to(() => FeedBackScreenUI());
+                      //     }),
+                      _subMenuCard(
+                          title: "Contact us",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => ContactUSScreenUI());
+                          }),
+                      _subMenuCard(
+                          title: "About US",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => AboutUsScreenUI());
+                          }),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 10),

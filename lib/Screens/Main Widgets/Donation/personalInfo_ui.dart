@@ -204,7 +204,8 @@ class _PersonalInfoUIState extends State<PersonalInfoUI> {
                           ),
                           child: ListTile(
                             title: CustomText("Total:- "),
-                            trailing: CustomText("\$${NumberFormat('###,###,###').format(num.parse(widget.totalamount.toString()))}"),
+                            trailing: CustomText(
+                                "\$${NumberFormat('###,###,###').format(num.parse(widget.totalamount.toString()))}"),
                           )),
 
                       // Spacer(),
