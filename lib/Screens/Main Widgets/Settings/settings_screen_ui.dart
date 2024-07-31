@@ -87,6 +87,15 @@ class _SettingScreenUIState extends State<SettingScreenUI> {
                         Get.to(() => BranchesScreenUI());
                       }),
                   cards(
+                      title: "PRIVACY POLICY",
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse(
+                              "https://loyadham.in/privacy"),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }),
+                  cards(
                       title: "ABOUT US",
                       onTap: () {
                         Get.to(() => AboutUsScreenUI());

@@ -79,7 +79,11 @@ class DrawerData extends StatelessWidget {
                           title: "Donations",
                           onTap: () {
                             Get.back();
-                            Get.to(() => DonationUI());
+                            launchUrl(
+                              Uri.parse(
+                                  "https://loyadham.in/donation"),
+                              mode: LaunchMode.externalApplication,
+                            );
                           }),
                       _subMenuCard(title: "Publications", onTap: () {
                           Get.back();
