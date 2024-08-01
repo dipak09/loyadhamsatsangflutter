@@ -1,5 +1,6 @@
-
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,6 @@ class DrawerData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Stack(
         children: [
@@ -57,7 +57,7 @@ class DrawerData extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: screenHeight(context,dividedBy: 1.7),
+                height: screenHeight(context, dividedBy: 1.7),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,16 +79,19 @@ class DrawerData extends StatelessWidget {
                           title: "Donations",
                           onTap: () {
                             Get.back();
-                            launchUrl(
-                              Uri.parse(
-                                  "https://loyadham.in/donation"),
-                              mode: LaunchMode.externalApplication,
-                            );
+                            Platform.isAndroid
+                                ? Get.to(() => DonationUI())
+                                : launchUrl(
+                                    Uri.parse("https://loyadham.in/donation"),
+                                    mode: LaunchMode.externalApplication,
+                                  );
                           }),
-                      _subMenuCard(title: "Publications", onTap: () {
-                          Get.back();
+                      _subMenuCard(
+                          title: "Publications",
+                          onTap: () {
+                            Get.back();
                             Get.to(() => OurApplication());
-                      }),
+                          }),
                       // _subMenuCard(title: "Our Guru Parampara", onTap: () {}),
                       _subMenuCard(
                           title: "Our Branches",
@@ -96,12 +99,12 @@ class DrawerData extends StatelessWidget {
                             Get.back();
                             Get.to(() => BranchesScreenUI());
                           }),
-                    _subMenuCard(
-                        title: "Offline Downloads",
-                        onTap: () {
-                          Get.back();
-                          Get.to(() => OfflineScreen());
-                        }),
+                      _subMenuCard(
+                          title: "Offline Downloads",
+                          onTap: () {
+                            Get.back();
+                            Get.to(() => OfflineScreen());
+                          }),
                       SizedBox(height: 20),
                       Divider(),
                       SizedBox(height: 20),
