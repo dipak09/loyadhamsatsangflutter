@@ -19,7 +19,7 @@ class OurApplication extends StatefulWidget {
 class _OurApplicationState extends State<OurApplication> {
   var OurApplication = Get.put(OurApplicationController());
 
-  final CarouselController carouselController = CarouselController();
+  final CarouselSliderController carouselController = CarouselSliderController();
   int currentIndex = 0;
 
   @override

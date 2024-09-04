@@ -25,7 +25,7 @@ class _DashBoardImageSliderState extends State<DashBoardImageSlider> {
     }
   }
 
-  final CarouselController carouselController = CarouselController();
+  final CarouselSliderController carouselController = CarouselSliderController();
   int currentIndex = 0;
   var Home = Get.put(DashboardController());
 

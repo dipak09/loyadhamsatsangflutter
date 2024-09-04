@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomAppBar.dart';
 import 'package:loyadhamsatsang/Screens/Custom%20Widgets/CustomText.dart';
@@ -8,7 +10,7 @@ class TodayBhajan extends StatefulWidget {
   String? title;
   String? date;
 
-  TodayBhajan({super.key, required this.description, this.title,this.date});
+  TodayBhajan({super.key, required this.description, this.title, this.date});
 
   @override
   State<TodayBhajan> createState() => _TodayBhajanState();
@@ -18,7 +20,7 @@ class _TodayBhajanState extends State<TodayBhajan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: " Today's Bhajan"),
+      appBar: CustomAppBar(title: "Today's Bhajan"),
       body: Container(
         height: screenHeight(context),
         width: screenWidth(context),
@@ -30,7 +32,7 @@ class _TodayBhajanState extends State<TodayBhajan> {
               SizedBox(
                 height: 30,
               ),
-              CustomText("${widget.title.toString()} (${widget.date.toString()})"),
+              CustomText(widget.title.toString()),
               SizedBox(
                 height: 20,
               ),

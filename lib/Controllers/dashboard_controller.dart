@@ -22,13 +22,16 @@ class DashboardController extends GetxController {
   List<Channel1> livestreamingList = [];
   List<DailyDarshan> dailyDarshanList = [];
   //List<UpcomingEvent> upcomingEventList = [];
-  List<TodaysBhajan> todayBhajanEventList = [];
+  List<TodayBhajan> todayBhajanEventList = [];
 
   List<FeaturedMediaDetail> featureMediaList = [];
   RxBool isLoading = false.obs;
+  RxBool isLoadingBhajan = false.obs;
   @override
   void onInit() {
     super.onInit();
+    print("object>>>>>>>>>");
+    getBhajans();
     getDashboardData();
   }
 
@@ -36,7 +39,8 @@ class DashboardController extends GetxController {
     try {
       isLoading(true);
       update();
-      String apiUrl = 'https://loyadham.in/api/webservice/home?token=$deviceToken';
+      String apiUrl =
+          'https://loyadham.in/api/webservice/home?token=$deviceToken';
 
       final response = await dio.get(
         apiUrl,
@@ -48,9 +52,9 @@ class DashboardController extends GetxController {
       print("Daily Darshan : ${dailyDarshan_date}");
 
       final sliderData = data['slider'];
-      if(sliderData == null || sliderData == []){
+      if (sliderData == null || sliderData == []) {
         sliderList = [];
-      }else{
+      } else {
         sliderData.forEach((el) {
           Dashboardata slider = Dashboardata.fromJson(el);
           sliderList.add(slider);
@@ -67,9 +71,9 @@ class DashboardController extends GetxController {
         });
       }
       final dailydarshansData = data['dailydarshans'];
-      if(dailydarshansData == null || dailydarshansData == []){
+      if (dailydarshansData == null || dailydarshansData == []) {
         dailyDarshanList = [];
-      }else{
+      } else {
         dailydarshansData.forEach((el) {
           DailyDarshan dailydarshans = DailyDarshan.fromJson(el);
           dailyDarshanList.add(dailydarshans);
@@ -77,43 +81,61 @@ class DashboardController extends GetxController {
       }
 
       final featureMediaData = data['featuredmedia'];
-      if(featureMediaData == null || featureMediaData == []){
+      if (featureMediaData == null || featureMediaData == []) {
         featureMediaList = [];
-      }else{
+      } else {
         featureMediaData.forEach((el) {
-          FeaturedMediaDetail featureMediaRse = FeaturedMediaDetail.fromJson(el);
+          FeaturedMediaDetail featureMediaRse =
+              FeaturedMediaDetail.fromJson(el);
           featureMediaList.add(featureMediaRse);
         });
       }
 
-
-      final todayBhajanData = data['todaysBhajan'];
-      if (todayBhajanData == null || todayBhajanData == []) {
-        todayBhajanEventList = [];
-      }else{
-        todayBhajanData.forEach((el) {
-          TodaysBhajan todaysBhajanRes = TodaysBhajan.fromJson(el);
-          todayBhajanEventList.add(todaysBhajanRes);
-          print("today bhajan List#${todayBhajanEventList.length}");
-        });
-
-      }
-      // final upcomingEventData = data['upcoming_event'];
-      // if (upcomingEventData == null || upcomingEventData == []) {
-      //   upcomingEventList = [];
+      // final todayBhajanData = data['todaysBhajan'];
+      // if (todayBhajanData == null || todayBhajanData == []) {
+      //   todayBhajanEventList = [];
       // } else {
-      //   upcomingEventData.forEach((el) {
-      //     UpcomingEvent upcomingEvent = UpcomingEvent.fromJson(el);
-      //     upcomingEventList.add(upcomingEvent);
+      //   todayBhajanData.forEach((el) {
+      //     TodaysBhajan todaysBhajanRes = TodaysBhajan.fromJson(el);
+      //     todayBhajanEventList.add(todaysBhajanRes);
+      //     print("today bhajan List#${todayBhajanEventList.length}");
       //   });
       // }
-
       log("liveStreamData!!!${livestreamingList.length}");
 
       isLoading(false);
       update();
     } catch (e) {
       isLoading(false);
+      update();
+      print("Error : ${e}");
+    }
+  }
+
+  Future<void> getBhajans() async {
+    try {
+      isLoadingBhajan(true);
+      update();
+
+      String apiUrl =
+          'https://loyadham.in/api/webservice/getBhajans?token=$deviceToken';
+
+      final response = await dio.get(apiUrl);
+      if (response.statusCode == 200) {
+        final data = response.data;
+        print('Data:::${data}');
+        todayBhajanEventList.clear();
+        for (var e in data) {
+          todayBhajanEventList.add(TodayBhajan.fromJson(e));
+        }
+        isLoadingBhajan(false);
+        update();
+      } else {
+        isLoadingBhajan(false);
+        update();
+      }
+    } catch (e) {
+      isLoadingBhajan(false);
       update();
       print("Error : ${e}");
     }
