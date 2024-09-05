@@ -37,7 +37,7 @@ dependencies:
   carousel_slider: ^5.0.0
   just_audio: ^0.9.35
   dio: ^5.4.2+1
-  win32: ^5.5.4
+#  win32: ^5.5.4
   fluttertoast: ^8.2.4
   share_plus: ^7.0.0
   store_redirect: ^2.0.1
@@ -73,7 +73,7 @@ dependencies:
   flutter_timezone: ^1.0.8
   flutter_downloader: ^1.11.7
   youtube_explode_dart: ^2.2.1
-  esys_flutter_share_plus: ^2.2.0
+#  esys_flutter_share_plus: ^2.2.0
   flutter_multi_formatter: ^2.12.8
   package_info_plus: ^4.0.0
 
@@ -82,6 +82,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_html: ^3.0.0-beta.2
 
 dev_dependencies:
   flutter_test:
