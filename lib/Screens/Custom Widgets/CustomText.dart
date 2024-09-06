@@ -43,7 +43,7 @@ class CustomText extends StatelessWidget {
         backgroundColor: backgroundColor,
         height: height,
       ),
-      textScaleFactor: 1,
+      textScaleFactor: 1.0,
       overflow: overflow,
       maxLines: maxLines,
       textAlign: textAlign,

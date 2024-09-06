@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 // import 'package:firebase_core/firebase_core.dart';
@@ -46,8 +44,6 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
-
 
 class _MyAppState extends State<MyApp> {
   String location = 'Unknown';
@@ -152,11 +148,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-     _initData();
-   // _determinePosition();
-   // getPosition();
+    _initData();
+    // _determinePosition();
+    // getPosition();
     DeviceConfig.rotationLock();
-
   }
 
   var Splash = Get.put(SplashScreenController());
@@ -180,6 +175,12 @@ class _MyAppState extends State<MyApp> {
             selectionColor: Colors.red, selectionHandleColor: Colors.blue),
       ),
       home: SplashScreenUI(),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child!,
+        );
+      },
       // getPages: [
       //   // GetPage(
       //   //   name: '/dailyDarshan',

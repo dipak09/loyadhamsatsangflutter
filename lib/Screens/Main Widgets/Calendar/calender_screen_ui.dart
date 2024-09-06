@@ -135,66 +135,60 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                   // Display the days of the week
                   _buildWeeks(),
                   // Display the calendar
-                  // Expanded(
-                  //   child: PageView.builder(
-                  //     controller: _pageController,
-                  //     onPageChanged: (index) {
-                  //       setState(() {
-                  //         widget.currentMonth = DateTime(
-                  //             widget.currentMonth.year, (index % 12) + 1, 1);
-                  //       });
-                  //     },
-                  //     itemCount: 12, // Show 10 years
-                  //     itemBuilder: (context, pageIndex) {
-                  //       print(pageIndex);
-                  //       //DateTime month = DateTime(widget.currentMonth.year, (pageIndex % 12) + 1, 1);
-                  //       return _buildCalendar(
-                  //           widget.currentMonth, calanderController);
-                  //     },
-                  //   ),
-                  // ),
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     shrinkWrap: true,
-                  //     itemCount: 12,
-                  //     scrollDirection: Axis.horizontal,
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     itemBuilder: (context, index) {
-                  //       return _buildCalendar(
-                  //           widget.currentMonth, calanderController);
-                  //     },
-                  //   ),
-                  // )
-                  CarouselSlider.builder(
-                    itemCount: 12,
-                    carouselController: carouselSliderController,
-                    itemBuilder: (context, index, realIndex) {
-                      return Container(
-                        color: Colors.red,
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        width: screenWidth(context),
-                        child: Text(
-                          index.toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 35),
-                        ),
-                      );
-                    },
-                    options: CarouselOptions(
-                      viewportFraction: 1.0,
-                      aspectRatio: 0.7,
-                      onPageChanged: (index, reason) {
-                        Future.delayed(Duration(milliseconds: 600), () {
-                          setState(() {
-                            sliderIndex = index;
-                            print('index::::$sliderIndex');
-                          });
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          widget.currentMonth = DateTime(
+                              widget.currentMonth.year, (index % 12) + 1, 1);
                         });
                       },
-                      scrollPhysics: sliderIndex > 0
-                          ? null
-                          : OneDirectionScrollPhysics(allowLeftToRight: false),
+                      itemCount: 12, // Show 10 years
+                      itemBuilder: (context, pageIndex) {
+                        print(pageIndex);
+                        //DateTime month = DateTime(widget.currentMonth.year, (pageIndex % 12) + 1, 1);
+                        return _buildCalendar(
+                            widget.currentMonth, calanderController);
+                      },
                     ),
                   ),
+                  //// Carousel Slider
+                  // Expanded(
+                  //   child: CarouselSlider.builder(
+                  //     itemCount: 12,
+                  //     carouselController: carouselSliderController,
+                  //     itemBuilder: (context, index, realIndex) {
+                  //       log("Index::::::$index::::::${widget.currentMonth.month}");
+                  //       return _buildCalendar(
+                  //           widget.currentMonth, calanderController);
+                  //     },
+                  //     options: CarouselOptions(
+                  //       initialPage: widget.currentMonth.month - 1,
+                  //       // +
+                  //       // (12 * widget.currentMonth.year -
+                  //       //     DateTime.now().year),
+                  //       viewportFraction: 1.0,
+                  //       height: screenHeight(context),
+                  //       onPageChanged: (index, reason) {
+                  //         setState(() {
+                  //           widget.currentMonth = DateTime(
+                  //               widget.currentMonth.year, (index % 12) + 1, 1);
+                  //         });
+                  //         Future.delayed(Duration(milliseconds: 600), () {
+                  //           setState(() {
+                  //             sliderIndex = index;
+                  //             print('index::::$sliderIndex');
+                  //           });
+                  //         });
+                  //       },
+                  //       scrollPhysics: sliderIndex > 0
+                  //           ? null
+                  //           : OneDirectionScrollPhysics(
+                  //               allowLeftToRight: false),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
       ),
@@ -204,9 +198,9 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
   // Build the header with month and year selection
   Widget _buildHeader() {
     bool isLastMonthOfYear = widget.currentMonth.month == 12;
-    bool isFirstMonthOfYear = widget.currentMonth.month == 1;
-    print("Last Month:::$isLastMonthOfYear");
-    print("Last Month:::$isFirstMonthOfYear");
+    // bool isFirstMonthOfYear = widget.currentMonth.month == 1;
+    // print("Last Month:::$isLastMonthOfYear");
+    // print("Last Month:::$isFirstMonthOfYear");
     // print("Last Month:::${_pageController.page}");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -216,17 +210,17 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
           IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // if (_pageController.page! > 0 && !isFirstMonthOfYear) {
-              //   _pageController.previousPage(
-              //     duration: Duration(milliseconds: 300),
-              //     curve: Curves.easeInOut,
-              //   );
-              // }
-              if (sliderIndex > 0) {
-                // setState(()
-                carouselSliderController.previousPage();
+              if (_pageController.page! > 0
+                  // && !isFirstMonthOfYear
+                  ) {
+                _pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               }
-              // });
+              // if (sliderIndex > 0) {
+              //   carouselSliderController.previousPage();
+              // }
             },
           ),
           Text(
@@ -253,10 +247,20 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                   calanderController.getData("$year-01-01", "$year-12-31");
 
                   int yearDiff = DateTime.now().year - year;
+                  log("monthIndex?????${yearDiff}");
+                  log("monthIndex?????${widget.currentMonth.month}");
                   int monthIndex =
                       12 * yearDiff + widget.currentMonth.month - 1;
-                  log("monthIndex${monthIndex}");
+                  log("monthIndex?????${monthIndex}");
                   _pageController.jumpToPage(monthIndex);
+                  // if (DateTime.now().year == year) {
+                  //   log('IFFFFFFF');
+                  //   carouselSliderController
+                  //       .jumpToPage(DateTime.now().month - 1);
+                  // } else {
+                  //   log('LELELELELLELELLE');
+                  //   carouselSliderController.jumpToPage(0);
+                  // }
                 });
               }
             },
@@ -275,18 +279,18 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
             onPressed: () {
               // print('::::::::::${_pageController.page}');
               // carouselSliderController.jumpToPage(2);
-              if (sliderIndex < 11) {
-                carouselSliderController.nextPage();
-              }
-              // setState(() {});
-              // if (!isLastMonthsOfYear) {
-              //   setState(() {
-              //     _pageController.nextPage(
-              //       duration: Duration(milliseconds: 300),
-              //       curve: Curves.easeInOut,
-              //     );
-              //   });
+              // if (sliderIndex < 11) {
+              //   carouselSliderController.nextPage();
               // }
+              setState(() {});
+              if (!isLastMonthOfYear) {
+                setState(() {
+                  _pageController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                });
+              }
             },
           ),
         ],
@@ -390,10 +394,10 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
           Container(
             height: (daysInMonth + weekdayOfFirstDay - 1) == 36 ||
                     (daysInMonth + weekdayOfFirstDay - 1) == 37
-                ? 577
-                : 500,
+                ? screenHeight(context, dividedBy: 1.5)
+                : screenHeight(context, dividedBy: 1.8),
             width: screenWidth(context),
-            color: Colors.red,
+            color: Colors.transparent,
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
@@ -403,7 +407,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
               ),
               itemCount: daysInMonth + weekdayOfFirstDay - 1,
               itemBuilder: (context, index) {
-                print('object:::::${daysInMonth + weekdayOfFirstDay - 1}');
+                // log('object:::::${daysInMonth + weekdayOfFirstDay - 1}');
                 if (index < weekdayOfFirstDay - 1) {
                   // Show dates from the previous month in grey
                   int previousMonthDay =
