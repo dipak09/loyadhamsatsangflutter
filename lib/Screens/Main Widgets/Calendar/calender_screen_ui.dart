@@ -453,7 +453,7 @@ class _CalenderScreenUIState extends State<CalenderScreenUI> {
                                     // Replace with your image URL
                                     width: 40,
                                     height: 40,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ),

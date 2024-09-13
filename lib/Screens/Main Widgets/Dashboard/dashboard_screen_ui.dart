@@ -43,7 +43,7 @@ class _DashboardScreenUIState extends State<DashboardScreenUI> {
   var Video = Get.put(VideoController());
   var upcomingEvent = Get.put(UpComingEventController());
 
-  final CarouselController carouselController = CarouselController();
+  final CarouselSliderController carouselController = CarouselSliderController();
 
   //var LiveStream = Get.put(LiveStreamController());
   //var FeatureMedia = Get.put(FeaturedmediaController());

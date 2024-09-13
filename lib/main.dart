@@ -9,7 +9,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
-import 'package:loyadhamsatsang/Constants/app_colors.dart';
 import 'package:loyadhamsatsang/Constants/helper.dart';
 import 'package:loyadhamsatsang/Controllers/splashScreen_controller.dart';
 import 'package:loyadhamsatsang/Screens/Main%20Widgets/SplashScreen/splash_screen_ui.dart';
@@ -178,20 +177,6 @@ class _MyAppState extends State<MyApp> {
             selectionColor: Colors.red, selectionHandleColor: Colors.blue),
       ),
       home: SplashScreenUI(),
-      // getPages: [
-      //   // GetPage(
-      //   //   name: '/dailyDarshan',
-      //   //   page: () => DailyDarshanScreenUI(),
-      //   // ),
-      //   // GetPage(
-      //   //   name: '/wallpaper',
-      //   //   page: () => WallpaperScreenUI(),
-      //   // ),
-      //   // GetPage(
-      //   //   name: '/books',
-      //   //   page: () => BooksScreenUI(),
-      //   // ),
-      // ],
     );
   }
 }
