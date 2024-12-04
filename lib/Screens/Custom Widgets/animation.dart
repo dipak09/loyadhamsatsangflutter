@@ -23,6 +23,7 @@ class _CustomSlidetransitionState extends State<CustomSlidetransition>
   @override
   void initState() {
     super.initState();
+
     _animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: widget.duration));
     Timer(Duration(milliseconds: 10), () {
