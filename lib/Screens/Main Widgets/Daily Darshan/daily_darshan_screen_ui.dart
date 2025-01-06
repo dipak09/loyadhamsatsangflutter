@@ -1,9 +1,9 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, unnecessary_string_interpolations, must_be_immutable
 
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loyadhamsatsang/Constants/app_colors.dart';
@@ -39,6 +39,14 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
     setState(() {});
   }
 
+  final longCacheManager = CacheManager(
+    Config(
+      'longTermCache',
+      stalePeriod: const Duration(days: 1),  // Cache for 1 day
+      maxNrOfCacheObjects: 200,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,12 +69,12 @@ class _DailyDarshanScreenUIState extends State<DailyDarshanScreenUI> {
                                     return Stack(children: [
                                       InkWell(
                                         onTap: () {
-                                          
+                                          log("${e.source}");
                                           Get.to(() => DailyDarshanPhotoViewer(
                                               title: e.title,
                                               darshanList: DailyDarshan
                                                   .dailyDarshanList));
-                                          
+
                                         },
                                         child: Container(
                                           height: 335,
